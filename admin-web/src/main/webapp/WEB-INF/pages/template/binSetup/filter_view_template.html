@@ -1,0 +1,26 @@
+<table class="table table-striped table-bordered table-hover" xmlns:th="http://www.thymeleaf.org" data-parsley-validate="true">
+    <tbody>
+    <tr>
+        <td class="errorDescription" colspan="2"></td>
+    </tr>
+
+    <tr>
+        <th>{{=Common.bundles.getMessage('bin.bin')}}</th>
+        <td>
+            <input name="bin" class="form-control input-sm" data-parsley-maxlength="19" maxlength="19" size="19"
+                   data-parsley-regexp="^\d+$"
+                   th:attr="data-parsley-regexp-message=#{bin.invalid}"
+                   data-parsley-regexp-message=""/>
+            <div class="fieldRemark" data-remark-field="bin"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+        </td>
+        <td>
+            <button class="btnFilter btn btn-primary" th:text="#{common.filter}"></button>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-03_cvm_columns.xml">
+
+    <changeSet id="update2018-03-03_cvm_columns_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="PAN_INTERNAL_ID"/>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="PAN_INTERNAL_GUID"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="PAN_INTERNAL_ID" type="VARCHAR(64)"/>
+        </addColumn>
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR(64)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-03-03_cvm_columns_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="PAN_INTERNAL_ID"/>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="PAN_INTERNAL_GUID"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="PAN_INTERNAL_ID" type="VARCHAR2(64)"/>
+        </addColumn>
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR2(64)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-03-03_token_history_wp_request_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="WPREQUEST_ID"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="WPREQUEST_ID" newDataType="VARCHAR(64)"/>
+    </changeSet>
+
+    <changeSet id="update2018-03-03_token_history_wp_request_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="WPREQUEST_ID"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="WPREQUEST_ID" newDataType="VARCHAR2(64)"/>
+    </changeSet>
+
+
+</databaseChangeLog>

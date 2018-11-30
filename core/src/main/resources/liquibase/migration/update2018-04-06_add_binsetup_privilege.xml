@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-04-06_add_binsetup_privilege.xml">
+
+    <changeSet id="bin_setup_view_add_privilege" author="a.lypivets" runOnChange="true">
+    <preConditions onFail="MARK_RAN">
+        <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'BIN_VIEW'</sqlCheck>
+    </preConditions>
+    <sql>
+        INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('BIN_VIEW', 'Просмотр информации о Bin');
+    </sql>
+</changeSet>
+
+    <changeSet id="assign_bin_setup_privilege" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'BIN_VIEW');
+        </sql>
+    </changeSet>
+
+    <changeSet id="bin_setup_create_add_privilege" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'BIN_CREATE'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('BIN_CREATE', 'Создание Bin');
+        </sql>
+    </changeSet>
+
+    <changeSet id="assign_bin_setup_create_privilege" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'BIN_CREATE');
+        </sql>
+    </changeSet>
+
+    <changeSet id="bin_setup_edit_add_privilege" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'BIN_EDIT'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('BIN_EDIT', 'Редактирование Bin');
+        </sql>
+    </changeSet>
+
+    <changeSet id="assign_bin_setup_edit_privilege" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'BIN_EDIT');
+        </sql>
+    </changeSet>
+
+    <changeSet id="bin_setup_delete_add_privilege" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'BIN_DELETE'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('BIN_DELETE', 'Редактирование Bin');
+        </sql>
+    </changeSet>
+
+    <changeSet id="assign_bin_setup_delete_privilege" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'BIN_DELETE');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

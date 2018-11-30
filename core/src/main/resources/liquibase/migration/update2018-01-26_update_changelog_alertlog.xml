@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-26_update_changelog_alertlog.xml">
+
+    <changeSet id="update2018-01-26_update_changelog_alertlog" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="CHANGELOG" columnName="FECODE"/>
+            <columnExists tableName="ALERTLOG" columnName="FECODE"/>
+            <columnExists tableName="ALERTLOG" columnName="CMSMPA_ID"/>
+            <columnExists tableName="ALERTLOG" columnName="DC_ID"/>
+        </preConditions>
+
+        <dropColumn tableName="CHANGELOG" columnName="FECODE"/>
+        <dropColumn tableName="ALERTLOG" columnName="FECODE"/>
+        <dropColumn tableName="ALERTLOG" columnName="CMSMPA_ID"/>
+        <dropColumn tableName="ALERTLOG" columnName="DC_ID"/>
+    </changeSet>
+
+</databaseChangeLog>

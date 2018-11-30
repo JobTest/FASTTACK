@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+<head>
+    <title th:text="#{messageHistory.title}"></title>
+</head>
+<script type="text/javascript" th:fragment="asset">
+    function extendRequireJsDependency(paths, shims, requires) {
+        paths['messageHistory.views.MessageHistoryPageView'] = AppCommon.assetBaseUrl + 'cts/js/messageHistory/views/MessageHistoryPageView';
+        paths['security.model'] = AppCommon.assetBaseUrl + 'cts/js/common/model/SecurityModels';
+        requires.push('messageHistory.views.MessageHistoryPageView');
+    }
+</script>
+<body>
+<div layout:fragment="windowTitle" th:text="#{messageHistory.title}"></div>
+<div class="row" layout:fragment="content">
+    <div class="col-lg-10">
+        <div id="main-container" class="table-responsive">
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

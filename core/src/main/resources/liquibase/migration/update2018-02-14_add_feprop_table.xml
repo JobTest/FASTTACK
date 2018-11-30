@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-02-14_add_feprop_table.xml">
+
+    <changeSet id="update2018-02-14_add_feprop_table_01" author="v.semerkov" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="FEPROP"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="FEPROP">
+            <column name="PROPNAME" type="VARCHAR(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="PROPVALUE" type="VARCHAR(255)"/>
+        </createTable>
+        
+        <insert tableName="FEPROP">
+        	<column name="PROPNAME" value="TERMINAL_ID" />
+        	<column name="PROPVALUE" value="" />
+        </insert>
+        <insert tableName="FEPROP">
+        	<column name="PROPNAME" value="MERCHANT_ID" />
+        	<column name="PROPVALUE" value="" />
+        </insert>
+        <insert tableName="FEPROP">
+        	<column name="PROPNAME" value="ORG_NAME" />
+        	<column name="PROPVALUE" value="" />
+        </insert>
+        <insert tableName="FEPROP">
+        	<column name="PROPNAME" value="CALL_CENTER_AUTOMATED_NUMBER" />
+        	<column name="PROPVALUE" value="" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="update2018-02-14_add_feprop_table_02" author="v.semerkov" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="FEPROP"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="FEPROP">
+            <column name="PROPNAME" type="VARCHAR2(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="PROPVALUE" type="VARCHAR2(255)"/>
+        </createTable>
+        
+        <insert tableName="FEPROP">
+        	<column name="PROPNAME" value="TERMINAL_ID" />
+        	<column name="PROPVALUE" value="" />
+        </insert>
+        <insert tableName="FEPROP">
+        	<column name="PROPNAME" value="MERCHANT_ID" />
+        	<column name="PROPVALUE" value="" />
+        </insert>
+        <insert tableName="FEPROP">
+        	<column name="PROPNAME" value="ORG_NAME" />
+        	<column name="PROPVALUE" value="" />
+        </insert>
+        <insert tableName="FEPROP">
+        	<column name="PROPNAME" value="CALL_CENTER_AUTOMATED_NUMBER" />
+        	<column name="PROPVALUE" value="" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

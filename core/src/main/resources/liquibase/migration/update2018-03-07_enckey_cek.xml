@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-07_enckey_cek.xml">
+
+    <changeSet id="enckey_cek_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions>
+            <and>
+                <tableExists tableName="ENCKEY"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM ENCKEY WHERE KEYTYPE = 'CEK'</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '0',
+            'T', 0,
+            '3004D8158E429FD1BCE69C18C4EB7BE9',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '1',
+            'T', 0,
+            'E90B1EC5CA08525024A7DFDF9A135F03',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '2',
+            'T', 0,
+            '91D45AC627782DC2E7AFA3831BA598D8',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '3',
+            'T', 0,
+            'B762DC56A086B9E3FB805DCCF13A61E2',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '4',
+            'T', 0,
+            '4A6E22FAD6B2CB5B2A29A139DC27DBA1',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '5',
+            'T', 0,
+            '0D3ED7422844DBE343F97541B16FF862',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '6',
+            'T', 0,
+            '1A26115D387032428EC45F9CF83EDF39',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '7',
+            'T', 0,
+            '762227E37C9885884343AF13CDC5FCCC',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '8',
+            'T', 0,
+            'D9F4890B744D2EEB5059C0814CA0C490',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+
+            INSERT INTO ENCKEY(KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            'CEK', '9',
+            'T', 0,
+            '90602E5046FA6BFE9F8C6AD24AA626AA',
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="enckey_cek_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions>
+            <and>
+                <tableExists tableName="ENCKEY"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM ENCKEY WHERE KEYTYPE = 'CEK'</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '0',
+            'T', 0,
+            '3004D8158E429FD1BCE69C18C4EB7BE9',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '1',
+            'T', 0,
+            'E90B1EC5CA08525024A7DFDF9A135F03',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '2',
+            'T', 0,
+            '91D45AC627782DC2E7AFA3831BA598D8',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '3',
+            'T', 0,
+            'B762DC56A086B9E3FB805DCCF13A61E2',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '4',
+            'T', 0,
+            '4A6E22FAD6B2CB5B2A29A139DC27DBA1',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '5',
+            'T', 0,
+            '0D3ED7422844DBE343F97541B16FF862',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '6',
+            'T', 0,
+            '1A26115D387032428EC45F9CF83EDF39',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '7',
+            'T', 0,
+            '762227E37C9885884343AF13CDC5FCCC',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '8',
+            'T', 0,
+            'D9F4890B744D2EEB5059C0814CA0C490',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+
+            INSERT INTO ENCKEY(ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, KEYVALUE, EFFDATE, EXPDATE) VALUES (
+            ENCKEY_ID_SEQ.nextval,
+            'CEK', '9',
+            'T', 0,
+            '90602E5046FA6BFE9F8C6AD24AA626AA',
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120)
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

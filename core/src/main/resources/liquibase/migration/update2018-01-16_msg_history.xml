@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-16_msg_history.xml">
+
+    <changeSet id="create_table_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="MSG_HISTORY"/>
+            </not>
+        </preConditions>
+        <createTable tableName="MSG_HISTORY">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="PARENT_ID" type="bigserial"/>
+            <column name="TOKEN_ID" type="VARCHAR(36)"/>
+            <column name="CONNECTOR_CLIENT" type="VARCHAR(6)"/>
+            <column name="MSG_TYPE" type="VARCHAR(64)"/>
+            <column name="MSG_DATE_IN" type="DATE"/>
+            <column name="MSG_DATE_OUT" type="DATE"/>
+            <column name="MSG_RAW_IN" type="TEXT"/>
+            <column name="MSG_RAW_OUT" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="MSG_HISTORY"/>
+            </not>
+        </preConditions>
+        <createTable tableName="MSG_HISTORY">
+            <column name="ID" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="PARENT_ID" type="number(10)"/>
+            <column name="TOKEN_ID" type="VARCHAR2(36)"/>
+            <column name="CONNECTOR_CLIENT" type="VARCHAR2(1)"/>
+            <column name="MSG_TYPE" type="VARCHAR2(64)"/>
+            <column name="MSG_DATE_IN" type="DATE"/>
+            <column name="MSG_DATE_OUT" type="DATE"/>
+            <column name="MSG_RAW_IN" type="CLOB"/>
+            <column name="MSG_RAW_OUT" type="CLOB"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="update_msg_history" author="d.koval" context="postgresql">
+        <preConditions onFail="MARK_RAN" >
+            <columnExists tableName="MSG_HISTORY" columnName="PARENT_ID" />
+        </preConditions>
+        <modifyDataType
+                columnName="PARENT_ID"
+                newDataType="BIGINT"
+                tableName="MSG_HISTORY"/>
+
+        <dropNotNullConstraint columnName="PARENT_ID" tableName="MSG_HISTORY"/>
+    </changeSet>
+
+</databaseChangeLog>

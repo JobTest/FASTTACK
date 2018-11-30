@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-10-22_update_token_history.xml">
+
+    <changeSet id="update2018-10-22_update_token_history_columns_oracle" author="a.lazarchuk" runOnChange="true" context="oracle">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_HISTORY" columnName="REMINDER_PERIOD"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="REMINDER_PERIOD" type="VARCHAR(64)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

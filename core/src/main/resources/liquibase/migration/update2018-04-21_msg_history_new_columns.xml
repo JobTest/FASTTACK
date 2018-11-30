@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-04-21_msg_history_new_columns.xml">
+
+    <changeSet id="add_decision_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="DECISION"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="DECISION" type="VARCHAR(64)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_decision_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="DECISION"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="DECISION" type="VARCHAR2(64)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_error_code_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="ERROR_CODE"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="ERROR_CODE" type="VARCHAR(32)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_error_code_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="ERROR_CODE"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="ERROR_CODE" type="VARCHAR2(32)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_cvc_resp_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="CVC_RESP"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="CVC_RESP" type="VARCHAR(1)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_cvc_resp_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="CVC_RESP"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="CVC_RESP" type="VARCHAR2(1)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_masked_pan_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="MASKED_PAN"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="MASKED_PAN" type="VARCHAR(19)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_masked_pan_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="MASKED_PAN"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="MASKED_PAN" type="VARCHAR2(19)"/>
+        </addColumn>
+
+    </changeSet>
+
+
+    <changeSet id="add_pan_int_id_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="PAN_INTERNAL_ID"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="PAN_INTERNAL_ID" type="VARCHAR(64)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_pan_int_id_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="PAN_INTERNAL_ID"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="PAN_INTERNAL_ID" type="VARCHAR2(64)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_pan_int_guid_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="PAN_INTERNAL_GUID"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR(64)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_pan_int_guid_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="PAN_INTERNAL_GUID"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR2(64)"/>
+        </addColumn>
+
+    </changeSet>
+
+
+    <changeSet id="add_pan_source_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="PAN_SOURCE"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="PAN_SOURCE" type="VARCHAR(1)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="add_pan_source_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MSG_HISTORY" columnName="PAN_SOURCE"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="MSG_HISTORY">
+            <column name="PAN_SOURCE" type="VARCHAR2(1)"/>
+        </addColumn>
+
+    </changeSet>
+
+
+</databaseChangeLog>

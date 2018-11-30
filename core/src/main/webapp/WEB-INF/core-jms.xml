@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messaging-deployment xmlns="urn:jboss:messaging-activemq-deployment:1.0">
+    <server name="default">
+        <jms-destinations>
+            <jms-queue name="FASTTACK.MDES.authorizeService">
+                <entry name="FASTTACK.MDES.authorizeService"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.MDES.notifyTokenUpdated">
+                <entry name="FASTTACK.MDES.notifyTokenUpdated"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.VTS.sendPasscode">
+                <entry name="FASTTACK.VTS.sendPasscode"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.VTS.cardholderVerificationMethods">
+                <entry name="FASTTACK.VTS.cardholderVerificationMethods"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.MDES.deliverActivationCode">
+                <entry name="FASTTACK.MDES.deliverActivationCode"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.MDES.notifyServiceActivated">
+                <entry name="FASTTACK.MDES.notifyServiceActivated"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.BANK.listTokensByWalletId">
+                <entry name="FASTTACK.BANK.listTokensByWalletId"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.tokenLifecycle">
+                <entry name="FASTTACK.CORE.tokenLifecycle"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.tokenInquiry">
+                <entry name="FASTTACK.CORE.tokenInquiry"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.VTS.tokenCreateNotification">
+                <entry name="FASTTACK.VTS.tokenCreateNotification"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.VTS.tokenNotification">
+                <entry name="FASTTACK.VTS.tokenNotification"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.BANK.lifecycleToken">
+                <entry name="FASTTACK.BANK.lifecycleToken"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.updateToken">
+                <entry name="FASTTACK.CORE.updateToken"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.BANK.tokenInfo">
+                <entry name="FASTTACK.BANK.tokenInfo"/>
+            </jms-queue>
+
+            <jms-queue name="FASTTACK.CORE.tokenDeactivateNotification">
+                <entry name="FASTTACK.CORE.tokenDeactivateNotification"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.tokenDeactivate">
+                <entry name="FASTTACK.CORE.tokenDeactivate"/>
+            </jms-queue>
+
+            <jms-queue name="FASTTACK.CORE.cardDataUpdate">
+                <entry name="FASTTACK.CORE.cardDataUpdate"/>
+            </jms-queue>
+        </jms-destinations>
+    </server>
+</messaging-deployment>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+    <head>
+        <title th:text="#{roles.title}"></title>
+    </head>
+    <script type="text/javascript" th:fragment="asset">
+        function extendRequireJsDependency(paths, shims, requires) {
+            paths['role.views.RoleCreatePageView'] = AppCommon.assetBaseUrl + 'cts/js/role/views/RoleCreatePageView';
+            paths['security.model'] = AppCommon.assetBaseUrl + 'cts/js/common/model/SecurityModels';
+            requires.push('role.views.RoleCreatePageView');
+        }
+    </script>
+    <body>
+        <div layout:fragment="windowTitle" th:text="#{roles.title}"></div>
+        <div class="row" layout:fragment="content">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <table id="roleCreateContainer" class="table table-striped table-bordered table-hover" data-parsley-validate="true">
+                        <tbody>
+                            <tr><td class="errorDescription" colspan="2"></td></tr>
+                            <tr>
+                                <th th:text="#{roles.id}"></th>
+                                <td>
+                                    <input name="id" size="20" class="form-control input-sm"
+                                           data-parsley-required="true"
+                                           th:attr="data-parsley-required-message=#{roles.validation.empty.id}"
+                                           data-parsley-errors-container="div[data-remark-field='id']"/>
+                                    <div class="fieldRemark" data-remark-field="id"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th th:text="#{roles.description}"></th>
+                                <td>
+                                    <input name="description" size="30" class="form-control input-sm"
+                                           data-parsley-required="true"
+                                           th:attr="data-parsley-required-message=#{roles.validation.empty.description}"
+                                           data-parsley-errors-container="div[data-remark-field='description']"/>
+                                    <div class="fieldRemark" data-remark-field="description"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th th:text="#{roles.privileges}"></th>
+                                <td width="50%">
+                                    <select id="privileges" name="privileges[]" class="select2" data-multiple="true" data-select-mode="object" data-allow-clear="true"
+                                            data-parsley-required="true"
+                                            th:attr="data-parsley-required-message=#{roles.validation.empty.privileges}"
+                                            data-parsley-errors-container="div[data-remark-field='privileges']"></select>
+                                    <div class="fieldRemark" data-remark-field="privileges"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a th:href="@{/role/list.htm}" class="btnCancel btn btn-default" th:text="#{common.cancel}"></a>
+                                </td>
+                                <td>
+                                    <button class="btnSave btn btn-primary" th:text="#{common.save}"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

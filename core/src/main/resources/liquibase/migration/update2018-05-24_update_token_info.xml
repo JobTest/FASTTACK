@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-05-24_update_token_info.xml">
+
+    <changeSet id="update2018-05-24_update_tokeninfo_add_bin_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="BIN"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="TOKEN_INFO">
+            <column name="BIN" type="NUMBER(19,0)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-05-24_create_idx_tokeninfo_paninternalid_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_tokeninfo_paninternalid"/>
+            </not>
+        </preConditions>
+
+        <createIndex indexName="idx_tokeninfo_paninternalid" tableName="TOKEN_INFO">
+            <column name="PAN_INTERNAL_ID" type="VARCHAR(64)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="update2018-05-24_create_idx_tokeninfo_paninternalguid_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_tokeninfo_paninternalguid"/>
+            </not>
+        </preConditions>
+
+        <createIndex indexName="idx_tokeninfo_paninternalguid" tableName="TOKEN_INFO">
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR(64)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="update2018-05-24_update_tokeninfo_add_bin_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="BIN"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="TOKEN_INFO">
+            <column name="BIN" type="NUMBER(19)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-05-24_create_idx_tokeninfo_paninternalid_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_tokeninfo_paninternalid"/>
+            </not>
+        </preConditions>
+
+        <createIndex indexName="idx_tokeninfo_paninternalid" tableName="TOKEN_INFO">
+            <column name="PAN_INTERNAL_ID" type="VARCHAR2(64)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="update2018-05-24_create_idx_tokeninfo_paninternalguid_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_tokeninfo_paninternalguid"/>
+            </not>
+        </preConditions>
+
+        <createIndex indexName="idx_tokeninfo_paninternalguid" tableName="TOKEN_INFO">
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR2(64)"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

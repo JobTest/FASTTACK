@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-13_alter_sms_template.xml">
+
+    <changeSet id="alter_sms_message_template_code" author="a.leliuk" runOnChange="true">
+        <sql>
+            UPDATE SMS_MESSAGE SET MESSAGE_TYPE = 'AUTHENTICATION' WHERE MESSAGE_TYPE = 'AUTHENTICATION_ru_RU';
+            UPDATE SMS_MESSAGE SET MESSAGE_TYPE = 'RESTORE_PASSWORD' WHERE MESSAGE_TYPE = 'RESTORE_PASSWORD_ru_RU';
+            UPDATE SMS_MESSAGE SET MESSAGE_TYPE = 'ACTIVATION' WHERE MESSAGE_TYPE = 'ACTIVATION_ru_RU';
+
+            UPDATE SMS_MESSAGE_TEMPLATE SET MESSAGE_TYPE = 'AUTHENTICATION' WHERE MESSAGE_TYPE = 'AUTHENTICATION_ru_RU';
+            UPDATE SMS_MESSAGE_TEMPLATE SET MESSAGE_TYPE = 'RESTORE_PASSWORD' WHERE MESSAGE_TYPE = 'RESTORE_PASSWORD_ru_RU';
+            UPDATE SMS_MESSAGE_TEMPLATE SET MESSAGE_TYPE = 'ACTIVATION' WHERE MESSAGE_TYPE = 'ACTIVATION_ru_RU';
+        </sql>
+    </changeSet>
+</databaseChangeLog>

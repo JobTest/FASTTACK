@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-09_indexes.xml">
+
+    <changeSet id="cvm_correlation_id_index_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="CARDHOLDER_VERIFICATION_METHOD" indexName="CORRELATION_ID_IDX"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="CARDHOLDER_VERIFICATION_METHOD" indexName="CORRELATION_ID_IDX">
+            <column name="CORRELATION_ID" type="VARCHAR(64)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="cvm_correlation_id_index_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="CARDHOLDER_VERIFICATION_METHOD" indexName="CORRELATION_ID_IDX"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="CARDHOLDER_VERIFICATION_METHOD" indexName="CORRELATION_ID_IDX">
+            <column name="CORRELATION_ID" type="VARCHAR2(64)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="cvm_token_ref_id_requestor_index_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="CARDHOLDER_VERIFICATION_METHOD" indexName="TOKEN_REF_REQUESTOR_ID_IDX"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="CARDHOLDER_VERIFICATION_METHOD" indexName="TOKEN_REF_REQUESTOR_ID_IDX">
+            <column name="TOKEN_REF_ID" type="VARCHAR(64)"/>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR(30)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="cvm_token_ref_id_requestor_index_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="CARDHOLDER_VERIFICATION_METHOD" indexName="TOKEN_REF_REQUESTOR_ID_IDX"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="CARDHOLDER_VERIFICATION_METHOD" indexName="TOKEN_REF_REQUESTOR_ID_IDX">
+            <column name="TOKEN_REF_ID" type="VARCHAR2(64)"/>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR2(30)"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

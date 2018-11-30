@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-23_update_token_reason.xml">
+
+    <changeSet id="add_mdes_reason_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_REASON" columnName="MDES_REASON"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="TOKEN_REASON">
+            <column name="MDES_REASON" type="VARCHAR(1)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="modify_reason_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+                <columnExists tableName="TOKEN_REASON" columnName="REASON"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_REASON" columnName="REASON" newDataType="VARCHAR(256)"/>
+    </changeSet>
+
+    <changeSet id="add_description_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_REASON" columnName="MDES_REASON"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="TOKEN_REASON">
+            <column name="MDES_REASON" type="VARCHAR2(1)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="modify_reason_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_REASON" columnName="REASON"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_REASON" columnName="REASON" newDataType="VARCHAR2(256)"/>
+    </changeSet>
+
+    <changeSet id="add_mdes_reason_activate" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON = 'ACTIVATE' AND MDES_REASON IS NULL</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>
+            UPDATE TOKEN_REASON
+            SET REASON = 'Activation over Call center/Активация через кол центр', MDES_REASON='C'
+            WHERE TOKEN_STATUS_UPDATE_REASON='ACTIVATE' AND REASON='C';
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_mdes_reason_suspend" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON = 'SUSPEND' AND MDES_REASON IS NULL</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>
+            UPDATE TOKEN_REASON
+            SET REASON = 'Device don’t find/Устройство потеряно', MDES_REASON='L'
+            WHERE TOKEN_STATUS_UPDATE_REASON='SUSPEND' AND REASON='L';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Device stolen/Устройство украдено', MDES_REASON='S'
+            WHERE TOKEN_STATUS_UPDATE_REASON='SUSPEND' AND REASON='S';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Fraud/Мошенничество', MDES_REASON='T'
+            WHERE TOKEN_STATUS_UPDATE_REASON='SUSPEND' AND REASON='T';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Other/Другое', MDES_REASON='Z'
+            WHERE TOKEN_STATUS_UPDATE_REASON='SUSPEND' AND REASON='Z'
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_mdes_reason_resume" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON = 'RESUME' AND MDES_REASON IS NULL</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>
+            UPDATE TOKEN_REASON
+            SET REASON = 'Device recovered/Устройство восстановлено', MDES_REASON='F'
+            WHERE TOKEN_STATUS_UPDATE_REASON='RESUME' AND REASON='F';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'No Fraud/Не мошенничество', MDES_REASON='T'
+            WHERE TOKEN_STATUS_UPDATE_REASON='RESUME' AND REASON='T';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Other/Другое', MDES_REASON='Z'
+            WHERE TOKEN_STATUS_UPDATE_REASON='RESUME' AND REASON='Z';
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_mdes_reason_delete" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON = 'DELETE' AND MDES_REASON IS NULL</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>
+            UPDATE TOKEN_REASON
+            SET REASON = 'Device lost/Устройство потеряно', MDES_REASON='L'
+            WHERE TOKEN_STATUS_UPDATE_REASON='DELETE' AND REASON='L';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Device stolen/Устройство украдено', MDES_REASON='S'
+            WHERE TOKEN_STATUS_UPDATE_REASON='DELETE' AND REASON='S';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Fraud/Мошенничество', MDES_REASON='T'
+            WHERE TOKEN_STATUS_UPDATE_REASON='DELETE' AND REASON='T';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Account closed/Закрытие счета', MDES_REASON='C'
+            WHERE TOKEN_STATUS_UPDATE_REASON='DELETE' AND REASON='C';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Other/Другое', MDES_REASON='Z'
+            WHERE TOKEN_STATUS_UPDATE_REASON='DELETE' AND REASON='Z';
+
+            DELETE FROM TOKEN_REASON WHERE REASON='F';
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-22_update_enckey.xml">
+
+    <changeSet id="update2018-01-22_update_enckey" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <sequenceExists sequenceName="enckey_seq"/>
+        </preConditions>
+
+        <sql>RENAME enckey_seq TO enckey_id_seq</sql>
+    </changeSet>
+
+</databaseChangeLog>

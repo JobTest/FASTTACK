@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-20_add_token_reason.xml">
+
+    <changeSet id="create_table_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_REASON"/>
+            </not>
+        </preConditions>
+        <createTable tableName="TOKEN_REASON">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TOKEN_STATUS_UPDATE_REASON" type="VARCHAR(30)"/>
+            <column name="REASON" type="VARCHAR(30)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_REASON"/>
+            </not>
+        </preConditions>
+        <createTable tableName="TOKEN_REASON">
+            <column name="id" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TOKEN_STATUS_UPDATE_REASON" type="VARCHAR2(30)" />
+            <column name="REASON" type="VARCHAR2(30)" />
+        </createTable>
+
+        <createSequence
+                sequenceName="token_reason_id_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+
+    <changeSet id="add_record_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='ACTIVATE' AND REASON='C'</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('ACTIVATE', 'C');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_record_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='ACTIVATE' AND REASON='C'</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'ACTIVATE', 'C');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_reason_view_add_privilege1" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'TOKEN_ACTIVATE'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('TOKEN_ACTIVATE', 'Активация токена');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'TOKEN_ACTIVATE');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_reason_view_add_privilege2" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'TOKEN_SUSPEND'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('TOKEN_SUSPEND', 'Приостановка токена');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'TOKEN_SUSPEND');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_reason_view_add_privilege3" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'TOKEN_RESUME'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('TOKEN_RESUME', 'Восстановление токена');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'TOKEN_RESUME');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_reason_view_add_privilege4" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'TOKEN_DELETE'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('TOKEN_DELETE', 'Удаление токена');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'TOKEN_DELETE');
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

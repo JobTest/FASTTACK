@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-16_column_lengths.xml">
+    
+    <changeSet id="token_info_phone_length_postgresql" author="a.leliuk" runOnChange="true" context="postgesql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_INFO" columnName="CUSTOMER_PHONE"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_INFO" columnName="CUSTOMER_PHONE" newDataType="VARCHAR(16)"/>
+    </changeSet>
+    <changeSet id="token_info_phone_length_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_INFO" columnName="CUSTOMER_PHONE"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_INFO" columnName="CUSTOMER_PHONE" newDataType="VARCHAR2(16)"/>
+    </changeSet>
+
+    <changeSet id="token_history_wprequest_id_length_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="WPREQUEST_ID"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="WPREQUEST_ID" newDataType="VARCHAR(64)"/>
+    </changeSet>
+    <changeSet id="token_history_wprequest_id_length_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="WPREQUEST_ID"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="WPREQUEST_ID" newDataType="VARCHAR2(64)"/>
+    </changeSet>
+
+    <changeSet id="usrdet_phone_length_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="USRDET" columnName="PHONE"/>
+        </preConditions>
+        <modifyDataType tableName="USRDET" columnName="PHONE" newDataType="VARCHAR(16)"/>
+    </changeSet>
+    <changeSet id="usrdet_phone_length_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="USRDET" columnName="PHONE"/>
+        </preConditions>
+        <modifyDataType tableName="USRDET" columnName="PHONE" newDataType="VARCHAR2(16)"/>
+    </changeSet>
+</databaseChangeLog>

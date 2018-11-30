@@ -1,0 +1,24 @@
+<table class="table table-striped table-bordered table-hover" xmlns:th="http://www.thymeleaf.org" data-parsley-validate="true">
+    <tbody>
+    <tr>
+        <td class="errorDescription" colspan="2"></td>
+    </tr>
+
+    <tr>
+        <th width="20%">{{=Common.bundles.getMessage('cardProduct.productConfigId')}}</th>
+        <td width="80%">
+            <input name="productConfigId" class="form-control input-sm" data-parsley-maxlength="19" maxlength="19" size="19"
+                   data-parsley-regexp="^\d+$"
+                   th:attr="data-parsley-regexp-message=#{cardProduct.invalid}"
+                   data-parsley-regexp-message=""/>
+            <div class="fieldRemark" data-remark-field="productConfigId"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <button class="btnFilter btn btn-primary" th:text="#{common.filter}"></button>
+        </td>
+    </tr>
+    </tbody>
+</table>

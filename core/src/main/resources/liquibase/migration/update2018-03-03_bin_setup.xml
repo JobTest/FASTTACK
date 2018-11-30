@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-03_bin_setup.xml">
+
+    <changeSet id="update2018-03-03_bin_setup_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="BIN_SETUP" columnName="SEND_GET_CUSTOMER_ID"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="BIN_SETUP">
+            <column name="SEND_GET_CUSTOMER_ID" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-03-03_bin_setup_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="BIN_SETUP" columnName="SEND_GET_CUSTOMER_ID"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="BIN_SETUP">
+            <column name="SEND_GET_CUSTOMER_ID" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

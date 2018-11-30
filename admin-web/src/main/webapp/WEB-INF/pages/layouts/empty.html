@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <meta http-equiv="cache-control" content="no-cache">
+        <meta http-equiv="cache-control" content="no-store">
+        <meta http-equiv="expires" content="0">
+        <meta http-equiv="pragma" content="no-cache">
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    
+        <title layout:title-pattern="$CONTENT_TITLE"></title>
+    
+        <link rel="stylesheet" th:href="@{'/assets/bootstrap/css/bootstrap.min.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+    
+        <!-- MetisMenu CSS -->
+        <link rel="stylesheet" th:href="@{'/assets/dist/css/metisMenu.min.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+    
+        <!-- Custom CSS -->
+        <link rel="stylesheet" th:href="@{'/assets/dist/css/cts-common.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+        <link rel="stylesheet" th:href="@{'/assets/dist/css/sb-admin-2.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+    
+        <!-- Custom Fonts -->
+        <link rel="stylesheet" th:href="@{'/assets/fontAwesome/css/font-awesome.min.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+    
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <script type="text/javascript" th:src="@{'/assets/dist/js/jquery-3.2.1.min.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}"></script>
+    
+        <script type="text/javascript" th:src="@{'/assets/bootstrap/js/bootstrap.min-3.3.5.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}"></script>
+    
+        <script type="text/javascript" th:include="this::asset"></script>
+        <script type="text/javascript" th:inline="javascript">
+            window.AppCommon = {
+                context: {
+                    localStoragePrefix: 'ctsls',
+                    version: /*[[${properties['spring.admin.web.buildTimestamp']}]]*/''
+                }
+            };
+            window.AppCommon.baseUrl = /*[[@{/}]]*/ '';
+        </script>
+        <script type="text/javascript"
+                th:src="@{'/assets/requirejs/require.min.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}"
+                th:attr="data-main=@{'/assets/cts/js/common/app-common.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}">
+        </script>
+    </head>
+    
+    <body>
+        <div layout:fragment="content"></div>
+    </body>
+</html>

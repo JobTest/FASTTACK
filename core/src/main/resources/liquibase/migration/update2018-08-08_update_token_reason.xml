@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-08-08_update_token_reason.xml">
+
+    <changeSet id="update_token_reason_resume" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON = 'RESUME'</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>
+            UPDATE TOKEN_REASON
+            SET REASON = 'Устройство найдено/Cardholder reported token device found or not stolen'
+            WHERE TOKEN_STATUS_UPDATE_REASON='RESUME' AND REASON='Картодержатель уведомил о том что устройство найдено или не было украдено/Cardholder reported token device found or not stolen';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Мошеннические операции отсутствуют/Issuer or cardholder confirmed no fraudulent token transactions'
+            WHERE TOKEN_STATUS_UPDATE_REASON='RESUME' AND REASON='Банк или картодержатель подтвердили об отсутствии мошеннических операций с токенами/Issuer or cardholder confirmed no fraudulent token transactions';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Прочее/Other'
+            WHERE TOKEN_STATUS_UPDATE_REASON='RESUME' AND REASON='Другое/Other';
+        </sql>
+    </changeSet>
+
+    <changeSet id="update_token_reason_suspend" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON = 'SUSPEND'</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>
+            UPDATE TOKEN_REASON
+            SET REASON = 'Прочее/Other'
+            WHERE TOKEN_STATUS_UPDATE_REASON='SUSPEND' AND REASON='Другое/Other';
+
+            UPDATE TOKEN_REASON
+            SET REASON = 'Устройство потеряно/Device lost'
+            WHERE TOKEN_STATUS_UPDATE_REASON='SUSPEND' AND REASON='Устройство потеряно/Device don’t find';
+        </sql>
+    </changeSet>
+
+    <changeSet id="update_token_reason_delete" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON = 'DELETE'</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>
+            UPDATE TOKEN_REASON
+            SET REASON = 'Прочее/Other'
+            WHERE TOKEN_STATUS_UPDATE_REASON='DELETE' AND REASON='Другое/Other';
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

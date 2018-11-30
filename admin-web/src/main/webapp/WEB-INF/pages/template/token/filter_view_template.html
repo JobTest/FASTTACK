@@ -1,0 +1,148 @@
+<script>
+    $( function() {
+        $('input[name="dateFrom"],[name="dateTill"]').datepicker({ locale: 'no', format: 'dd.mm.yyyy', showButtonPanel: true, closeOnSelect: true });
+    } );
+</script>
+
+<form onsubmit="return false">
+<table class="table table-striped table-bordered table-hover" xmlns:th="http://www.thymeleaf.org" data-parsley-validate="true">
+    <tbody>
+    <tr>
+        <td class="errorDescription" colspan="2"></td>
+    </tr>
+
+    <tr>
+        <th>{{=Common.bundles.getMessage('token.accountpan')}}</th>
+        <td width="70%">
+            <!--<input name="pan" class="form-control input-sm" data-parsley-maxlength="19" maxlength="19" size="19"-->
+                   <!--data-parsley-regexp="^([\d]{16}|[\d]{19})$"-->
+                   <!--th:attr="data-parsley-regexp-message=#{token.accountPan.invalid}"-->
+                   <!--data-parsley-regexp-message="" value="{{=filter.pan}}"/>-->
+            <!--<div class="fieldRemark" data-remark-field="pan"></div>-->
+            <input class="form-control input-sm"
+                   name="pan"
+                   pattern="^([\d]{16}|[\d]{19})$"
+                   value="{{=filter.pan}}"
+                   oninvalid="setCustomValidity('Введите номер карты в правильном формате')"
+                   onchange="try{ setCustomValidity('') } catch(e){}" />
+        </td>
+    </tr>
+
+    <tr>
+        <th th:text="#{token.status}"></th>
+        <td width="50%">
+            <select id="statuses" name="statuses" class="select2" data-multiple="true" data-value="{{=filter.statuses}}"
+                    data-allow-clear="true"></select>
+            <div class="fieldRemark" data-remark-field="statuses"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <th>{{=Common.bundles.getMessage('token.contragentId')}}</th>
+        <td>
+            <input name="contragentId" class="form-control input-sm" value="{{=filter.contragentId}}"/>
+            <div class="fieldRemark" data-remark-field="contragentId"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <th>{{=Common.bundles.getMessage('token.taxId')}}</th>
+        <td>
+            <!--<input name="taxId" class="form-control input-sm" data-parsley-maxlength="10" maxlength="10" size="10"-->
+                   <!--data-parsley-regexp="^\d+$"-->
+                   <!--th:attr="data-parsley-regexp-message=#{token.taxId.invalid}" value="{{=filter.taxId}}"-->
+                   <!--data-parsley-regexp-message=""/>-->
+            <!--<div class="fieldRemark" data-remark-field="taxId"></div>-->
+            <input class="form-control input-sm"
+                   name="taxId"
+                   pattern="^([\d]{10})$"
+                   value="{{=filter.taxId}}"
+                   oninvalid="setCustomValidity('Введите ИНН в правильном формате')"
+                   onchange="try{ setCustomValidity('') } catch(e){}" />
+
+        </td>
+    </tr>
+
+    <tr>
+        <th>{{=Common.bundles.getMessage('token.document')}}</th>
+        <td>
+
+            <div style="display: flex;justify-content: space-between;">
+                <div class="input-group">
+                    <span class="input-group-addon" id="docSr">{{=Common.bundles.getMessage('token.docSr')}}</span>
+                    <input name="docSr" class="form-control input-sm" value="{{=filter.docSr}}"/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="docNo">{{=Common.bundles.getMessage('token.docNo')}}</span>
+                    <input name="docNo" class="form-control input-sm" value="{{=filter.docNo}}"/>
+                </div>
+            </div>
+
+            <div class="fieldRemark" data-remark-field="docNo"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <th>{{=Common.bundles.getMessage('token.tokenReference.name')}}</th>
+        <td>
+            <input name="tokenRefId" class="form-control input-sm" value="{{=filter.tokenRefId}}"/>
+            <div class="fieldRemark" data-remark-field="tokenRefId"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <th>{{=Common.bundles.getMessage('token.paymentAppId.name')}}</th>
+        <td>
+            <input name="paymentAppId" class="form-control input-sm" value="{{=filter.paymentAppId}}"/>
+            <div class="fieldRemark" data-remark-field="paymentAppId"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <th>{{=Common.bundles.getMessage('token.filter.showAll')}}</th>
+        <td>
+            {{ if(filter.showAll) { }}
+                <input name="showAll" type="checkbox" class="form-check-input boolean" checked/>
+            {{ } else { }}
+                <input name="showAll" type="checkbox" class="form-check-input boolean"/>
+            {{ }; }}
+        </td>
+    </tr>
+
+    <tr>
+        <th th:text="#{token.filter.date}"></th>
+        <td>
+            <div>
+                <span th:text="#{common.text.from}"></span>
+                <input name="dateFrom" size="15" class="form-control datepicker inputNarrow" />
+                <span th:text="#{common.text.to}"></span>
+                <input name="dateTill" size="15" class="form-control datepicker inputNarrow" />
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+        </td>
+        <td>
+            <button class="btnFilter btn btn-primary" th:text="#{common.filter}"></button>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <button id="btnActiveToken" class="btnActiveToken btn btn-primary" th:if="${@aclToken.isCanActivate()}" th:text="#{token.activate}"></button>
+
+            <button class="btnDeleteToken btn btn-danger" th:if="${@aclToken.isCanDelete()}" th:text="#{token.delete}"></button>
+
+            <button class="btnSuspendToken btn btn-primary" th:if="${@aclToken.isCanSuspend()}" th:text="#{token.suspend}"></button>
+
+            <button class="btnResumeToken btn btn-primary" th:if="${@aclToken.isCanResume()}" th:text="#{token.resume}"></button>
+
+            <button class="updateToken btn btn-primary" th:if="${@aclToken.isCanUpdate()}" th:text="#{token.update}"></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</form>

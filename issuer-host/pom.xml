@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.cts.fasttack</groupId>
+        <artifactId>fasttack</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.cts.fasttack.ih</groupId>
+    <artifactId>issuer-host-parent</artifactId>
+    <packaging>pom</packaging>
+
+    <profiles>
+        <!-- -=| The profile is DEFAULT |=- -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>ih-client</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>dev-ih-sv</id>
+            <modules>
+                <module>ih-sv-client</module>
+            </modules>
+        </profile>
+        <!-- -=| The profile use to RELEASE-Version |=- -->
+        <profile>
+            <id>release</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <modules>
+                <module>ih-client</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>release-ih-sv</id>
+            <modules>
+                <module>ih-sv-client</module>
+            </modules>
+        </profile>
+        <!-- -=| The PRODUCTION profile for 'Alfa-Bank' |=- -->
+        <profile>
+            <id>Alfa</id>
+            <modules>
+                <module>ih-sv-client</module>
+            </modules>
+        </profile>
+        <!-- -=| The TEST profile for 'Alfa-Bank' |=- -->
+        <profile>
+            <id>Alfa-TEST</id>
+            <modules>
+                <module>ih-sv-client</module>
+            </modules>
+        </profile>
+        <!-- -=| The PRODUCTION profile for 'OTP-Bank' |=- -->
+        <profile>
+            <id>OTP</id>
+            <modules>
+                <module>ih-client</module>
+            </modules>
+        </profile>
+    </profiles>
+
+</project>

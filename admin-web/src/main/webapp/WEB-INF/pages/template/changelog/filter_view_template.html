@@ -1,0 +1,46 @@
+<table class="table table-striped table-bordered table-hover ChangeLog-table" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+        <tr>
+            <th colspan="2" class="errorDescription"></th>
+        </tr>
+        <tr>
+            <th th:text="#{changeLog.action}"></th>
+            <td>
+                <input name="action" size="64" maxlength="255" class="form-control input-sm" />
+                <div class="fieldRemark" data-remark-field="action"></div>
+            </td>
+        </tr>
+        <tr>
+            <th th:text="#{changeLog.itemType}"></th>
+            <td>
+                <select id="itemType" name="itemType" class="select2"
+                        data-allow-clear="true" data-value='{{=filter.itemType}}'></select>
+                <div class="fieldRemark" data-remark-field="itemType"></div>
+            </td>
+        </tr>
+        <tr>
+            <th th:text="#{changeLog.itemId}"></th>
+            <td>
+                <input name="itemId" size="64" maxlength="64" class="form-control input-sm" />
+                <div class="itemId" data-remark-field="itemId"></div>
+            </td>
+        </tr>
+        <tr>
+            <th th:text="#{changeLog.time}"></th>
+            <td>
+                <div>
+                    <span th:text="#{common.text.from}"></span>
+                    <input name="dateFrom" size="15" class="form-control datepicker inputNarrow" />
+                    <span th:text="#{common.text.to}"></span>
+                    <input name="dateTill" size="15" class="form-control datepicker inputNarrow" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button class="btnFilter btn btn-primary" th:text="#{common.filter}"></button>
+            </td>
+        </tr>
+    </tbody>
+</table>

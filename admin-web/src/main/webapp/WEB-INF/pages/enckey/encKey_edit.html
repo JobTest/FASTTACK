@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+    <head>
+        <title th:text="#{enckey.title}"></title>
+    </head>
+    <script type="text/javascript" th:fragment="asset">
+        function extendRequireJsDependency(paths, shims, requires) {
+            paths['enckey.views.EncKeyEditPageView'] = AppCommon.assetBaseUrl + 'cts/js/enckey/views/EncKeyEditPageView';
+            paths['security.model'] = AppCommon.assetBaseUrl + 'cts/js/common/model/SecurityModels';
+            requires.push('enckey.views.EncKeyEditPageView');
+        }
+    </script>
+    <body>
+        <div layout:fragment="windowTitle" th:text="#{enckey.title}"></div>
+        <div class="row" layout:fragment="content">
+            <div class="col-lg-6">
+                <div id="encKey-edit-container" class="panel panel-default" data-parsley-validate="true">
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

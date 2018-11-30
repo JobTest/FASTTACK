@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+    <head>
+        <title th:text="#{token.title}"></title>
+    </head>
+    <script type="text/javascript" th:fragment="asset">
+        function extendRequireJsDependency(paths, shims, requires) {
+            paths['token.views.TokenPageView'] = AppCommon.assetBaseUrl + 'cts/js/token/views/TokenPageView';
+            paths['security.model'] = AppCommon.assetBaseUrl + 'cts/js/common/model/SecurityModels';
+            requires.push('token.views.TokenPageView');
+        }
+    </script>
+    <body>
+        <div layout:fragment="windowTitle" th:text="#{token.tokenInfo}"></div>
+        <div class="row" layout:fragment="content">
+            <div class="col-lg-10">
+                <div id="main-container" class="table-responsive">
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

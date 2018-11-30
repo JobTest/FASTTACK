@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-10_enckey.xml">
+
+    <changeSet id="create_table_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ENCKEY"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ENCKEY">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="KEYTYPE" type="VARCHAR(30)"/>
+            <column name="REFCODE" type="VARCHAR(255)"/>
+            <column name="CAPACITY" type="CHAR(1)"/>
+            <column name="STATCODE" type="SMALLINT"/>
+            <column name="CHECKVALUE" type="CHAR(6)"/>
+            <column name="EFFDATE" type="DATE"/>
+            <column name="EXPDATE" type="DATE"/>
+            <column name="WRAPPINGKEY" type="VARCHAR(255)"/>
+            <column name="KEYVALUE" type="TEXT"/>
+            <column name="PUBLICEXPONENT" type="VARCHAR(6)"/>
+        </createTable>
+        <addUniqueConstraint
+                constraintName="enckey_unique_values"
+                tableName="ENCKEY"
+                columnNames="KEYTYPE, REFCODE" />
+    </changeSet>
+
+    <changeSet id="create_table_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ENCKEY"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ENCKEY">
+            <column name="id" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="KEYTYPE" type="VARCHAR2(30)" />
+            <column name="REFCODE" type="VARCHAR2(255)" />
+            <column name="CAPACITY" type="CHAR(1)"/>
+            <column name="STATCODE" type="NUMBER(5)"/>
+            <column name="KEYVALUE" type="CLOB"/>
+            <column name="CHECKVALUE" type="CHAR(6)"/>
+            <column name="EFFDATE" type="DATETIME"/>
+            <column name="EXPDATE" type="DATETIME"/>
+            <column name="WRAPPINGKEY" type="VARCHAR2(255)"/>
+        </createTable>
+
+        <addUniqueConstraint
+                constraintName="enckey_unique_values"
+                tableName="ENCKEY"
+                columnNames="KEYTYPE, REFCODE" />
+
+        <createSequence
+                sequenceName="enckey_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+
+    <changeSet id="enckey_publicexponent" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="ENCKEY"/>
+                <not>
+                    <columnExists tableName="ENCKEY" columnName="PUBLICEXPONENT"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="ENCKEY">
+            <column name="PUBLICEXPONENT" type="CHAR(6)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="enckey_alter_publicexponent" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="ENCKEY"/>
+                <columnExists tableName="ENCKEY" columnName="PUBLICEXPONENT"/>
+            </and>
+        </preConditions>
+        <sql>
+            ALTER TABLE ENCKEY MODIFY (PUBLICEXPONENT VARCHAR2(6 CHAR));
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

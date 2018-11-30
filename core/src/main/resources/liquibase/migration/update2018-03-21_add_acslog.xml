@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-21_add_acslog.xml">
+
+
+    <changeSet id="create_acsLog_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ACSLOG"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ACSLOG">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(20)"/>
+            <column name="ITEMTYPE" type="VARCHAR(64)"/>
+            <column name="ITEMID" type="VARCHAR(64)"/>
+            <column name="USRNAME" type="varchar(30)"/>
+            <column name="ACSDATE" type="date"/>
+            <column name="F1" type="varchar(255)"/>
+            <column name="F2" type="varchar(255)"/>
+            <column name="F3" type="varchar(255)"/>
+            <column name="F4" type="varchar(255)"/>
+            <column name="F5" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ACSLOG_USRNAME_INDX"
+                     tableName="ACSLOG">
+            <column name="USRNAME" type="varchar(30)"/>
+        </createIndex>
+
+        <createIndex indexName="ACSLOG_ACSDATE_INDX"
+                     tableName="ACSLOG">
+            <column name="ACSDATE" type="date"/>
+        </createIndex>
+
+        <createIndex indexName="ACSLOG_ITEMTYPE_INDX" tableName="ACSLOG">
+            <column name="ITEMTYPE" type="varchar(64)"/>
+        </createIndex>
+
+        <createIndex indexName="ACSLOG_ITEMID_INDX" tableName="ACSLOG">
+            <column name="ITEMID" type="varchar(64)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create_acsLog_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ACSLOG"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ACSLOG">
+            <column name="id" type="number">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR2(20)"/>
+            <column name="ITEMTYPE" type="VARCHAR2(64)"/>
+            <column name="ITEMID" type="VARCHAR2(64)"/>
+            <column name="USRNAME" type="varchar2(30)"/>
+            <column name="ACSDATE" type="date"/>
+            <column name="F1" type="varchar2(255)"/>
+            <column name="F2" type="varchar2(255)"/>
+            <column name="F3" type="varchar2(255)"/>
+            <column name="F4" type="varchar2(255)"/>
+            <column name="F5" type="varchar2(255)"/>
+        </createTable>
+
+        <createSequence
+                sequenceName="ACSLOG_ID_SEQ"
+                startValue="1"
+                incrementBy="1"/>
+
+        <createIndex indexName="ACSLOG_USRNAME_INDX"
+                     tableName="ACSLOG">
+            <column name="USRNAME" type="varchar2(30)"/>
+        </createIndex>
+
+        <createIndex indexName="ACSLOG_ACSDATE_INDX"
+                     tableName="ACSLOG">
+            <column name="ACSDATE" type="date"/>
+        </createIndex>
+
+        <createIndex indexName="ACSLOG_ITEMTYPE_INDX" tableName="ACSLOG">
+            <column name="ITEMTYPE" type="varchar2(64)"/>
+        </createIndex>
+
+        <createIndex indexName="ACSLOG_ITEMID_INDX" tableName="ACSLOG">
+            <column name="ITEMID" type="varchar2(64)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="token_reason_view_add_privilege4" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'ACCESS_LOG_VIEW'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('ACCESS_LOG_VIEW', 'Просмотр записей в логе доступа');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'ACCESS_LOG_VIEW');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

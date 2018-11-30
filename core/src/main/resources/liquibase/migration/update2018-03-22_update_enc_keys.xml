@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-22_update_enc_keys.xml">
+
+
+    <changeSet id="update2018-03-22_update_enc_keys" author="v.semerkov" runOnChange="true">
+        <sql>
+            UPDATE ENCKEY SET KEYTYPE = 'MDES_PUB' WHERE KEYTYPE = 'OPC_PUB';
+            UPDATE ENCKEY SET KEYTYPE = 'TAV_PRIV', REFCODE = 'FASTTACK' WHERE KEYTYPE = 'OPC_TAV_PRIV';
+            UPDATE ENCKEY SET REFCODE = '1' WHERE KEYTYPE = 'VTS_WSD' AND REFCODE = 'FASTTACK';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

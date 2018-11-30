@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-10_enckey.xml">
+
+    <changeSet id="create_table_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="CVC_ATTEMPT"/>
+            </not>
+        </preConditions>
+        <createTable tableName="CVC_ATTEMPT">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="FAILURES" type="INTEGER"/>
+            <column name="LASTDATE" type="TIMESTAMP"/>
+            <column name="PAN_INTERNAL_ID" type="VARCHAR(64)"/>
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR(64)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="CVC_ATTEMPT"/>
+            </not>
+        </preConditions>
+        <createTable tableName="CVC_ATTEMPT">
+            <column name="id" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="FAILURES" type="INTEGER(4)" />
+            <column name="LASTDATE" type="TIMESTAMP" />
+            <column name="PAN_INTERNAL_ID" type="VARCHAR2(64)"/>
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR2(64)"/>
+        </createTable>
+
+        <createSequence
+                sequenceName="cvc_attempt_id_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+
+    <changeSet id="update_binsetup_cvv_attempt" author="d.koval">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="BIN_SETUP" columnName="CVC_ATTEMPT"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="BIN_SETUP">
+            <column name="CVC_ATTEMPT" type="INTEGER" />
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

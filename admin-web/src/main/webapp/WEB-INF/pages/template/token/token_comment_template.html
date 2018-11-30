@@ -1,0 +1,16 @@
+<form data-parsley-validate="true" xmlns:th="http://www.thymeleaf.org">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="row">
+        <div class="col-lg-4 col-sm-3 col-xs-3 errorDescription"></div>
+    </div>
+    <div class="row">
+        <label class="col-lg-4 col-sm-3 col-xs-3" for="comment" th:text="#{token.comment}"></label>
+        <div class="col-lg-8 col-sm-8 col-xs-8 form-group">
+            <textarea id="comment" name="comment" rows="5" class="form-control" th:maxlength="256"
+                      data-parsley-required="true"
+                      th:attr="data-parsley-required-message=#{org.hibernate.validator.constraints.NotEmpty.message}"
+                      data-parsley-errors-container="div[data-remark-field='comment']"></textarea>
+            <div class="fieldRemark" data-remark-field="comment"></div>
+        </div>
+    </div>
+</form>

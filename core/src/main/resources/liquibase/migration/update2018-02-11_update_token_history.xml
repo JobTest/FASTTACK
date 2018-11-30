@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-02-11_update_token_history.xml">
+
+    <changeSet id="update2018-02-11_update_token_history" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="1">SELECT COUNT(*) FROM pg_constraint WHERE conname = 'token_history_token_ref_id_key'</sqlCheck>
+                <sqlCheck expectedResult="1">SELECT COUNT(*) FROM pg_constraint WHERE conname = 'token_history_tokenrequestor_id_key'</sqlCheck>
+            </and>
+        </preConditions>
+
+        <dropUniqueConstraint tableName="TOKEN_HISTORY" constraintName="token_history_token_ref_id_key"
+                              uniqueColumns="TOKEN_REF_ID"/>
+
+        <dropUniqueConstraint tableName="TOKEN_HISTORY" constraintName="token_history_tokenrequestor_id_key"
+                              uniqueColumns="TOKENREQUESTOR_ID"/>
+    </changeSet>
+
+
+    <changeSet id="update2018-02-11_update_token_history_33" author="a.lypivets" runOnChange="true" context="oracle">
+
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="TOKEN_HISTORY" columnName="TOKEN_REF_ID"/>
+                <columnExists tableName="TOKEN_HISTORY" columnName="TOKENREQUESTOR_ID"/>
+            </and>
+        </preConditions>
+
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="NEW_TOKEN_REF_ID" type="VARCHAR2(48)"/>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="NEW_TOKENREQUESTOR_ID" type="VARCHAR2(30)"/>
+        </addColumn>
+
+
+        <update tableName="TOKEN_HISTORY">
+            <column name="NEW_TOKEN_REF_ID" type="varchar(48)" valueComputed="TOKEN_REF_ID"/>
+        </update>
+
+        <update tableName="TOKEN_HISTORY">
+            <column name="NEW_TOKENREQUESTOR_ID" type="varchar(30)" valueComputed="TOKENREQUESTOR_ID"/>
+        </update>
+
+
+        <dropColumn columnName="TOKEN_REF_ID" tableName="TOKEN_HISTORY"/>
+        <dropColumn columnName="TOKENREQUESTOR_ID" tableName="TOKEN_HISTORY"/>
+
+
+        <renameColumn tableName="TOKEN_HISTORY" oldColumnName="NEW_TOKEN_REF_ID" newColumnName="TOKEN_REF_ID"/>
+        <renameColumn tableName="TOKEN_HISTORY" oldColumnName="NEW_TOKENREQUESTOR_ID" newColumnName="TOKENREQUESTOR_ID"/>
+    </changeSet>
+</databaseChangeLog>

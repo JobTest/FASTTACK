@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+    <head>
+        <title th:text="#{accessLog.title}"></title>
+    </head>
+
+    <script type="text/javascript" th:fragment="asset">
+        function extendRequireJsDependency(paths, shims, requires) {
+            paths['accesslog.views.list.AccessLogFilterTableView'] = AppCommon.assetBaseUrl + 'cts/js/accesslog/views/list/AccessLogFilterTableView';
+            requires.push('accesslog.views.list.AccessLogFilterTableView');
+        }
+    </script>
+    <body>
+        <div layout:fragment="windowTitle" th:text="#{accessLog.title}"></div>
+        <div id="main-container" layout:fragment="content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div id="filterContainer"></div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div id="tableContainer"></div>
+                            </div>
+                            <!-- /.col-lg-4 (nested) -->
+                            <div class="col-lg-8">
+                                <div id="morris-bar-chart"></div>
+                            </div>
+                            <!-- /.col-lg-8 (nested) -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

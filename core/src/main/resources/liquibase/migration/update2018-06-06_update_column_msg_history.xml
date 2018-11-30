@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-06-06_update_column_msg_history.xml">
+
+    <changeSet id="update2018-06-06_update_msghistory_expand_tokenid_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="MSG_HISTORY" columnName="TOKEN_ID"/>
+        </preConditions>
+
+        <modifyDataType
+                        columnName="TOKEN_ID"
+                        newDataType="VARCHAR(64)"
+                        tableName="MSG_HISTORY"/>
+    </changeSet>
+
+    <changeSet id="update2018-06-06_update_msghistory_expand_tokenid_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="MSG_HISTORY" columnName="TOKEN_ID"/>
+        </preConditions>
+
+        <modifyDataType
+                        columnName="TOKEN_ID"
+                        newDataType="VARCHAR2(64)"
+                        tableName="MSG_HISTORY"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-06-04_update_token_history.xml">
+
+    <changeSet id="update2018-06-04_update_tokenhistory_add_tokenstatus_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_HISTORY" columnName="TOKEN_STATUS"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="TOKEN_STATUS" type="VARCHAR(1)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-06-04_update_tokenhistory_add_tokenexpdate_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_HISTORY" columnName="TOKEN_EXPDATE"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="TOKEN_EXPDATE" type="DATE"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-06-04_update_tokenhistory_add_tokenstatus_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_HISTORY" columnName="TOKEN_STATUS"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="TOKEN_STATUS" type="VARCHAR2(1)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-06-04_update_tokenhistory_add_tokenexpdate_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_HISTORY" columnName="TOKEN_EXPDATE"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="TOKEN_EXPDATE" type="DATE"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-19_upd_os_name_device_info.xml">
+
+    <changeSet id="update2018-03-19_upd_os_name_device_info_01" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="DEVICE_INFO"/>
+        </preConditions>
+        <sql>
+            UPDATE DEVICE_INFO SET
+                OS_NAME = CASE
+                    WHEN OS_NAME = '0' THEN 'ANDROID'
+                    WHEN OS_NAME = '1' THEN 'WINDOWS'
+                    WHEN OS_NAME = '2' THEN 'TIZEN'
+                    WHEN OS_NAME = '3' THEN 'IOS'
+                    WHEN OS_NAME = '4' THEN 'BLACKBERRY'
+                END
+            WHERE OS_NAME IN('0','1','2','3','4')
+        </sql>
+    </changeSet>
+</databaseChangeLog>

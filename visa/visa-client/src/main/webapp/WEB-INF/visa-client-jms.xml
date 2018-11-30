@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messaging-deployment xmlns="urn:jboss:messaging-activemq-deployment:1.0">
+    <server name="default">
+        <jms-destinations>
+            <jms-queue name="FASTTACK.VTS.tokenLifecycle">
+                <entry name="FASTTACK.VTS.tokenLifecycle"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.VTS.tokenInquiry">
+                <entry name="FASTTACK.VTS.tokenInquiry"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.VTS.tokenInfo">
+                <entry name="FASTTACK.VTS.tokenInfo"/>
+            </jms-queue>
+        </jms-destinations>
+    </server>
+</messaging-deployment>

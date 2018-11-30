@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Configuration strict="true" name="fasttack_visa_client_logger_configuration" status="warn">
+    <Properties>
+        <Property name="loggingRootDirectory">${sc-logs:./target/logs}/fasttack</Property>
+        <Property name="excludedPackages">org.apache.jasper,javax.management,com.sun.jmx,sun.reflect,java.lang.reflect,java.util.concurrent,org.apache.tomcat.util,org.apache.tomcat.websocket,org.apache.catalina,javax.servlet.http,org.apache.coyote,org.apache.logging.log4j.web,org.springframework,org.hibernate,com.zaxxer,io.undertow,org.wildfly,com.fasterxml,org.postgresql,org.apache.camel</Property>
+    </Properties>
+    <ThresholdFilter level="trace"/>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p %xEx{filters(${excludedPackages})} [%t] %C{2} (%F:%L) - %m%n"/>
+        </Console>
+        <RollingFile name="defaultLogger" fileName="${loggingRootDirectory}/visa-client.log"
+                     filePattern="${loggingRootDirectory}/visa-client-%d{yyyy-MM-dd}-%i.log.gz">
+            <Layout type="PatternLayout" pattern="%d{dd.MM.yyyy HH:mm:ss} %xEx{filters(${excludedPackages})} %-5p %-5c{3}\:%L  %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" compressionLevel="5"/>
+        </RollingFile>
+        <RollingFile name="restTemplateLogger" fileName="${loggingRootDirectory}/visa-client-tracing.log"
+                     filePattern="${loggingRootDirectory}/visa-client-tracing-%d{yyyy-MM-dd}-%i.log.gz">
+            <Layout type="PatternLayout" pattern="%d{dd.MM.yyyy HH:mm:ss} %xEx{filters(${excludedPackages})} %-5p %-5c{3}\:%L  %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" compressionLevel="5"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="warn">
+            <AppenderRef ref="console"/>
+        </Root>
+        <Logger name="com.cts.fasttack" level="info" additivity="false">
+            <AppenderRef ref="defaultLogger"/>
+        </Logger>
+        <Logger name="fasttack-visa-client-tracing" level="trace" additivity="false">
+            <AppenderRef ref="restTemplateLogger"/>
+        </Logger>
+        <Logger name="org.springframework" level="warn" additivity="false">
+            <AppenderRef ref="defaultLogger"/>
+        </Logger>
+    </Loggers>
+</Configuration>

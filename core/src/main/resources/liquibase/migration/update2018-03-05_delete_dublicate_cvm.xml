@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-05_delete_dublicate_cvm.xml">
+
+    <changeSet id="delete_dublicate_cvm_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT CASE WHEN EXISTS (SELECT 1 FROM CARDHOLDER_VERIFICATION_METHOD GROUP BY
+                CORRELATION_ID HAVING COUNT(*) > 1) THEN 1 ELSE 0 END
+            </sqlCheck>
+        </preConditions>
+
+        <sql>
+            DELETE FROM CARDHOLDER_VERIFICATION_METHOD
+            WHERE ID NOT IN (
+            SELECT MAX(id)
+            FROM CARDHOLDER_VERIFICATION_METHOD CVM
+            GROUP BY CVM.CORRELATION_ID
+            );
+        </sql>
+
+    </changeSet>
+
+
+    <changeSet id="delete_dublicate_cvm_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">select count(*) from all_tables where EXISTS (SELECT 1 FROM CARDHOLDER_VERIFICATION_METHOD GROUP BY CORRELATION_ID HAVING COUNT(*) > 1) AND rownum=1
+                </sqlCheck>
+            </not>
+        </preConditions>
+
+        <sql>
+            DELETE FROM CARDHOLDER_VERIFICATION_METHOD
+            WHERE ID NOT IN (
+            SELECT MAX(id)
+            FROM CARDHOLDER_VERIFICATION_METHOD CVM
+            GROUP BY CVM.CORRELATION_ID
+            );
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-18_changelog.xml">
+
+    <changeSet id="create_table_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="CHANGELOG"/>
+            </not>
+        </preConditions>
+        <createTable tableName="CHANGELOG">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ACTION" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEVERITY" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MESSAGE" type="VARCHAR(255)"/>
+            <column name="ITEMTYPE" type="varchar(64)"/>
+            <column name="ITEMID" type="varchar(64)"/>
+
+            <column name="DT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ORIGINATOR" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F1" type="varchar(255)"/>
+            <column name="F2" type="varchar(255)"/>
+            <column name="F3" type="varchar(255)"/>
+            <column name="F4" type="varchar(255)"/>
+            <column name="F5" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="CHANGELOG"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="CHANGELOG">
+            <column name="ID" type="number">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ACTION" type="VARCHAR2(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEVERITY" type="VARCHAR2(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MESSAGE" type="VARCHAR2(255)"/>
+            <column name="FECODE" type="VARCHAR2(8)"/>
+
+            <column name="ITEMTYPE" type="VARCHAR2(64)"/>
+            <column name="ITEMID" type="VARCHAR2(64)"/>
+
+            <column name="DT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ORIGINATOR" type="VARCHAR2(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F1" type="VARCHAR2(255)"/>
+            <column name="F2" type="VARCHAR2(255)"/>
+            <column name="F3" type="VARCHAR2(255)"/>
+            <column name="F4" type="VARCHAR2(255)"/>
+            <column name="F5" type="VARCHAR2(255)"/>
+
+        </createTable>
+
+        <createSequence
+                sequenceName="changelog_id_seq"
+                startValue="1"
+                incrementBy="1" />
+
+    </changeSet>
+
+</databaseChangeLog>

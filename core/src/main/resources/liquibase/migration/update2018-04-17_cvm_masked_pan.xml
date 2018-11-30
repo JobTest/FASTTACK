@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-04-17_cvm_masked_pan.xml">
+    
+    <changeSet id="cvm_masked_pan_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="MASKED_PAN"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="MASKED_PAN" type="VARCHAR(19)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="cvm_masked_pan_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="MASKED_PAN"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="MASKED_PAN" type="VARCHAR2(19)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

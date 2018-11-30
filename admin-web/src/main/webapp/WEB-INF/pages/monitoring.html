@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+
+    <head>
+        <title th:text="#{monitoring.title}"></title>
+        <meta http-equiv="Refresh" content="60; URL=/fasttack-admin-web/monitoring.htm">
+    </head>
+
+    <script type="text/javascript" th:fragment="asset">
+        function extendRequireJsDependency(paths, shims, requires) {
+            paths['monitoring.views.MonitoringPageView'] = AppCommon.assetBaseUrl + 'cts/js/monitoring/views/MonitoringPageView';
+            paths['security.model'] = AppCommon.assetBaseUrl + 'cts/js/common/model/SecurityModels';
+            requires.push('monitoring.views.MonitoringPageView');
+        }
+    </script>
+
+    <body>
+        <div layout:fragment="windowTitle" th:text="#{monitoring.title}"></div>
+        <div layout:fragment="content" class="row">
+            <div class="col-lg-6">
+                <div id="main-container" class="table-responsive"></div>
+            </div>
+        </div>
+    </body>
+
+</html>

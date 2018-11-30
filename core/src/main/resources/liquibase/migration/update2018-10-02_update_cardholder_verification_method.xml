@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-10-02_update_cardholder_verification_method.xml">
+
+    <changeSet id="update2018-10-02_update_cardholder_verification_method_columns_postgresql" author="a.lazarchuk" runOnChange="true" context="postgresql">
+
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_DEVICE_SCORE"/>
+            <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_ACCOUNT_SCORE"/>
+            <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_PHONENUMBER_SCORE"/>
+            <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_REASON_CODES"/>
+            <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="COLOR_TOKENIZATION_STANDARD_VERSION"/>
+        </preConditions>
+
+        <modifyDataType tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_DEVICE_SCORE" newDataType="VARCHAR(64)"/>
+        <modifyDataType tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_ACCOUNT_SCORE" newDataType="VARCHAR(64)"/>
+        <modifyDataType tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_PHONENUMBER_SCORE" newDataType="VARCHAR(64)"/>
+        <modifyDataType tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_REASON_CODES" newDataType="VARCHAR(255)"/>
+        <modifyDataType tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="COLOR_TOKENIZATION_STANDARD_VERSION" newDataType="VARCHAR(64)"/>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-04-16_add_token_update_reasons.xml">
+
+    <changeSet id="modify_reason_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_REASON" columnName="MDES_REASON"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_REASON" columnName="MDES_REASON" newDataType="VARCHAR(256)"/>
+    </changeSet>
+
+    <changeSet id="modify_reason_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_REASON" columnName="MDES_REASON"/>
+        </preConditions>
+        <modifyDataType tableName="TOKEN_REASON" columnName="MDES_REASON" newDataType="VARCHAR2(256)"/>
+    </changeSet>
+
+    <changeSet id="add_token_update_reason" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='UPDATE' AND REASON IN('Lost Token')</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON, MDES_REASON) VALUES ('UPDATE', 'Lost Token', 'L');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_token_update_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='UPDATE' AND REASON IN('Lost Token')</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON, MDES_REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'UPDATE', 'Lost Token', 'L');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

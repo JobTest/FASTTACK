@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-10-29_add_token_requestor.xml">
+
+    <changeSet id="create_table_token_requestor_postgresql" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_REQUESTOR"/>
+            </not>
+        </preConditions>
+        <createTable tableName="TOKEN_REQUESTOR">
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TOKENREQUESTOR_TITLE" type="VARCHAR(64)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="token_requestor_insert_apple" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REQUESTOR WHERE TOKENREQUESTOR_TITLE = 'Apple'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID,TOKENREQUESTOR_TITLE) VALUES('12345670603', 'Apple');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID,TOKENREQUESTOR_TITLE) VALUES('40010030273', 'Apple');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_requestor_insert_google" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REQUESTOR WHERE TOKENREQUESTOR_TITLE = 'Google'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID,TOKENREQUESTOR_TITLE) VALUES('40010075001', 'Google');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_requestor_insert_garmin" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REQUESTOR WHERE TOKENREQUESTOR_TITLE = 'Garmin'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID,TOKENREQUESTOR_TITLE) VALUES('40010069887', 'Garmin');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_requestor_insert_fitbit" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REQUESTOR WHERE TOKENREQUESTOR_TITLE = 'Fitbit'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID,TOKENREQUESTOR_TITLE) VALUES('40010077056', 'Fitbit');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_requestor_insert_vco" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REQUESTOR WHERE TOKENREQUESTOR_TITLE = 'VCO'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID,TOKENREQUESTOR_TITLE) VALUES('40010075338', 'VCO');
+        </sql>
+    </changeSet>
+
+    <changeSet id="token_requestor_insert_netflix" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REQUESTOR WHERE TOKENREQUESTOR_TITLE = 'Netflix'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID,TOKENREQUESTOR_TITLE) VALUES('40010075839', 'Netflix');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

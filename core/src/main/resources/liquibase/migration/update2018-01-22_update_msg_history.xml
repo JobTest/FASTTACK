@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-22_update_msg_history.xml">
+
+    <changeSet id="update2018-01-22_update_msg_history" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="MSG_HISTORY" columnName="MSG_DATE_IN"/>
+                <columnExists tableName="MSG_HISTORY" columnName="MSG_DATE_OUT"/>
+            </and>
+        </preConditions>
+
+        <modifyDataType
+                columnName="MSG_DATE_IN"
+                newDataType="TIMESTAMP"
+                tableName="MSG_HISTORY"/>
+        <modifyDataType
+                columnName="MSG_DATE_OUT"
+                newDataType="TIMESTAMP"
+                tableName="MSG_HISTORY"/>
+
+    </changeSet>
+
+</databaseChangeLog>

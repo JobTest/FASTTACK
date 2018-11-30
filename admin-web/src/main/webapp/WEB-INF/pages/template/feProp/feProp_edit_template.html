@@ -1,0 +1,27 @@
+<table class="table table-striped table-bordered table-hover" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+        <tr><td class="errorDescription" colspan="2"></td></tr>
+        <tr>
+            <th th:text="#{feProp.propName}"></th>
+            <td>{{=propName}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{feProp.propValue}"></th>
+            <td>
+                <input name="propValue" size="255" class="form-control input-sm" value="{{=propValue}}" th:maxlength="255"
+                       data-parsley-required="true"
+                       th:attr="data-parsley-required-message=#{feProp.validation.empty.propValue}"
+                       data-parsley-errors-container="div[data-remark-field='name']"/>
+                <div class="fieldRemark" data-remark-field="propValue"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a th:href="@{'/feProp/view.htm?propName={{=propName}}'}" class="btnCancel btn btn-default" th:text="#{common.cancel}"></a>
+            </td>
+            <td>
+                <button class="btnSave btn btn-primary" th:text="#{common.save}"></button>
+            </td>
+        </tr>
+    </tbody>
+</table>

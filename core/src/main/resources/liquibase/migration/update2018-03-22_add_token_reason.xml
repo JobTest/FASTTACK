@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-22_add_token_reason.xml">
+
+    <changeSet id="add_suspend_reasons_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='SUSPEND' AND REASON IN('L', 'S', 'T', 'Z')</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('SUSPEND', 'L');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('SUSPEND', 'S');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('SUSPEND', 'T');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('SUSPEND', 'Z');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_suspend_reasons_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='SUSPEND' AND REASON IN('L', 'S', 'T', 'Z')</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'SUSPEND', 'L');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'SUSPEND', 'S');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'SUSPEND', 'T');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'SUSPEND', 'Z');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_resume_reasons_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='RESUME' AND REASON IN('F', 'T', 'Z')</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('RESUME', 'F');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('RESUME', 'T');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('RESUME', 'Z');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_resume_reasons_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='RESUME' AND REASON IN('F', 'T', 'Z')</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'RESUME', 'F');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'RESUME', 'T');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'RESUME', 'Z');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_delete_reasons" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='DELETE' AND REASON IN('F', 'T', 'Z', 'L', 'S', 'C')</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('DELETE', 'F');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('DELETE', 'T');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('DELETE', 'Z');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('DELETE', 'L');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('DELETE', 'S');
+            INSERT INTO TOKEN_REASON(TOKEN_STATUS_UPDATE_REASON, REASON) VALUES ('DELETE', 'C');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_delete_reasons_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="TOKEN_REASON"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM TOKEN_REASON WHERE TOKEN_STATUS_UPDATE_REASON='DELETE' AND REASON IN('F', 'T', 'Z', 'L', 'S', 'C')</sqlCheck>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'DELETE', 'F');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'DELETE', 'T');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'DELETE', 'Z');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'DELETE', 'L');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'DELETE', 'S');
+            INSERT INTO TOKEN_REASON(ID, TOKEN_STATUS_UPDATE_REASON, REASON) VALUES (TOKEN_REASON_ID_SEQ.nextval, 'DELETE', 'C');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

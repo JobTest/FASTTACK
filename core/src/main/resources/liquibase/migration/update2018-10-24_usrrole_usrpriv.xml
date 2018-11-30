@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-10-24_usrpriv.xml">
+
+    <changeSet id="cardproduct_create_add_privilege" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'CARD_PROPRODUCT_CREATE'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('CARD_PROPRODUCT_CREATE', 'Создание карточного продукта');
+        </sql>
+    </changeSet>
+
+    <changeSet id="cardproduct_create_view_privilege" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'CARD_PROPRODUCT_VIEW'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('CARD_PROPRODUCT_VIEW', 'Просмотр карточного продукта');
+        </sql>
+    </changeSet>
+
+    <changeSet id="cardproduct_create_edit_privilege" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'CARD_PROPRODUCT_EDIT'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('CARD_PROPRODUCT_EDIT', 'Редактирование карточного продукта');
+        </sql>
+    </changeSet>
+
+    <changeSet id="cardproduct_create_delete_privilege" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'CARD_PROPRODUCT_DELETE'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('CARD_PROPRODUCT_DELETE', 'Удаление карточного продукта');
+        </sql>
+    </changeSet>
+
+    <changeSet id="assign_cardproduct_privilege" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'CARD_PROPRODUCT_CREATE');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'CARD_PROPRODUCT_VIEW');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'CARD_PROPRODUCT_EDIT');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'CARD_PROPRODUCT_DELETE');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

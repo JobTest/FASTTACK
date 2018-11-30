@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018_02-18_card_ver_meth_upd.xml">
+
+    <changeSet id="update2018_02-18_card_ver_meth_upd_01" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="CARDHOLDER_VERIFICATION_METHOD"/>
+        </preConditions>
+
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="CVM_IDENTIFIER_OTP" type="VARCHAR(32)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018_02-18_card_ver_meth_upd_02" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="CARDHOLDER_VERIFICATION_METHOD"/>
+        </preConditions>
+
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="CVM_IDENTIFIER_OTP" type="VARCHAR2(32)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

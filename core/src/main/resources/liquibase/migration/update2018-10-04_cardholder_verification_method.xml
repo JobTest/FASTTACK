@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-10-04_cardholder_verification_method.xml">
+
+    <changeSet id="update2018-10-04_cardholder_verification_method_columns_postgresql" author="a.lazarchuk" runOnChange="true" context="postgresql">
+
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="DEVICE_TYPE"/>
+        </not>
+    </preConditions>
+
+    <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+        <column name="DEVICE_TYPE" type="VARCHAR(64)">
+            <constraints nullable="true"/>
+        </column>
+    </addColumn>
+
+</changeSet>
+
+</databaseChangeLog>

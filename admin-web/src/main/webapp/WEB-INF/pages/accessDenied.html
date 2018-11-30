@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+    <head>
+        <title th:text="#{access.denied.title}"></title>
+    </head>
+    <body>
+        <div class="panel-body" layout:fragment="content">
+            <form>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <fieldset>
+                    <div class="form-group" th:text="#{access.denied.message}"></div>
+                    <a th:href="@{/bank/list.htm}" class="btn btn-default" th:text="#{common.back}"></a>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>

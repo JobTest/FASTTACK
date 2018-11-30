@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-05-14_update_privilege.xml">
+
+    <changeSet id="update2018-05-14_update_privilege" author="a.lypivets" runOnChange="true">
+        <sql>
+            DELETE FROM USRROLE_USRPRIV WHERE PRIVCODE='HEALTH_MONITOR_VIEW';
+            DELETE FROM USRPRIV WHERE PRIVCODE='HEALTH_MONITOR_VIEW';
+        </sql>
+
+    </changeSet>
+
+    <changeSet id="add_monitoring_view_priv" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'MONITORING_VIEW'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('MONITORING_VIEW', 'Просмотр страницы monitoring');
+        </sql>
+    </changeSet>
+
+    <changeSet id="assign_monitoring_view_privilege" author="a.lypivets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'MONITORING_VIEW');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

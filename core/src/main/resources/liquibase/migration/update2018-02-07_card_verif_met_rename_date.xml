@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-02-07_card_verif_met_rename_date.xml">
+
+    <changeSet id="rename_column_postgresql" author="a.lipavets" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="DATE" tableName="CARDHOLDER_VERIFICATION_METHOD"/>
+        </preConditions>
+
+        <renameColumn tableName="CARDHOLDER_VERIFICATION_METHOD" oldColumnName="DATE"
+                      newColumnName="TRANSACTION_DATE"/>
+    </changeSet>
+
+</databaseChangeLog>

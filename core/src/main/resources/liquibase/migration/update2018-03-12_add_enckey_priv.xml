@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-12_add_enckey_priv.xml">
+
+    <changeSet id="update2018-03-12_add_enckey_priv" author="a.leliuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'ENC_KEY_CREATE'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'ENC_KEY_VIEW'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'ENC_KEY_EDIT'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'ENC_KEY_DELETE'</sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('ENC_KEY_CREATE', 'Создание записи ключа');
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('ENC_KEY_VIEW', 'Просмотр записи ключа');
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('ENC_KEY_EDIT', 'Редактирование записи ключа');
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('ENC_KEY_DELETE', 'Удаление записи ключа');
+        </sql>
+    </changeSet>
+
+    <changeSet id="update2018-03-12_assign_enckey_priv" author="a.leliuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'ENC_KEY_CREATE');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'ENC_KEY_VIEW');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'ENC_KEY_EDIT');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'ENC_KEY_DELETE');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

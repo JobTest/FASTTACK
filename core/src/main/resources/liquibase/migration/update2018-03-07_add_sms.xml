@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-07_add_sms.xml">
+
+    <changeSet id="create_table_sms_message_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SMS_MESSAGE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SMS_MESSAGE">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="MESSAGE_ID" type="VARCHAR(255)" />
+            <column name="MESSAGE_TYPE" type="VARCHAR(50)" />
+            <column name="PHONE" type="VARCHAR(15)"/>
+            <column name="MESSAGE_TEXT" type="VARCHAR(255)"/>
+            <column name="MESSAGE_STATUS" type="VARCHAR(10)"/>
+            <column name="DESCRIPTION" type="VARCHAR(512)"/>
+            <column name="DATE_CREATE" type="DATE"/>
+            <column name="DATE_SEND" type="DATE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_sms_message_templ_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SMS_MESSAGE_TEMPLATE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SMS_MESSAGE_TEMPLATE">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="MESSAGE_TYPE" type="VARCHAR(25)" />
+            <column name="TEMPLATE" type="VARCHAR(512)"/>
+            <column name="LAST_MODIFIED" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="create_table_sms_message_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SMS_MESSAGE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SMS_MESSAGE">
+            <column name="id" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="MESSAGEID" type="VARCHAR2(255)" />
+            <column name="MESSAGE_TYPE" type="VARCHAR2(50)" />
+            <column name="PHONE" type="VARCHAR2(15)"/>
+            <column name="MESSAGE_TEXT" type="VARCHAR2(255)"/>
+            <column name="MESSAGE_STATUS" type="VARCHAR2(10)"/>
+            <column name="DESCRIPTION" type="VARCHAR2(512)"/>
+            <column name="DATE_CREATE" type="DATE"/>
+            <column name="DATE_SEND" type="DATE"/>
+        </createTable>
+
+        <createSequence
+                sequenceName="sms_message_id_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+
+    <changeSet id="alter_sms_message_id_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="SMS_MESSAGE" columnName="MESSAGEID"/>
+        </preConditions>
+        <renameColumn tableName="SMS_MESSAGE" oldColumnName="MESSAGEID" newColumnName="MESSAGE_ID"/>
+    </changeSet>
+
+
+    <changeSet id="create_sms_message_templ_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SMS_MESSAGE_TEMPLATE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SMS_MESSAGE_TEMPLATE">
+            <column name="id" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="MESSAGE_TYPE" type="VARCHAR2(25)" />
+            <column name="TEMPLATE" type="VARCHAR2(512)"/>
+            <column name="LAST_MODIFIED" type="TIMESTAMP(6)"/>
+        </createTable>
+
+        <createSequence
+                sequenceName="sms_message_template_id_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+
+    <changeSet id="add_template_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'AUTHENTICATION_ru_RU'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'RESTORE_PASSWORD_ru_RU'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'ACTIVATION_ru_RU'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'AUTHENTICATION'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'RESTORE_PASSWORD'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'ACTIVATION'</sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO SMS_MESSAGE_TEMPLATE (MESSAGE_TYPE, TEMPLATE, LAST_MODIFIED) VALUES ('AUTHENTICATION_ru_RU', '${code}', current_timestamp);
+            INSERT INTO SMS_MESSAGE_TEMPLATE (MESSAGE_TYPE, TEMPLATE, LAST_MODIFIED) VALUES ('RESTORE_PASSWORD_ru_RU', '${code}', current_timestamp);
+            INSERT INTO SMS_MESSAGE_TEMPLATE (MESSAGE_TYPE, TEMPLATE, LAST_MODIFIED) VALUES ('ACTIVATION_ru_RU', '${code}', current_timestamp);
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_template_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'AUTHENTICATION_ru_RU'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'RESTORE_PASSWORD_ru_RU'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'ACTIVATION_ru_RU'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'AUTHENTICATION'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'RESTORE_PASSWORD'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM SMS_MESSAGE_TEMPLATE WHERE MESSAGE_TYPE = 'ACTIVATION'</sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO SMS_MESSAGE_TEMPLATE (ID, MESSAGE_TYPE, TEMPLATE, LAST_MODIFIED) VALUES (SMS_MESSAGE_ID_SEQ.nextval, 'AUTHENTICATION_ru_RU', '${code}', current_timestamp);
+            INSERT INTO SMS_MESSAGE_TEMPLATE (ID, MESSAGE_TYPE, TEMPLATE, LAST_MODIFIED) VALUES (SMS_MESSAGE_ID_SEQ.nextval, 'RESTORE_PASSWORD_ru_RU', '${code}', current_timestamp);
+            INSERT INTO SMS_MESSAGE_TEMPLATE (ID, MESSAGE_TYPE, TEMPLATE, LAST_MODIFIED) VALUES (SMS_MESSAGE_ID_SEQ.nextval, 'ACTIVATION_ru_RU', '${code}', current_timestamp);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

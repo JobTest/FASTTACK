@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-06_update_enckey.xml">
+
+    <changeSet id="update2018-03-06_update_enckey" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM ENCKEY WHERE KEYTYPE = 'VTS_IAPI_VISA_CERT'</sqlCheck>
+        </preConditions>
+        <sql>
+            UPDATE ENCKEY SET KEYVALUE =
+            '-----BEGIN CERTIFICATE-----
+            MIIGYDCCBUigAwIBAgIRALNiOgNfjXGUFQYDAwZzJU0wDQYJKoZIhvcNAQELBQAw
+            fTELMAkGA1UEBhMCVVMxDTALBgNVBAoTBFZJU0ExLzAtBgNVBAsTJlZpc2EgSW50
+            ZXJuYXRpb25hbCBTZXJ2aWNlIEFzc29jaWF0aW9uMS4wLAYDVQQDEyVWaXNhIElu
+            Zm9ybWF0aW9uIERlbGl2ZXJ5IEV4dGVybmFsIENBMB4XDTE3MDQyNDEzNDkyMloX
+            DTIwMDQyNDEzNDkyMloweDEUMBIGA1UEBxMLRm9zdGVyIENpdHkxCzAJBgNVBAgT
+            AkNBMQswCQYDVQQGEwJVUzERMA8GA1UEChMIVmlzYSBJbmMxGDAWBgNVBAsTD091
+            dGJvdW5kIENsaWVudDEZMBcGA1UEAxMQc2J4LnZ0cy52aXNhLmNvbTCCASIwDQYJ
+            KoZIhvcNAQEBBQADggEPADCCAQoCggEBAMZld+ptVonS8NGBb+setSll9wlMDz/o
+            ttwrmSL5fDr6rawqetHPRFytHr5vI2XyUZD/m5oVGS95wNwef4OUXonpVG1tVEy2
+            Eq8EIJdBnmZIOi+w2wSD2qyGa0cJ+Ab44P8MaUeLvHNpafnEp5mpJTZeoWF4zCnc
+            /CAf1HoqPvO5Q5Vw+rlOwhp87FdfXHr+YgiTFOgVzNrnh9TIyDjPQZ58Qrwf+PmC
+            1w6SgLtsfp0zOBtbfFfLkhqkfV8HviS268OfaPlGBow3vt8QAKaBS1IibQ7CuZVq
+            bDn7ptiTAiID39SyRVW9E78puHRGZ4gM1zLXr4ErnI/0ntbH2FeiXnECAwEAAaOC
+            At4wggLaMDEGA1UdEQQqMCiCEHNieC52dHMudmlzYS5jb22CFHNieC5kaWdpdGFs
+            LnZpc2EuY29tMGUGCCsGAQUFBwEBBFkwVzAlBggrBgEFBQcwAYYZaHR0cDovL29j
+            c3AudmlzYS5jb20vb2NzcDAuBggrBgEFBQcwAoYiaHR0cDovL2Vucm9sbC52aXNh
+            Y2EuY29tL3ZpY2EzLmNlcjAfBgNVHSMEGDAWgBQZOlJmzSkf4/rLNH0WdiEC2k+5
+            GDAMBgNVHRMBAf8EAjAAMIIBowYDVR0fBIIBmjCCAZYwKKAmoCSGImh0dHA6Ly9F
+            bnJvbGwudmlzYWNhLmNvbS9WSUNBMy5jcmwwgZ6ggZuggZiGgZVsZGFwOi8vRW5y
+            b2xsLnZpc2FjYS5jb206Mzg5L2NuPVZpc2EgSW5mb3JtYXRpb24gRGVsaXZlcnkg
+            RXh0ZXJuYWwgQ0EsYz1VUyxvdT1WaXNhIEludGVybmF0aW9uYWwgU2VydmljZSBB
+            c3NvY2lhdGlvbixvPVZJU0E/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdDAooCag
+            JIYiaHR0cDovL2NybC5pbm92LnZpc2EubmV0L1ZJQ0EzLmNybDCBnqCBm6CBmIaB
+            lWxkYXA6Ly9jcmwuaW5vdi52aXNhLm5ldDozODkvY249VmlzYSBJbmZvcm1hdGlv
+            biBEZWxpdmVyeSBFeHRlcm5hbCBDQSxjPVVTLG91PVZpc2EgSW50ZXJuYXRpb25h
+            bCBTZXJ2aWNlIEFzc29jaWF0aW9uLG89VklTQT9jZXJ0aWZpY2F0ZVJldm9jYXRp
+            b25MaXN0MA4GA1UdDwEB/wQEAwIDuDAdBgNVHQ4EFgQU+FJAx/SaBM8db60XDqnO
+            xEuE/pYwOQYDVR0gBDIwMDAuBgVngQMCATAlMCMGCCsGAQUFBwIBFhdodHRwOi8v
+            d3d3LnZpc2EuY29tL3BraTANBgkqhkiG9w0BAQsFAAOCAQEARXdLBXsLjpwVkoOX
+            45mFFcOq101+BAzDGTC8U6TlVrB00myWx6m3yucTX9fy3/gtZGwi+gwHrDO12/+N
+            TNn/lH6F1k2vcfys7aZgjDCAHa6XWkJEsPh5Aoit09Ws0/xHdvLq7pO4JDV3syaI
+            +WJAZ8ptgVssSwxb1lAxZWI9VE/oGAFfIjmKAT98D80yvvf8hpahf9wTVZSoTYnI
+            MrrwbnzGMNbPInVNK5bPdDm/BEC5x70IoO1/cHDldmGjJmJY2f0rBKDP2+97XuTy
+            jaT+MAwzC1WNJ6lRbnEsu29Wc5+5izqbX57cPdjLA4soUCHIo3WM0fP+GxGchcBN
+            tTbUXw==
+            -----END CERTIFICATE-----' WHERE KEYTYPE='VTS_IAPI_VISA_CERT';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

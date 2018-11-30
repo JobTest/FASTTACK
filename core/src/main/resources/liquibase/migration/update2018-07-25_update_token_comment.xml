@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-07-25_update_token_comment.xml">
+
+    <changeSet id="update2018-07-25_update_token_comment_in_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_COMMENT" columnName="COMMENT"/>
+        </preConditions>
+
+        <renameColumn tableName="TOKEN_COMMENT" oldColumnName="COMMENT" newColumnName="COMCONTENT"/>
+    </changeSet>
+
+    <changeSet id="update2018-07-25_update_token_comment_in_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_COMMENT" columnName="COMMENT"/>
+        </preConditions>
+
+        <renameColumn tableName="TOKEN_COMMENT" oldColumnName="COMMENT" newColumnName="COMCONTENT"/>
+    </changeSet>
+
+</databaseChangeLog>

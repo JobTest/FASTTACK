@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-05-24_update_bin_setup.xml">
+
+    <changeSet id="update2018-05-24_update_binsetup_add_prepaid_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="BIN_SETUP" columnName="PREPAID"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="BIN_SETUP">
+            <column name="PREPAID" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-05-24_update_binsetup_add_maxtokenspercard_postgresql" author="d.ishchenko" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="BIN_SETUP" columnName="MAX_TOKENS_PER_CARD"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="BIN_SETUP">
+            <column name="MAX_TOKENS_PER_CARD" type="INTEGER" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-05-24_update_binsetup_add_prepaid_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="BIN_SETUP" columnName="PREPAID"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="BIN_SETUP">
+            <column name="PREPAID" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update2018-05-24_update_binsetup_add_maxtokenspercard_oracle" author="d.ishchenko" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="BIN_SETUP" columnName="MAX_TOKENS_PER_CARD"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="BIN_SETUP">
+            <column name="MAX_TOKENS_PER_CARD" type="INTEGER" />
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

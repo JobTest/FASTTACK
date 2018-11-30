@@ -1,0 +1,60 @@
+<table class="table table-striped table-bordered table-hover UserView-table" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+        <tr>
+            <th th:text="#{common.username}"></th>
+            <td>{{=dto.username}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{common.name}"></th>
+            <td>{{=dto.name}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{common.phone}"></th>
+            <td>{{=dto.phone}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{roles.title}"></th>
+            <td>{{=dto.roleDescriptions}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{common.status}"></th>
+            <td>{{=Common.bundles.getMessage('UserStatus.' + dto.statusCaption)}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{users.regdate}"></th>
+            <td>{{=dto.regDate}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{users.unlockdate}"></th>
+            <td>{{=dto.unlockDate}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{users.password.change.date}"></th>
+            <td>{{=dto.pwdchDate}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{users.login.date}"></th>
+            <td>{{=dto.lastlogonDate}}</td>
+        </tr>
+        <tr>
+            <th th:text="#{users.login.fails}"></th>
+            <td>{{=dto.logonFailures}}</td>
+        </tr>
+        <tr>
+            <td>
+                {{ if (backUrl) { }}
+                <a href="{{=backUrl}}" class="btn btn-default" th:text="#{common.back}"></a>
+                {{ } }}
+            </td>
+            <td>
+                <a href="{{=editUrl}}" class="btn btn-primary" th:text="#{common.edit}" th:if="${@aclUser.isCanEdit()}"></a>
+                {{ if (isCanChangePassword) { }}
+                <button class="btnShowChangePasswordModalPanel btn btn-primary" th:text="#{users.change.password}"></button>
+                {{ } }}
+                {{ if (isCanDelete) { }}
+                <button class="btnDelete btn btn-danger" th:text="#{common.delete}"></button>
+                {{ } }}
+            </td>
+        </tr>
+    </tbody>
+</table>

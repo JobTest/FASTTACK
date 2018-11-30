@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-13_token_history_index.xml">
+
+    <changeSet id="drop_token_histsory_index_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <indexExists tableName="TOKEN_HISTORY" indexName="TOKEN_HISTORY_REF_REQUESTOR_ID_IDX"/>
+        </preConditions>
+        <dropIndex tableName="TOKEN_HISTORY" indexName="TOKEN_HISTORY_REF_REQUESTOR_ID_IDX"/>
+    </changeSet>
+
+    <changeSet id="token_history_index_postgresql" author="a.leliuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="TOKEN_HISTORY" indexName="TH_REF_REQUESTOR_ID_IDX"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="TOKEN_HISTORY" indexName="TH_REF_REQUESTOR_ID_IDX">
+            <column name="TOKEN_REF_ID" type="VARCHAR(48)"/>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR(30)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="token_history_index_oracle" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="TOKEN_HISTORY" indexName="TH_REF_REQUESTOR_ID_IDX"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="TOKEN_HISTORY" indexName="TH_REF_REQUESTOR_ID_IDX">
+            <column name="TOKEN_REF_ID" type="VARCHAR2(48)"/>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR2(30)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="token_info_view_add_privilege" author="a.leliuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'TOKEN_VIEW'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('TOKEN_VIEW', 'Просмотр информации о токене');
+        </sql>
+    </changeSet>
+
+    <changeSet id="assign_token_info_privilege" author="a.leliuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'TOKEN_VIEW');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

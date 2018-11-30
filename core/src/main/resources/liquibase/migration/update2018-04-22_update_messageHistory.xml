@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-04-22_update_messageHistory.xml">
+
+    <changeSet id="update_messageHistory_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <not>
+                    <columnExists tableName="TOKEN_HISTORY" columnName="MDES_REASON"/>
+                </not>
+                <not>
+                    <columnExists tableName="TOKEN_HISTORY" columnName="SUCCESS"/>
+                </not>
+            </and>
+        </preConditions>
+
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="MDES_REASON" type="VARCHAR(256)"/>
+            <column name="SUCCESS" type="BOOLEAN" defaultValue="false"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="update_messageHistory_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <not>
+                    <columnExists tableName="TOKEN_HISTORY" columnName="MDES_REASON"/>
+                </not>
+                <not>
+                    <columnExists tableName="TOKEN_HISTORY" columnName="SUCCESS"/>
+                </not>
+            </and>
+        </preConditions>
+
+        <addColumn tableName="TOKEN_HISTORY">
+            <column name="MDES_REASON" type="VARCHAR2(256)"/>
+            <column name="SUCCESS" type="BOOLEAN" defaultValue="0"/>
+        </addColumn>
+
+    </changeSet>
+
+
+
+
+</databaseChangeLog>

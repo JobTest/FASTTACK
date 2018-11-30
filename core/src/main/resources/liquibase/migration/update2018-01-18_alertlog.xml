@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-18_alertlog.xml">
+
+    <changeSet id="create_table_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ALERTLOG"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ALERTLOG">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="EVENT" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATA" type="VARCHAR(410)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ORIGINATOR" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ACTUSER" type="VARCHAR(30)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ACTDATA" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ACTDATE" type="DATE">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ALERTLOG"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ALERTLOG">
+            <column name="ID" type="NUMBER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="EVENT" type="VARCHAR2(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FECODE" type="VARCHAR2(8)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="CMSMPA_ID" type="VARCHAR2(64)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="DC_ID" type="VARCHAR2(64)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="DATA" type="VARCHAR2(410)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DT" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ORIGINATOR" type="VARCHAR2(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ACTDATA" type="VARCHAR2(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ACTDATE" type="DATE">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createSequence
+                sequenceName="alertlog_id_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+
+    <changeSet id="aleter_log_act_user" author="a.leliuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="ALERTLOG" columnName="ACTUSER"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="ALERTLOG">
+            <column name="ACTUSER" type="VARCHAR2(30)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

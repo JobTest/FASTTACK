@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-23_token_comment.xml">
+
+    <changeSet id="create_table_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_COMMENT"/>
+            </not>
+        </preConditions>
+        <createTable tableName="TOKEN_COMMENT">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="TOKEN_REF_ID" type="VARCHAR(48)"/>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR(30)"/>
+            <column name="EVENT_REF" type="VARCHAR(40)"/>
+            <column name="COMDATA" type="datetime"/>
+            <column name="COMMENT" type="VARCHAR(256)"/>
+            <column name="USRNAME" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_COMMENT"/>
+            </not>
+        </preConditions>
+        <createTable tableName="TOKEN_COMMENT">
+            <column name="ID" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="TOKEN_REF_ID" type="VARCHAR2(48)"/>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR2(30)"/>
+            <column name="EVENT_REF" type="VARCHAR2(40)"/>
+            <column name="COMDATA" type="datetime"/>
+            <column name="COMMENT" type="VARCHAR2(256)"/>
+            <column name="USRNAME" type="VARCHAR2(10)"/>
+        </createTable>
+
+        <createSequence
+                sequenceName="token_comment_id_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+
+    
+    <changeSet id="modify_token_history_postgresql" author="d.koval" context="postgresql">
+        <preConditions>
+            <columnExists tableName="TOKEN_HISTORY" columnName="EVENT_REF"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="EVENT_REF" newDataType="VARCHAR(40)"/>
+    </changeSet>
+
+    <changeSet id="modify_token_history_oracle" author="d.koval" context="oracle">
+        <preConditions>
+            <columnExists tableName="TOKEN_HISTORY" columnName="EVENT_REF"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="EVENT_REF" newDataType="VARCHAR2(40)"/>
+    </changeSet>
+
+    <changeSet id="token_comment_add_privilege" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'TOKEN_ADD_COMMENT'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('TOKEN_ADD_COMMENT', 'Добавление комментариев');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'TOKEN_ADD_COMMENT');
+        </sql>
+    </changeSet>
+    
+</databaseChangeLog>

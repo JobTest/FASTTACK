@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-05_usrdet.xml">
+
+    <!-- USRDET -->
+
+    <changeSet id="update2018-03-05_usrdet_01" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRDET"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRDET">
+            <column name="username" type="varchar(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="passwd" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="phone" type="varchar(13)"/>
+            <column name="regdate" type="datetime"/>
+            <column name="statcode" type="char(2)"/>
+            <column name="unlockdate" type="datetime"/>
+            <column name="pwdchdate" type="datetime"/>
+            <column name="lastlogondate" type="datetime"/>
+            <column name="logonfailures" type="number(2)"/>
+            <column name="smscode" type="varchar(255)"/>
+            <column name="restore_pwd_sms_code" type="varchar(255)"/>
+            <column name="need_reset_password" type="boolean" defaultValue="0"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="update2018-03-05_usrdet_02" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRDET"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRDET">
+            <column name="username" type="varchar2(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="passwd" type="varchar2(255)"/>
+            <column name="name" type="varchar2(255)"/>
+            <column name="phone" type="varchar2(13)"/>
+            <column name="regdate" type="datetime"/>
+            <column name="statcode" type="char(2)"/>
+            <column name="unlockdate" type="datetime"/>
+            <column name="pwdchdate" type="datetime"/>
+            <column name="lastlogondate" type="datetime"/>
+            <column name="logonfailures" type="number(2)"/>
+            <column name="smscode" type="varchar2(255)"/>
+            <column name="restore_pwd_sms_code" type="varchar2(255)"/>
+            <column name="need_reset_password" type="boolean" defaultValue="0"/>
+        </createTable>
+    </changeSet>
+
+    <!-- USR_USRROLE -->
+
+    <changeSet id="update2018-03-05_usrdet_03" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USR_USRROLE"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USR_USRROLE">
+            <column name="username" type="varchar(30)">
+                <constraints nullable="false" foreignKeyName="fk_USR_USRROLE_username" references="USRDET(username)"/>
+            </column>
+            <column name="rolecode" type="varchar(30)">
+                <constraints nullable="false" foreignKeyName="fk_USR_USRROLE_rolecode" references="USRROLE(rolecode)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="update2018-03-05_usrdet_04" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USR_USRROLE"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USR_USRROLE">
+            <column name="username" type="varchar2(30)">
+                <constraints nullable="false" foreignKeyName="fk_USR_USRROLE_username" references="USRDET(username)"/>
+            </column>
+            <column name="rolecode" type="varchar2(30)">
+                <constraints nullable="false" foreignKeyName="fk_USR_USRROLE_rolecode" references="USRROLE(rolecode)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- USRPWDHIST -->
+
+    <changeSet id="update2018-03-05_usrdet_05" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRPWDHIST"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRPWDHIST">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="USR" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PASSWORD" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATETIME" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="idx_usrpwdhist" tableName="USRPWDHIST">
+            <column name="USR" type="varchar(30)"/>
+            <column name="PASSWORD" type="varchar(255)"/>
+            <column name="DATETIME" type="datetime"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="update2018-03-05_usrdet_05_2" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="USRPWDHIST_SEQ"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="USRPWDHIST_SEQ" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="update2018-03-05_usrdet_05_3" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sequenceExists sequenceName="usrpwdhist_id_seq"/>
+        </preConditions>
+        <dropSequence sequenceName="usrpwdhist_id_seq"/>
+    </changeSet>
+
+    <changeSet id="update2018-03-05_usrdet_06" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRPWDHIST"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRPWDHIST">
+            <column name="ID" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="USR" type="varchar2(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PASSWORD" type="varchar2(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATETIME" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createSequence sequenceName="USRPWDHIST_SEQ" startValue="1" incrementBy="1"/>
+
+        <createIndex indexName="idx_usrpwdhist" tableName="USRPWDHIST">
+            <column name="USR" type="varchar2(30)"/>
+            <column name="PASSWORD" type="varchar2(255)"/>
+            <column name="DATETIME" type="datetime"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- INSERT USRDET ADMIN -->
+
+    <changeSet id="update2018-03-05_usrdet_07" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRDET WHERE username = 'admin@cts.com'</sqlCheck>
+        </preConditions>
+
+        <sql>
+            INSERT INTO USRDET(username, passwd, statcode, logonFailures, need_reset_password) VALUES ('admin@cts.com', '15a46521f9c5358ef8a1f9dd3a1859a46d55ce878fcbdce00052759c6f8ee9e6930278da86ba1fce1ccc3538b1e2d07839ed8bdbd9195595096d07391aa25df6', '00', 0, true);
+        </sql>
+    </changeSet>
+
+    <changeSet id="update2018-03-05_usrdet_08" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRDET WHERE username = 'admin@cts.com'</sqlCheck>
+        </preConditions>
+
+        <sql>
+            INSERT INTO USRDET(username, passwd, statcode, logonFailures, need_reset_password) VALUES ('admin@cts.com', '15a46521f9c5358ef8a1f9dd3a1859a46d55ce878fcbdce00052759c6f8ee9e6930278da86ba1fce1ccc3538b1e2d07839ed8bdbd9195595096d07391aa25df6', '00', 0, 1);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

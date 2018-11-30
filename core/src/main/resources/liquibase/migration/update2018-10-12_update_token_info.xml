@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-10-12_update_token_info.xml">
+
+    <changeSet id="update2018-10-12_update_token_info" author="a.lazarchuk" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="TOKEN_INFO" columnName="DIGITIZE_DATE"/>
+                <columnExists tableName="TOKEN_INFO" columnName="TOKEN_STATUS_UPDATE"/>
+            </and>
+        </preConditions>
+
+        <modifyDataType
+                columnName="DIGITIZE_DATE"
+                newDataType="TIMESTAMP"
+                tableName="TOKEN_INFO"/>
+        <modifyDataType
+                columnName="TOKEN_STATUS_UPDATE"
+                newDataType="TIMESTAMP"
+                tableName="TOKEN_INFO"/>
+
+    </changeSet>
+
+</databaseChangeLog>

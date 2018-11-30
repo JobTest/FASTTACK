@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-21_add_priv_change_log.xml">
+
+<changeSet id="update2018-03-21_add_priv_change_log" author="d.koval" runOnChange="true">
+    <preConditions onFail="MARK_RAN">
+        <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'CHANGE_LOG_VIEW'</sqlCheck>
+    </preConditions>
+    <sql>
+        INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('CHANGE_LOG_VIEW', 'Просмотр Журнала изменений объектов');
+        INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'CHANGE_LOG_VIEW');
+    </sql>
+</changeSet>
+
+</databaseChangeLog>

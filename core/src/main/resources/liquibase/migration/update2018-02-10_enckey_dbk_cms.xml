@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-02-10_enckey_dbk_cms.xml">
+
+    <changeSet id="add_enckey_dbk_cms_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="ENCKEY"/>
+        </preConditions>
+        <sql>
+            INSERT INTO
+            ENCKEY (KEYTYPE, REFCODE,    CAPACITY, STATCODE, CHECKVALUE, EFFDATE,      EXPDATE,                                     WRAPPINGKEY, KEYVALUE,                           PUBLICEXPONENT)
+            VALUES ('DBK',   'FASTTACK', 'T',      0,        NULL,       CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE, 'LMK2',      'FC1F9701089DF247C01EC93E60AF6B3F', NULL)
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_enckey_dbk_cms_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="ENCKEY"/>
+        </preConditions>
+        <sql>
+            INSERT INTO ENCKEY (ID, KEYTYPE, REFCODE, CAPACITY, STATCODE, CHECKVALUE, EFFDATE, EXPDATE, WRAPPINGKEY, KEYVALUE, PUBLICEXPONENT)
+            VALUES (ENCKEY_ID_SEQ.nextval, 'DBK', 'FASTTACK', 'T', 0, NULL, trunc(sysdate), add_months(trunc(sysdate), 120), 'LMK2', 'FC1F9701089DF247C01EC93E60AF6B3F', NULL);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

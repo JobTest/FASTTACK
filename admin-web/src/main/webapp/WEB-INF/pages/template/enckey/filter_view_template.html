@@ -1,0 +1,21 @@
+<table class="table table-striped table-bordered table-hover" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+        <tr>
+            <td class="errorDescription" colspan="2"></td>
+        </tr>
+        <tr>
+            <th th:text="#{enckey.keyType}"></th>
+            <td>
+                <input name="keyType" class="form-control input-sm"/>
+                <div class="fieldRemark" data-remark-field="keyType"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <button class="btnFilter btn btn-primary" th:text="#{common.filter}"></button>
+            </td>
+        </tr>
+    </tbody>
+</table>

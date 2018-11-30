@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-10-23_update_token_info.xml">
+
+    <changeSet id="clr_tokenization_standard_ver_update_token_info_in_postgresql" author="a.lazarchuk" runOnChange="true" context="postgresql">
+
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_INFO" columnName="COLOR_TOKENIZATION_STANDARD_VERSION"/>
+        </preConditions>
+
+        <renameColumn oldColumnName="COLOR_TOKENIZATION_STANDARD_VERSION"
+                      newColumnName="CLR_TOKENIZATION_STANDARD_VER"
+                      tableName="TOKEN_INFO"/>
+
+    </changeSet>
+
+</databaseChangeLog>

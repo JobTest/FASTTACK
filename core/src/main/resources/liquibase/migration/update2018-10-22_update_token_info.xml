@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-10-22_update_token_info.xml">
+
+    <changeSet id="reminder_period_update_token_info_columns_oracle" author="a.lazarchuk" runOnChange="true" context="oracle">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="REMINDER_PERIOD"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="REMINDER_PERIOD" type="VARCHAR(64)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="tokenization_path_update_token_info_columns_oracle" author="a.lazarchuk" runOnChange="true" context="oracle">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="TOKENIZATION_PATH"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="TOKENIZATION_PATH" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="another_fields_update_token_info_columns_oracle" author="a.lazarchuk" runOnChange="true" context="oracle">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="WP_DEVICE_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="WP_ACCOUNT_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="WP_PHONENUMBER_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="WP_REASON_CODES"/>
+            </not>
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="CLR_TOKENIZATION_STANDARD_VER"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="WP_DEVICE_SCORE" type="VARCHAR(64)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="WP_ACCOUNT_SCORE" type="VARCHAR(64)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="WP_PHONENUMBER_SCORE" type="VARCHAR(64)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="WP_REASON_CODES" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="CLR_TOKENIZATION_STANDARD_VER" type="VARCHAR(64)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="digitize_date_update_token_info" author="a.lazarchuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="TOKEN_INFO" columnName="DIGITIZE_DATE"/>
+                <columnExists tableName="TOKEN_INFO" columnName="TOKEN_STATUS_UPDATE"/>
+            </and>
+        </preConditions>
+
+        <modifyDataType
+                columnName="DIGITIZE_DATE"
+                newDataType="TIMESTAMP"
+                tableName="TOKEN_INFO"/>
+        <modifyDataType
+                columnName="TOKEN_STATUS_UPDATE"
+                newDataType="TIMESTAMP"
+                tableName="TOKEN_INFO"/>
+
+    </changeSet>
+
+</databaseChangeLog>

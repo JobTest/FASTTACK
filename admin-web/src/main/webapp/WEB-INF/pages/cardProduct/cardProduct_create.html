@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+    <head>
+        <title th:text="#{cardProduct.title}"></title>
+    </head>
+    <script type="text/javascript" th:fragment="asset">
+        function extendRequireJsDependency(paths, shims, requires) {
+            paths['cardProduct.views.CardProductCreatePageView'] = AppCommon.assetBaseUrl + 'cts/js/cardProduct/views/CardProductCreatePageView';
+            paths['security.model'] = AppCommon.assetBaseUrl + 'cts/js/common/model/SecurityModels';
+            requires.push('cardProduct.views.CardProductCreatePageView');
+        }
+    </script>
+    <body>
+        <div layout:fragment="windowTitle" th:text="#{cardProduct.title}"></div>
+        <div class="row" layout:fragment="content">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <table id="cardProductCreateContainer" class="table table-striped table-bordered table-hover" data-parsley-validate="true">
+                        <tbody>
+                            <tr><td class="errorDescription" colspan="2"></td></tr>
+                            <tr>
+                                <th th:text="#{cardProduct.productConfigId}"></th>
+                                <td>
+                                    <input name="productConfigId" size="30" class="form-control input-sm" th:maxlength="30"
+                                           data-parsley-required="true"
+                                           th:attr="data-parsley-required-message=#{cardProduct.validation.empty.productConfigId}"
+                                           data-parsley-errors-container="div[data-remark-field='productConfigId']"/>
+                                    <div class="fieldRemark" data-remark-field="productConfigId"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th th:text="#{cardProduct.beginRange}"></th>
+                                <td>
+                                    <input name="beginRange" size="19" class="form-control input-sm" th:minlength="16" th:maxlength="19"
+                                           data-parsley-required="true"
+                                           th:attr="data-parsley-required-message=#{cardProduct.validation.empty.beginRange}"
+                                           data-parsley-errors-container="div[data-remark-field='beginRange']"/>
+                                    <div class="fieldRemark" data-remark-field="beginRange"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th th:text="#{cardProduct.endRange}"></th>
+                                <td>
+                                    <input name="endRange" size="19" class="form-control input-sm" th:minlength="16" th:maxlength="19"
+                                           data-parsley-required="true"
+                                           th:attr="data-parsley-required-message=#{cardProduct.validation.empty.endRange}"
+                                           data-parsley-errors-container="div[data-remark-field='endRange']"/>
+                                    <div class="fieldRemark" data-remark-field="endRange"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a th:href="@{/cardProduct/list.htm}" class="btnCancel btn btn-default" th:text="#{common.cancel}"></a>
+                                </td>
+                                <td>
+                                    <button class="btnSave btn btn-primary" th:text="#{common.save}"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

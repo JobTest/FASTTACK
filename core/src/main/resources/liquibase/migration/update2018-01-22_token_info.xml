@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-22_token_info.xml">
+
+    <changeSet id="create_table_postgresql_02" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_INFO"/>
+            </not>
+        </preConditions>
+        
+        <createTable tableName="TOKEN_INFO">
+            <column name="TOKEN_REF_ID" type="VARCHAR(64)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="PAN_INTERNAL_ID" type="VARCHAR(64)"/>
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR(64)"/>
+            <column name="PAN_REF_ID" type="VARCHAR(64)"/>
+            <column name="MASKED_PAN" type="VARCHAR(19)"/>
+            <column name="MASKED_TOKEN" type="VARCHAR(19)"/>
+            <column name="TOKEN_EXPDATE" type="DATE"/>
+            <column name="LIFECYCLE_TRACE_ID" type="VARCHAR(15)"/>
+            <column name="PAN_SOURCE" type="VARCHAR(1)"/>
+            <column name="ACTIVE_TOKEN_COUNT" type="VARCHAR(99)"/>
+            <column name="TOKEN_TYPE" type="VARCHAR(1)"/>
+            <column name="TOKEN_STATUS" type="VARCHAR(1)"/>
+            <column name="DIGITIZE_DATE" type="DATE"/>
+            <column name="TOKEN_STATUS_UPDATE" type="DATE"/>
+            <column name="CUSTOMER_ID" type="VARCHAR(64)"/>
+            <column name="CUSTOMER_PHONE" type="VARCHAR(12)"/>
+            <column name="IPS" type="VARCHAR(1)"/>
+            <column name="CLIENT_WALLET_ACCOUNT_ID" type="VARCHAR(48)"/>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle_02" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_INFO"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="TOKEN_INFO">
+            <column name="TOKEN_REF_ID" type="VARCHAR2(64)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR2(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="PAN_INTERNAL_ID" type="VARCHAR2(64)"/>
+            <column name="PAN_INTERNAL_GUID" type="VARCHAR2(64)"/>
+            <column name="PAN_REF_ID" type="VARCHAR2(64)"/>
+            <column name="MASKED_PAN" type="VARCHAR2(19)"/>
+            <column name="MASKED_TOKEN" type="VARCHAR2(19)"/>
+            <column name="TOKEN_EXPDATE" type="DATE"/>
+            <column name="LIFECYCLE_TRACE_ID" type="VARCHAR2(15)"/>
+            <column name="PAN_SOURCE" type="VARCHAR2(1)"/>
+            <column name="ACTIVE_TOKEN_COUNT" type="VARCHAR2(99)"/>
+            <column name="TOKEN_TYPE" type="VARCHAR2(1)"/>
+            <column name="TOKEN_STATUS" type="VARCHAR2(1)"/>
+            <column name="DIGITIZE_DATE" type="DATE"/>
+            <column name="TOKEN_STATUS_UPDATE" type="DATE"/>
+            <column name="CUSTOMER_ID" type="VARCHAR2(64)"/>
+            <column name="CUSTOMER_PHONE" type="VARCHAR2(12)"/>
+            <column name="IPS" type="VARCHAR2(1)"/>
+            <column name="CLIENT_WALLET_ACCOUNT_ID" type="VARCHAR2(48)"/>
+
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

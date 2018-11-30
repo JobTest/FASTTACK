@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-22_token_history.xml">
+
+    <changeSet id="create_table_postgresql_02" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_HISTORY"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="TOKEN_HISTORY">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="TOKEN_REF_ID" type="VARCHAR(48)">
+                <constraints unique="true"/>
+            </column>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR(30)">
+                <constraints unique="true"/>
+            </column>
+            <column name="WPREQUEST_ID" type="VARCHAR(30)"/>
+            <column name="WPCONVERSATION_ID" type="VARCHAR(64)"/>
+            <column name="TOKEN_EVENT_TYPE" type="VARCHAR(48)"/>
+            <column name="TOKEN_EVENT_DATE" type="DATE"/>
+            <column name="TOKEN_EVENT_SOURCE" type="VARCHAR(2)"/>
+            <column name="TOKEN_EVENT_REASON" type="VARCHAR(30)"/>
+            <column name="MESSAGE_REASON_CODE" type="VARCHAR(4)"/>
+            <column name="EVENT_REF" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle_02" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TOKEN_HISTORY"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="TOKEN_HISTORY">
+            <column name="ID" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="TOKEN_REF_ID" type="VARCHAR2(48)">
+                <constraints unique="true"/>
+            </column>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR2(30)">
+                <constraints unique="true"/>
+            </column>
+            <column name="WPREQUEST_ID" type="VARCHAR2(30)"/>
+            <column name="WPCONVERSATION_ID" type="VARCHAR2(64)"/>
+            <column name="TOKEN_EVENT_TYPE" type="VARCHAR2(48)"/>
+            <column name="TOKEN_EVENT_DATE" type="DATE"/>
+            <column name="TOKEN_EVENT_SOURCE" type="VARCHAR2(2)"/>
+            <column name="TOKEN_EVENT_REASON" type="VARCHAR2(30)"/>
+            <column name="MESSAGE_REASON_CODE" type="VARCHAR2(4)"/>
+            <column name="EVENT_REF" type="VARCHAR2(20)"/>
+        </createTable>
+
+        <createSequence
+                sequenceName="token_history_id_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+</databaseChangeLog>

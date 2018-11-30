@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-02-05_update_sequence.xml">
+
+    <changeSet id="update2018-02-05_update_sequence" author="a.lypivets" runOnChange="true" context="postgresql">
+
+        <preConditions onFail="MARK_RAN">
+            <sequenceExists sequenceName="cardholder_verification_method_id_seq"/>
+        </preConditions>
+
+        <dropSequence sequenceName="cardholder_verification_method_id_seq"/>
+
+        <createSequence
+                sequenceName="cardholder_verif_met_id_seq"
+                startValue="1"
+                incrementBy="1" />
+
+    </changeSet>
+</databaseChangeLog>

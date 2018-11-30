@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-03-05_enckey_vts_wsd.xml">
+
+    <changeSet id="enckey_vts_wsd_postgresql" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="ENCKEY"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM ENCKEY WHERE KEYTYPE = 'VTS_WSD'</sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO ENCKEY
+            (KEYTYPE, REFCODE, CAPACITY, STATCODE,
+            EFFDATE, EXPDATE, WRAPPINGKEY,
+            KEYVALUE)
+            VALUES
+            ('VTS_WSD', 'FASTTACK', 'T', 0,
+            CURRENT_DATE, (CURRENT_DATE + INTERVAL '120 MONTH')::DATE,
+            'LMK1',
+            'E1F812993706347BC057EFA98F5F7662');
+        </sql>
+    </changeSet>
+
+    <changeSet id="enckey_vts_wsd_oracle" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="ENCKEY"/>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM ENCKEY WHERE KEYTYPE = 'VTS_WSD'</sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO ENCKEY
+            (ID, KEYTYPE, REFCODE, CAPACITY, STATCODE,
+            EFFDATE, EXPDATE, WRAPPINGKEY,
+            KEYVALUE)
+            VALUES
+            (ENCKEY_ID_SEQ.nextval, 'VTS_WSD', 'FASTTACK', 'T', 0,
+            TRUNC(SYSDATE), ADD_MONTHS(TRUNC(SYSDATE), 120),
+            'LMK1',
+            'E1F812993706347BC057EFA98F5F7662');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

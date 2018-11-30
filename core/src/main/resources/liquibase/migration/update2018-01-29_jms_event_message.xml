@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018_01-29_jms_event_message.xml">
+
+    <changeSet id="create_table_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="JMS_MESSAGE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="JMS_MESSAGE">
+            <column name="ID" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="CONTENT" type="TEXT"/>
+            <column name="MESSAGE_ID" type="VARCHAR(50)"/>
+            <column name="PROCESSOR_NAME" type="VARCHAR(50)"/>
+            <column name="NUMBER_DELIVERY_ATTEMPTS" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="JMS_MESSAGE"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="JMS_MESSAGE">
+            <column name="ID" type="NUMBER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="CONTENT" type="CLOB"/>
+            <column name="MESSAGE_ID" type="VARCHAR2(50)"/>
+            <column name="PROCESSOR_NAME" type="VARCHAR2(50)"/>
+            <column name="NUMBER_DELIVERY_ATTEMPTS" type="number(10)"/>
+        </createTable>
+
+        <createSequence
+                sequenceName="jms_message_id_seq"
+                startValue="1"
+                incrementBy="1" />
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018_02-08_bin_setup.xml">
+
+    <changeSet id="update2018_02-08_bin_setup_01" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BIN_SETUP"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="BIN_SETUP">
+            <column name="BIN" type="NUMBER(19,0)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="SEND_ASV" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEND_CARD_TOKENIZED" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="update2018_02-08_bin_setup_02" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BIN_SETUP"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="BIN_SETUP">
+            <column name="BIN" type="NUMBER(19)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="SEND_ASV" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEND_CARD_TOKENIZED" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

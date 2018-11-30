@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-04-12_update_column_token_comment.xml">
+
+    <changeSet id="update_token_comment_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_COMMENT" columnName="USRNAME"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_COMMENT" columnName="USRNAME" newDataType="VARCHAR(30)"/>
+
+    </changeSet>
+
+    <changeSet id="update_token_comment_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_COMMENT" columnName="USRNAME"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_COMMENT" columnName="USRNAME" newDataType="VARCHAR2(30)"/>
+
+    </changeSet>
+
+</databaseChangeLog>

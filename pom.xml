@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cts.fasttack</groupId>
+    <artifactId>fasttack</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>FASTTACK</name>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.10.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+
+        <build.number>0</build.number>
+
+        <fasttack.spring.boot.skip>true</fasttack.spring.boot.skip>
+
+        <mobo.hsm.version>1.4.0</mobo.hsm.version>
+        <iaik-jce-full.version>5.3</iaik-jce-full.version>
+        <iaikPkcs11Wrapper.version>1.4</iaikPkcs11Wrapper.version>
+
+        <camel.version>2.20.1</camel.version>
+        <oracle.version>12.1.0.2</oracle.version>
+        <hikari.version>2.7.4</hikari.version>
+        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+
+        <junit.version>4.12</junit.version>
+        <commons.io.version>2.6</commons.io.version>
+        <commons.lang3.version>3.4</commons.lang3.version>
+        <version.bouncycastle>1.55</version.bouncycastle>
+        <httpclient.version>4.5.4</httpclient.version>
+        <visa.encryption.utilities.version>2.40.1</visa.encryption.utilities.version>
+        <jsmpp.version>2.3.6</jsmpp.version>
+        <jcharset.version>2.0</jcharset.version>
+
+        <spring-cloud.version>1.4.3.RELEASE</spring-cloud.version>
+        <spring.version>4.3.14.RELEASE</spring.version>
+    </properties>
+
+    <profiles>
+        <!-- -=| The profile is DEFAULT |=- -->
+        <profile>
+            <id>dev</id>
+
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <repositories>
+                <repository>
+                    <id>ProfITsoft</id>
+                    <url>http://192.168.1.100:12345/portal/content/repositories/CTS/</url>
+                </repository>
+            </repositories>
+
+            <properties>
+                <activatedProfileId>dev</activatedProfileId>
+                <!-- - -->
+                <mdes.server.contextPath>/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uia</bank.server.contextPath>
+                <bank.push.provisioning.contextPath>/ft/pp</bank.push.provisioning.contextPath>
+                <visa.vnts.contextPath>/visa/vnts</visa.vnts.contextPath>
+                <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                    </resource>
+                </resources>
+            </build>
+
+            <modules>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <!--<module>liquibase</module>-->
+                <module>issuer-host</module>
+                <module>admin-web</module>
+                <module>visa</module>
+                <module>sms</module>
+                <module>service-registry</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>dev-ih-sv</id>
+
+            <repositories>
+                <repository>
+                    <id>ProfITsoft</id>
+                    <url>http://192.168.1.100:12345/portal/content/repositories/CTS/</url>
+                </repository>
+            </repositories>
+
+            <properties>
+                <activatedProfileId>dev-ih-sv</activatedProfileId>
+                <!-- - -->
+                <mdes.server.contextPath>/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uia</bank.server.contextPath>
+                <bank.push.provisioning.contextPath>/ft/pp</bank.push.provisioning.contextPath>
+                <visa.vnts.contextPath>/visa/vnts</visa.vnts.contextPath>
+                <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                    </resource>
+                </resources>
+            </build>
+
+            <modules>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <!--<module>liquibase</module>-->
+                <module>issuer-host</module>
+                <module>admin-web</module>
+                <module>visa</module>
+                <module>sms</module>
+                <module>service-registry</module>
+            </modules>
+        </profile>
+
+        <!-- -=| The profile use to RELEASE-Version |=- -->
+        <profile>
+            <id>release</id>
+
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <repositories>
+                <repository>
+                    <id>ProfITsoft</id>
+                    <url>http://192.168.1.100:12345/portal/content/repositories/CTS/</url>
+                </repository>
+            </repositories>
+
+            <properties>
+                <activatedProfileId>release</activatedProfileId>
+                <!-- - -->
+                <mdes.server.contextPath>/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uia</bank.server.contextPath>
+                <bank.push.provisioning.contextPath>/ft/pp</bank.push.provisioning.contextPath>
+                <visa.vnts.contextPath>/visa/vnts</visa.vnts.contextPath>
+                <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/fasttack-service-registry-application.properties</exclude>
+                            <exclude>**/fasttack-core-application.properties</exclude>
+                            <exclude>**/fasttack-crypto-server-application.properties</exclude>
+                            <exclude>**/fasttack-bank-client-application.properties</exclude>
+                            <exclude>**/fasttack-bank-pushprovisioning-application.properties</exclude>
+                            <exclude>**/fasttack-bank-server-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-client-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-sv-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-server-application.properties</exclude>
+                            <exclude>**/fasttack-sms-server-application.properties</exclude>
+                            <exclude>**/fasttack-visa-client-application.properties</exclude>
+                            <exclude>**/fasttack-vnts-server-application.properties</exclude>
+                            <exclude>**/fasttack-vtis-server-application.properties</exclude>
+                            <exclude>**/fasttack-admin-web-application.properties</exclude>
+                        </excludes>
+                        <filtering>false</filtering>
+                    </resource>
+                </resources>
+            </build>
+
+            <modules>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <module>issuer-host</module>
+                <module>admin-web</module>
+                <module>visa</module>
+                <module>sms</module>
+                <module>service-registry</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>release-ih-sv</id>
+
+            <repositories>
+                <repository>
+                    <id>ProfITsoft</id>
+                    <url>http://192.168.1.100:12345/portal/content/repositories/CTS/</url>
+                </repository>
+            </repositories>
+
+            <properties>
+                <activatedProfileId>release-ih-sv</activatedProfileId>
+                <!-- - -->
+                <mdes.server.contextPath>/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uia</bank.server.contextPath>
+                <bank.push.provisioning.contextPath>/ft/pp</bank.push.provisioning.contextPath>
+                <visa.vnts.contextPath>/visa/vnts</visa.vnts.contextPath>
+                <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/fasttack-service-registry-application.properties</exclude>
+                            <exclude>**/fasttack-core-application.properties</exclude>
+                            <exclude>**/fasttack-crypto-server-application.properties</exclude>
+                            <exclude>**/fasttack-bank-client-application.properties</exclude>
+                            <exclude>**/fasttack-bank-pushprovisioning-application.properties</exclude>
+                            <exclude>**/fasttack-bank-server-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-client-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-sv-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-server-application.properties</exclude>
+                            <exclude>**/fasttack-sms-server-application.properties</exclude>
+                            <exclude>**/fasttack-visa-client-application.properties</exclude>
+                            <exclude>**/fasttack-vnts-server-application.properties</exclude>
+                            <exclude>**/fasttack-vtis-server-application.properties</exclude>
+                            <exclude>**/fasttack-admin-web-application.properties</exclude>
+                        </excludes>
+                        <filtering>false</filtering>
+                    </resource>
+                </resources>
+            </build>
+
+            <modules>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <module>issuer-host</module>
+                <module>admin-web</module>
+                <module>visa</module>
+                <module>sms</module>
+                <module>service-registry</module>
+            </modules>
+        </profile>
+
+        <!-- -=| The PRODUCTION profile for 'Alfa-Bank' |=- -->
+        <profile>
+            <id>Alfa</id>
+
+            <repositories>
+                <repository>
+                    <id>ProfITsoft</id>
+                    <url>http://192.168.1.100:12345/portal/content/repositories/CTS/</url>
+                </repository>
+            </repositories>
+
+            <properties>
+                <activatedProfileId>Alfa</activatedProfileId>
+                <!-- - -->
+                <mdes.server.contextPath>/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uiaserver</bank.server.contextPath>
+                <bank.push.provisioning.contextPath>/ft/uia</bank.push.provisioning.contextPath>
+                <visa.vnts.contextPath>/vnts</visa.vnts.contextPath>
+                <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/fasttack-service-registry-application.properties</exclude>
+                            <exclude>**/fasttack-core-application.properties</exclude>
+                            <exclude>**/fasttack-crypto-server-application.properties</exclude>
+                            <exclude>**/fasttack-bank-client-application.properties</exclude>
+                            <exclude>**/fasttack-bank-pushprovisioning-application.properties</exclude>
+                            <exclude>**/fasttack-bank-server-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-client-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-sv-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-server-application.properties</exclude>
+                            <exclude>**/fasttack-sms-server-application.properties</exclude>
+                            <exclude>**/fasttack-visa-client-application.properties</exclude>
+                            <exclude>**/fasttack-vnts-server-application.properties</exclude>
+                            <exclude>**/fasttack-vtis-server-application.properties</exclude>
+                            <exclude>**/fasttack-admin-web-application.properties</exclude>
+                        </excludes>
+                        <filtering>false</filtering>
+                    </resource>
+                </resources>
+            </build>
+
+            <modules>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <module>issuer-host</module>
+                <module>admin-web</module>
+                <module>visa</module>
+                <module>sms</module>
+                <module>service-registry</module>
+            </modules>
+        </profile>
+
+        <!-- -=| The TEST profile for 'Alfa-Bank' |=- -->
+        <profile>
+            <id>Alfa-TEST</id>
+
+            <repositories>
+                <repository>
+                    <id>ProfITsoft</id>
+                    <url>http://192.168.1.100:12345/portal/content/repositories/CTS/</url>
+                </repository>
+            </repositories>
+
+            <properties>
+                <activatedProfileId>Alfa-test</activatedProfileId>
+                <!-- - -->
+                <mdes.server.contextPath>/mcissuerapitest/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uiaserver</bank.server.contextPath>
+                <bank.push.provisioning.contextPath>/ft/uia</bank.push.provisioning.contextPath>
+                <visa.vnts.contextPath>/vnts</visa.vnts.contextPath>
+                <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/fasttack-service-registry-application.properties</exclude>
+                            <exclude>**/fasttack-core-application.properties</exclude>
+                            <exclude>**/fasttack-crypto-server-application.properties</exclude>
+                            <exclude>**/fasttack-bank-client-application.properties</exclude>
+                            <exclude>**/fasttack-bank-pushprovisioning-application.properties</exclude>
+                            <exclude>**/fasttack-bank-server-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-client-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-sv-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-server-application.properties</exclude>
+                            <exclude>**/fasttack-sms-server-application.properties</exclude>
+                            <exclude>**/fasttack-visa-client-application.properties</exclude>
+                            <exclude>**/fasttack-vnts-server-application.properties</exclude>
+                            <exclude>**/fasttack-vtis-server-application.properties</exclude>
+                            <exclude>**/fasttack-admin-web-application.properties</exclude>
+                        </excludes>
+                        <filtering>false</filtering>
+                    </resource>
+                </resources>
+            </build>
+
+            <modules>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <module>issuer-host</module>
+                <module>admin-web</module>
+                <module>visa</module>
+                <module>sms</module>
+                <module>service-registry</module>
+            </modules>
+        </profile>
+
+        <!-- -=| The PRODUCTION profile for 'OTP-Bank' |=- -->
+        <profile>
+            <id>OTP</id>
+
+            <repositories>
+                <repository>
+                    <id>ProfITsoft</id>
+                    <url>http://192.168.1.100:12345/portal/content/repositories/CTS/</url>
+                </repository>
+            </repositories>
+
+            <properties>
+                <activatedProfileId>OTP</activatedProfileId>
+                <!-- - -->
+                <mdes.server.contextPath>/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uia</bank.server.contextPath>
+                <bank.push.provisioning.contextPath>/ft/pp</bank.push.provisioning.contextPath>
+                <visa.vnts.contextPath>/visa/vnts</visa.vnts.contextPath>
+                <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/fasttack-service-registry-application.properties</exclude>
+                            <exclude>**/fasttack-core-application.properties</exclude>
+                            <exclude>**/fasttack-crypto-server-application.properties</exclude>
+                            <exclude>**/fasttack-bank-client-application.properties</exclude>
+                            <exclude>**/fasttack-bank-pushprovisioning-application.properties</exclude>
+                            <exclude>**/fasttack-bank-server-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-client-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-sv-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-server-application.properties</exclude>
+                            <exclude>**/fasttack-sms-server-application.properties</exclude>
+                            <exclude>**/fasttack-visa-client-application.properties</exclude>
+                            <exclude>**/fasttack-vnts-server-application.properties</exclude>
+                            <exclude>**/fasttack-vtis-server-application.properties</exclude>
+                            <exclude>**/fasttack-admin-web-application.properties</exclude>
+                        </excludes>
+                        <filtering>false</filtering>
+                    </resource>
+                </resources>
+            </build>
+
+            <modules>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <module>issuer-host</module>
+                <module>admin-web</module>
+                <module>visa</module>
+                <module>sms</module>
+                <module>service-registry</module>
+            </modules>
+        </profile>
+
+        <!-- -=| ? |=- -->
+        <profile>
+            <id>spring-boot-tomcat</id>
+
+            <properties>
+                <activatedProfileId>spring-boot-tomcat</activatedProfileId>
+                <fasttack.spring.boot.skip>false</fasttack.spring.boot.skip>
+                <!-- - -->
+                <mdes.server.contextPath>/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uia</bank.server.contextPath>
+                <bank.push.provisioning.contextPath>/ft/pp</bank.push.provisioning.contextPath>
+                <visa.vnts.contextPath>/visa/vnts</visa.vnts.contextPath>
+                <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+            </dependencies>
+
+            <modules>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <!--<module>liquibase</module>-->
+                <module>issuer-host</module>
+                <module>admin-web</module>
+                <module>visa</module>
+                <module>sms</module>
+                <module>service-registry</module>
+            </modules>
+        </profile>
+    </profiles>
+
+</project>

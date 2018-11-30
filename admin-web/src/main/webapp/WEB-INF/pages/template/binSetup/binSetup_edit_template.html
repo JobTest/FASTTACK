@@ -1,0 +1,80 @@
+<table class="table table-striped table-bordered table-hover" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+    <tr><td class="errorDescription" colspan="2"></td></tr>
+    <tr>
+        <th th:text="#{bin.bin}"></th>
+        <td>{{=bin}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{bin.sendAsv}"></th>
+        <td>
+
+            {{ if(sendAsv) { }}
+            <input name="sendAsv" type="checkbox" class="form-check-input boolean"checked>
+            {{ } else { }}
+            <input name="sendAsv" type="checkbox" class="form-check-input boolean">
+            {{ }; }}
+
+            <div class="fieldRemark" data-remark-field="sendAsv"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{bin.sendCardTokenized}"></th>
+        <td>
+            {{ if(sendCardTokenized) { }}
+                <input name="sendCardTokenized" type="checkbox" class="form-check-input boolean" checked>
+            {{ } else { }}
+                <input name="sendCardTokenized" type="checkbox" class="form-check-input boolean">
+            {{ }; }}
+            <div class="fieldRemark" data-remark-field="sendCardTokenized"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{bin.sendGetCustomerId}"></th>
+        <td>
+            {{ if(sendGetCustomerId) { }}
+            <input name="sendGetCustomerId" type="checkbox" class="form-check-input boolean" checked>
+            {{ } else { }}
+            <input name="sendGetCustomerId" type="checkbox" class="form-check-input boolean">
+            {{ }; }}
+
+            <div class="fieldRemark" data-remark-field="sendGetCustomerId"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{bin.cvcAttempt}"></th>
+        <td>
+            <input name="cvcAttempt" class="form-control input-sm" value="{{=cvcAttempt}}"/>
+            <div class="fieldRemark" data-remark-field="cvcAttempt"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{bin.prepaid}"></th>
+        <td>
+            {{ if(prepaid) { }}
+            <input name="prepaid" type="checkbox" class="form-check-input boolean" checked>
+            {{ } else { }}
+            <input name="prepaid" type="checkbox" class="form-check-input boolean">
+            {{ }; }}
+
+            <div class="fieldRemark" data-remark-field="prepaid"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{bin.maxTokensPerCard}"></th>
+        <td>
+            <input name="maxTokensPerCard" class="form-control input-sm" value="{{=maxTokensPerCard}}"/>
+            <div class="fieldRemark" data-remark-field="maxTokensPerCard"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <a th:href="@{/bin/list.htm}" class="btnCancel btn btn-default" th:text="#{common.cancel}"></a>
+        </td>
+        <td>
+            <button class="btnSave btn btn-primary" th:text="#{common.save}"></button>
+        </td>
+    </tr>
+    </tbody>
+</table>

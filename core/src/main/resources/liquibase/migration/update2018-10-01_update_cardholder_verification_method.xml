@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-10-01_update_cardholder_verification_method.xml">
+
+    <changeSet id="update2018-10-01_update_cardholder_verification_method_columns_postgresql" author="a.lazarchuk" runOnChange="true" context="postgresql">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="TOKENIZATION_PATH"/>
+            </not>
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_DEVICE_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_ACCOUNT_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_PHONENUMBER_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="WP_REASON_CODES"/>
+            </not>
+            <not>
+                <columnExists tableName="CARDHOLDER_VERIFICATION_METHOD" columnName="COLOR_TOKENIZATION_STANDARD_VERSION"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="TOKENIZATION_PATH" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="WP_DEVICE_SCORE" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="WP_ACCOUNT_SCORE" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="WP_PHONENUMBER_SCORE" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="WP_REASON_CODES" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="CARDHOLDER_VERIFICATION_METHOD">
+            <column name="COLOR_TOKENIZATION_STANDARD_VERSION" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

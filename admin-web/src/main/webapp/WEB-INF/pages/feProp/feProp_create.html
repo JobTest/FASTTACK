@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+    <head>
+        <title th:text="#{feProp.title}"></title>
+    </head>
+    <script type="text/javascript" th:fragment="asset">
+        function extendRequireJsDependency(paths, shims, requires) {
+            paths['feProp.views.FePropCreatePageView'] = AppCommon.assetBaseUrl + 'cts/js/feProp/views/FePropCreatePageView';
+            paths['security.model'] = AppCommon.assetBaseUrl + 'cts/js/common/model/SecurityModels';
+            requires.push('feProp.views.FePropCreatePageView');
+        }
+    </script>
+    <body>
+        <div layout:fragment="windowTitle" th:text="#{feProp.title}"></div>
+        <div class="row" layout:fragment="content">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <table id="fePropCreateContainer" class="table table-striped table-bordered table-hover" data-parsley-validate="true">
+                        <tbody>
+                            <tr><td class="errorDescription" colspan="2"></td></tr>
+                            <tr>
+                                <th th:text="#{feProp.propName}"></th>
+                                <td>
+                                    <input name="propName" size="30" class="form-control input-sm" th:maxlength="30"
+                                           data-parsley-required="true"
+                                           th:attr="data-parsley-required-message=#{feProp.validation.empty.propName}"
+                                           data-parsley-errors-container="div[data-remark-field='propName']"/>
+                                    <div class="fieldRemark" data-remark-field="propName"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th th:text="#{feProp.propValue}"></th>
+                                <td>
+                                    <input name="propValue" size="255" class="form-control input-sm" th:maxlength="255"
+                                           data-parsley-required="true"
+                                           th:attr="data-parsley-required-message=#{feProp.validation.empty.propValue}"
+                                           data-parsley-errors-container="div[data-remark-field='propValue']"/>
+                                    <div class="fieldRemark" data-remark-field="propValue"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a th:href="@{/feProp/list.htm}" class="btnCancel btn btn-default" th:text="#{common.cancel}"></a>
+                                </td>
+                                <td>
+                                    <button class="btnSave btn btn-primary" th:text="#{common.save}"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

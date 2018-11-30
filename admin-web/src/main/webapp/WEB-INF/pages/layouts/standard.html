@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <meta http-equiv="cache-control" content="no-cache">
+        <meta http-equiv="cache-control" content="no-store">
+        <meta http-equiv="expires" content="0">
+        <meta http-equiv="pragma" content="no-cache">
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta th:name="_csrf" th:content="${_csrf.token}"/>
+
+        <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE" th:text="|#{fasttack} #{cts}|"></title>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <link rel="stylesheet" th:href="@{'/assets/bootstrap/css/bootstrap.min.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+        <link rel="stylesheet" th:href="@{'/assets/bootstrap/css/bootstrap-theme.min.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+        <link rel="stylesheet" th:href="@{'/assets/bootstrap/css/bootstrap-datepicker.standalone.min.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+        <link rel="stylesheet" th:href="@{'/assets/select2/select2.min.css'}"/>
+
+        <link rel="stylesheet" th:href="@{'/assets/dist/css/metisMenu.min.css'}"/>
+
+        <!--<link rel="stylesheet" th:href="@{'/assets/highlight/css/docco.css'}"/>-->
+
+        <!-- Custom Fonts -->
+        <link rel="stylesheet" th:href="@{'/assets/fontAwesome/css/font-awesome.min.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+
+        <link rel="stylesheet" th:href="@{'/assets/backgrid/css/backgrid.min.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+        <link rel="stylesheet" th:href="@{'/assets/backgrid/css/backgrid-paginator.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+        <link rel="stylesheet" th:href="@{'/assets/backgrid/css/backgrid-filter.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+        <link rel="stylesheet" th:href="@{'/assets/dist/css/cts-common.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+        <link rel="stylesheet" th:href="@{'/assets/dist/css/sb-admin-2.css?v=' + ${properties['spring.admin.web.buildTimestamp']}}"/>
+
+        <!-- The custom override to the weight page of board (etc tokens page) -->
+        <style>
+            @media ( min-width :1200px) {
+                .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3,
+                .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9 {
+                    float: left
+                }
+                .col-lg-12 {
+                    width: 100%
+                }
+                .col-lg-11 {
+                    width: 91.66666667%
+                }
+                .col-lg-10 {
+                    width: 100%
+                }
+                .col-lg-9 {
+                    width: 75%
+                }
+                .col-lg-8 {
+                    width: 66.66666667%
+                }
+                .col-lg-7 {
+                    width: 58.33333333%
+                }
+                .col-lg-6 {
+                    width: 50%
+                }
+                .col-lg-5 {
+                    width: 41.66666667%
+                }
+                .col-lg-4 {
+                    width: 33.33333333%
+                }
+                .col-lg-3 {
+                    width: 25%
+                }
+                .col-lg-2 {
+                    width: 16.66666667%
+                }
+                .col-lg-1 {
+                    width: 8.33333333%
+                }
+                .col-lg-pull-12 {
+                    right: 100%
+                }
+                .col-lg-pull-11 {
+                    right: 91.66666667%
+                }
+                .col-lg-pull-10 {
+                    right: 83.33333333%
+                }
+                .col-lg-pull-9 {
+                    right: 75%
+                }
+                .col-lg-pull-8 {
+                    right: 66.66666667%
+                }
+                .col-lg-pull-7 {
+                    right: 58.33333333%
+                }
+                .col-lg-pull-6 {
+                    right: 50%
+                }
+                .col-lg-pull-5 {
+                    right: 41.66666667%
+                }
+                .col-lg-pull-4 {
+                    right: 33.33333333%
+                }
+                .col-lg-pull-3 {
+                    right: 25%
+                }
+                .col-lg-pull-2 {
+                    right: 16.66666667%
+                }
+                .col-lg-pull-1 {
+                    right: 8.33333333%
+                }
+                .col-lg-pull-0 {
+                    right: auto
+                }
+                .col-lg-push-12 {
+                    left: 100%
+                }
+                .col-lg-push-11 {
+                    left: 91.66666667%
+                }
+                .col-lg-push-10 {
+                    left: 83.33333333%
+                }
+                .col-lg-push-9 {
+                    left: 75%
+                }
+                .col-lg-push-8 {
+                    left: 66.66666667%
+                }
+                .col-lg-push-7 {
+                    left: 58.33333333%
+                }
+                .col-lg-push-6 {
+                    left: 50%
+                }
+                .col-lg-push-5 {
+                    left: 41.66666667%
+                }
+                .col-lg-push-4 {
+                    left: 33.33333333%
+                }
+                .col-lg-push-3 {
+                    left: 25%
+                }
+                .col-lg-push-2 {
+                    left: 16.66666667%
+                }
+                .col-lg-push-1 {
+                    left: 8.33333333%
+                }
+                .col-lg-push-0 {
+                    left: auto
+                }
+                .col-lg-offset-12 {
+                    margin-left: 100%
+                }
+                .col-lg-offset-11 {
+                    margin-left: 91.66666667%
+                }
+                .col-lg-offset-10 {
+                    margin-left: 83.33333333%
+                }
+                .col-lg-offset-9 {
+                    margin-left: 75%
+                }
+                .col-lg-offset-8 {
+                    margin-left: 66.66666667%
+                }
+                .col-lg-offset-7 {
+                    margin-left: 58.33333333%
+                }
+                .col-lg-offset-6 {
+                    margin-left: 50%
+                }
+                .col-lg-offset-5 {
+                    margin-left: 41.66666667%
+                }
+                .col-lg-offset-4 {
+                    margin-left: 33.33333333%
+                }
+                .col-lg-offset-3 {
+                    margin-left: 25%
+                }
+                .col-lg-offset-2 {
+                    margin-left: 16.66666667%
+                }
+                .col-lg-offset-1 {
+                    margin-left: 8.33333333%
+                }
+                .col-lg-offset-0 {
+                    margin-left: 0
+                }
+            }
+        </style>
+
+        <script type="text/javascript" th:src="@{'/assets/dist/js/jquery-3.2.1.min.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}"></script>
+
+        <script type="text/javascript" th:src="@{'/assets/requirejs/require.min.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}"></script>
+
+        <script type="text/javascript" th:src="@{'/assets/cts/js/common/jsFunctionsExtension.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}"></script>
+
+        <script type="text/javascript" th:include="this::asset"></script>
+
+        <script th:inline="javascript">
+            window.AppCommon = {
+                context: {
+                    localStoragePrefix: 'ctsls',
+                    version: /*[[${properties['spring.admin.web.buildTimestamp']}]]*/ null,
+                    cacheTimeToLive: /*[[${properties['spring.admin.web.storageTtlMinutes']}]]*/ null,
+                    currentUserEmail: null
+                }
+            };
+            window.AppCommon.baseUrl = /*[[@{/}]]*/ '';
+        </script>
+
+        <script th:inline="javascript" sec:authorize="isAuthenticated()">
+            var privileges = eval(/*[[${session['SPRING_SECURITY_CONTEXT'].authentication.authoritiesJson}]]*/{});
+            window.AppCommon.isHasPrivilege = function (privilege) {
+                return privileges.indexOf(privilege) > -1;
+            };
+        </script>
+
+        <script type="text/javascript" th:src="@{'/assets/cts/js/common/app-common.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}"></script>
+        <!--<script type="text/javascript" th:src="@{'/assets/highlight/js/highlight.pack.js?v=' + ${properties['spring.admin.web.buildTimestamp']}}"></script>-->
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-brand" th:href="@{/index.html}" th:text="|#{fasttack} #{cts}|"></a>
+                </div>
+                <span class="text-center text-danger" th:text="#{users.password.expire.message}" th:if="${session['SPRING_SECURITY_CONTEXT'].authentication.principal.passwordExpire}"></span>
+                <ul class="nav navbar-right navbar-top-links">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a th:href="@{/profile/view.htm}"><i class="fa fa-sign-out fa-fw"></i><span th:text="#{profile.title}"></span></a></li>
+                            <li>
+                                <form id="logoutForm" method="post" th:action="@{/logout.htm}">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                </form>
+                                <a href="#" onclick="document.getElementById('logoutForm').submit();return false;"><i class="fa fa-sign-out fa-fw"></i><span th:text="#{common.logout}"></span></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            <th:block th:each="item : ${@menuItemRepository.getItems()}">
+                                <li th:if="${item.getAcl().isCanView()}">
+                                    <a th:href="@{${item.getUrl()}}"><i th:class="${item.getCssStyle()}"></i> <span th:text="#{${item.getCaption()}}"></span></a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 globalErrorMessages"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div layout:fragment="windowTitle">
+                            <h1 class="page-header"></h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div layout:fragment="content"></div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-09_create_idx_token_wallet_info.xml">
+
+
+    <changeSet id="update2018-03-09_create_idx_token_wallet_info_postgresql" author="v.semerkov" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_token_wallet_info"/>
+            </not>
+        </preConditions>
+
+        <createIndex indexName="idx_token_wallet_info" tableName="TOKEN_INFO">
+            <column name="CLIENT_WALLET_ACCOUNT_ID" type="VARCHAR(48)"/>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR(30)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="update2018-03-09_create_idx_token_wallet_info_oracle" author="v.semerkov" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_token_wallet_info"/>
+            </not>
+        </preConditions>
+
+        <createIndex indexName="idx_token_wallet_info" tableName="TOKEN_INFO">
+            <column name="CLIENT_WALLET_ACCOUNT_ID" type="VARCHAR2(48)"/>
+            <column name="TOKENREQUESTOR_ID" type="VARCHAR2(30)"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

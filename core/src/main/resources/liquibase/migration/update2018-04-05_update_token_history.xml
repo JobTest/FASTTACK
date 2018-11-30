@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-04-03_update_column_token_history.xml">
+
+    <changeSet id="update_token_event_reason_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="TOKEN_EVENT_REASON"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="TOKEN_EVENT_REASON" newDataType="VARCHAR(256)"/>
+
+    </changeSet>
+
+    <changeSet id="update_message_reason_code_postgresql" author="d.koval" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="MESSAGE_REASON_CODE"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="MESSAGE_REASON_CODE" newDataType="VARCHAR(30)"/>
+
+    </changeSet>
+
+    <changeSet id="update_token_event_reason_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="TOKEN_EVENT_REASON"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="TOKEN_EVENT_REASON" newDataType="VARCHAR2(256)"/>
+
+    </changeSet>
+
+    <changeSet id="update_message_reason_code_oracle" author="d.koval" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="MESSAGE_REASON_CODE"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="MESSAGE_REASON_CODE" newDataType="VARCHAR2(30)"/>
+
+    </changeSet>
+
+</databaseChangeLog>

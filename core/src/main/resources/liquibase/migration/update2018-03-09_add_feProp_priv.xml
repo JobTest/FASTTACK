@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-03-09_add_feProp_priv.xml">
+
+    <changeSet id="update2018-03-09_add_feProp_priv_01" author="n.bizin" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'FE_PROP_CREATE'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'FE_PROP_VIEW'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'FE_PROP_EDIT'</sqlCheck>
+                <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'FE_PROP_DELETE'</sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('FE_PROP_CREATE', 'Создание записей в справочнике параметров банка');
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('FE_PROP_VIEW', 'Просмотр записей в справочнике параметров банка');
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('FE_PROP_EDIT', 'Редактирование записей в справочнике параметров банка');
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('FE_PROP_DELETE', 'Удаление записей в справочнике параметров банка');
+        </sql>
+    </changeSet>
+
+    <changeSet id="update2018-03-09_add_feProp_priv_03" author="n.bizin" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'FE_PROP_CREATE');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'FE_PROP_VIEW');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'FE_PROP_EDIT');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'FE_PROP_DELETE');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

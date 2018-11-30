@@ -1,0 +1,94 @@
+<table class="table table-striped table-bordered table-hover EncKeyView-table" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+        <tr><td class="errorDescription" colspan="2"></td></tr>
+        <tr>
+            <th th:text="#{enckey.keyType}"></th>
+            <td>
+                {{=keyType}}
+                <div class="fieldRemark" data-remark-field="keyType"></div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <th th:text="#{enckey.refCode}"></th>
+            <td>
+                {{=refCode}}
+                <div class="fieldRemark" data-remark-field="refCode"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th th:text="#{enckey.capacity}"></th>
+            <td>
+                <select id="capacity" name="capacity" class="select2" data-allow-clear="true" data-value='{{=capacity}}'></select>
+                <div class="fieldRemark" data-remark-field="capacity"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th th:text="#{enckey.statusCode}"></th>
+            <td>
+                <select id="statusCode" name="statusCode" class="select2" data-allow-clear="true" data-value='{{=statusCode}}'></select>
+                <div class="fieldRemark" data-remark-field="statusCode"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th th:text="#{enckey.keyValue}"></th>
+            <td>
+                <textarea name="keyValue" maxlength="255" class="form-control input-sm" >{{=keyValue}}</textarea>
+                <div class="fieldRemark" data-remark-field="keyValue"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th th:text="#{enckey.checkValue}"></th>
+            <td>
+                <input name="checkValue" size="6" maxlength="6" class="form-control input-sm" value="{{=checkValue}}"/>
+                <div class="fieldRemark" data-remark-field="checkValue"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th th:text="#{enckey.publicExponent}"></th>
+            <td>
+                <input name="publicExponent" size="6" maxlength="6" class="form-control input-sm" value="{{=publicExponent}}"/>
+                <div class="fieldRemark" data-remark-field="publicExponent"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th th:text="#{enckey.wrappingKey}"></th>
+            <td>
+                <select id="wrappingKey" name="wrappingKey" class="select2" data-allow-clear="true" data-value='{{=wrappingKey}}' ></select>
+                <div class="fieldRemark" data-remark-field="wrappingKey"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th th:text="#{enckey.effDate}"></th>
+            <td>
+                <input name="effDate" class="form-control datepicker" value="{{=effDate}}"/>
+                <div class="fieldRemark" data-remark-field="effDate"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th th:text="#{enckey.expDate}"></th>
+            <td>
+                <input name="expDate" class="form-control datepicker" value="{{=expDate}}"/>
+                <div class="fieldRemark" data-remark-field="expDate"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <a th:href="@{'/enckey/view.htm?id={{=id}}'}" class="btnCancel btn btn-default" th:text="#{common.cancel}"></a>
+            </td>
+            <td>
+                <button class="btnSave btn btn-primary" th:text="#{common.save}"></button>
+            </td>
+        </tr>
+    </tbody>
+</table>

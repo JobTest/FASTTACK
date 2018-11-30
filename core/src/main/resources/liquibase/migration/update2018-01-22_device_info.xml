@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-01-22_device_info.xml">
+
+    <changeSet id="create_table_postgresql_03" author="a.lypivets" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="DEVICE_INFO"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="DEVICE_INFO">
+            <column name="TOKEN_REF_ID" type="VARCHAR(64)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="DEVICE_NAME" type="VARCHAR(64)"/>
+            <column name="SERIAL_NUMBER" type="VARCHAR(10)"/>
+            <column name="OS_NAME" type="VARCHAR(64)"/>
+            <column name="OS_VERSION" type="VARCHAR(64)"/>
+            <column name="IMEI" type="VARCHAR(64)"/>
+        </createTable>
+
+    </changeSet>
+
+
+    <changeSet id="create_table_oracle_03" author="a.lypivets" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="DEVICE_INFO"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="DEVICE_INFO">
+            <column name="TOKEN_REF_ID" type="VARCHAR2(64)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="DEVICE_NAME" type="VARCHAR2(64)"/>
+            <column name="SERIAL_NUMBER" type="VARCHAR2(10)"/>
+            <column name="OS_NAME" type="VARCHAR2(64)"/>
+            <column name="OS_VERSION" type="VARCHAR2(64)"/>
+            <column name="IMEI" type="VARCHAR2(64)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

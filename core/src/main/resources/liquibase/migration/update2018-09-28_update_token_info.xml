@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-09-06_update_token_info.xml">
+
+    <changeSet id="update2018-09-28_update_token_info_columns_postgresql" author="a.lazarchuk" runOnChange="true" context="postgresql">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="WP_DEVICE_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="WP_ACCOUNT_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="WP_PHONENUMBER_SCORE"/>
+            </not>
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="WP_REASON_CODES"/>
+            </not>
+            <not>
+                <columnExists tableName="TOKEN_INFO" columnName="COLOR_TOKENIZATION_STANDARD_VERSION"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="WP_DEVICE_SCORE" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="WP_ACCOUNT_SCORE" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="WP_PHONENUMBER_SCORE" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="WP_REASON_CODES" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="TOKEN_INFO">
+            <column name="COLOR_TOKENIZATION_STANDARD_VERSION" type="VARCHAR(16)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

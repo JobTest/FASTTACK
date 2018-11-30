@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messaging-deployment xmlns="urn:jboss:messaging-activemq-deployment:1.0">
+    <server name="default">
+        <jms-destinations>
+            <jms-queue name="FASTTACK.MDES.confirmProvisioning">
+                <entry name="FASTTACK.MDES.confirmProvisioning"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.sendOtp">
+                <entry name="FASTTACK.CORE.sendOtp"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.MDES.customerIdentifier">
+                <entry name="FASTTACK.MDES.customerIdentifier"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.cardTokenized">
+                <entry name="FASTTACK.CORE.cardTokenized"/>
+            </jms-queue>
+
+            <jms-queue name="FASTTACK.CORE.tokenCreateNotification">
+                <entry name="FASTTACK.CORE.tokenCreateNotification"/>
+            </jms-queue>
+
+            <jms-queue name="FASTTACK.CORE.customerIdentifier">
+                <entry name="FASTTACK.CORE.customerIdentifier"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.VTS.getCardholderVerificationMethods">
+                <entry name="FASTTACK.VTS.getCardholderVerificationMethods"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.VTS.confirmProvisioning">
+                <entry name="FASTTACK.VTS.confirmProvisioning"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.getCardInfoShort">
+                <entry name="FASTTACK.CORE.getCardInfoShort"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.notifyTokenUpdated">
+                <entry name="FASTTACK.CORE.notifyTokenUpdated"/>
+            </jms-queue>
+            <jms-queue name="FASTTACK.CORE.searchContragent2">
+                <entry name="FASTTACK.CORE.searchContragent2"/>
+            </jms-queue>
+
+            <jms-queue name="FASTTACK.BANK.sendNotificationToCustomer">
+                <entry name="FASTTACK.BANK.sendNotificationToCustomer"/>
+            </jms-queue>
+
+            <jms-queue name="FASTTACK.BANK.authenticate">
+                <entry name="FASTTACK.BANK.authenticate"/>
+            </jms-queue>
+
+            <jms-queue name="FASTTACK.BANK.getUserRoles">
+                <entry name="FASTTACK.BANK.getUserRoles"/>
+            </jms-queue>
+        </jms-destinations>
+    </server>
+</messaging-deployment>

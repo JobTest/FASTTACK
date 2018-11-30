@@ -1,0 +1,71 @@
+<table class="table table-striped table-bordered table-hover" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+    <tr>
+        <td class="errorDescription" colspan="2"></td>
+    </tr>
+    <tr>
+        <th th:text="#{messageHistory.connectorClient}"></th>
+        <td>
+            <input name="connectorClient" class="form-control input-sm"/>
+            <div class="fieldRemark" data-remark-field="connectorClient"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{messageHistory.msgType}"></th>
+        <td>
+            <input name="msgType" class="form-control input-sm"/>
+            <div class="fieldRemark" data-remark-field="msgType"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{messageHistory.msgDateOut}"></th>
+        <td>
+            <div>
+                <span th:text="#{common.text.from}"></span>
+                <input name="msgDateOutFrom" size="15" class="form-control datepicker inputNarrow" />
+                <span th:text="#{common.text.to}"></span>
+                <input name="msgDateOutTill" size="15" class="form-control datepicker inputNarrow" />
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{messageHistory.msgDateIn}"></th>
+        <td>
+            <div>
+                <span th:text="#{common.text.from}"></span>
+                <input name="msgDateInFrom" size="15" class="form-control datepicker inputNarrow" />
+                <span th:text="#{common.text.to}"></span>
+                <input name="msgDateInTill" size="15" class="form-control datepicker inputNarrow" />
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{messageHistory.maskedPan}"></th>
+        <td>
+            <input name="maskedPan" class="form-control input-sm"/>
+            <div class="fieldRemark" data-remark-field="maskedPan"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{messageHistory.panInternalId}"></th>
+        <td>
+            <input name="panInternalId" class="form-control input-sm"/>
+            <div class="fieldRemark" data-remark-field="panInternalId"></div>
+        </td>
+    </tr>
+    <tr>
+        <th th:text="#{messageHistory.panInternalGuid}"></th>
+        <td>
+            <input name="panInternalGuid" class="form-control input-sm"/>
+            <div class="fieldRemark" data-remark-field="panInternalGuid"></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        </td>
+        <td>
+            <button class="btnFilter btn btn-primary" th:text="#{common.filter}"></button>
+        </td>
+    </tr>
+    </tbody>
+</table>

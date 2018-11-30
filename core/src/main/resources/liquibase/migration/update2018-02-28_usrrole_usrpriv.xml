@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-02-28_usrrole_usrpriv.xml">
+
+    <!-- USRROLE -->
+
+    <changeSet id="update2018-02-28_usrrole_usrpriv_01" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRROLE"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRROLE">
+            <column name="rolecode" type="varchar(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="descr" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="update2018-02-28_usrrole_usrpriv_02" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRROLE"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRROLE">
+            <column name="rolecode" type="varchar2(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="descr" type="varchar2(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- USRPRIV -->
+
+    <changeSet id="update2018-02-28_usrrole_usrpriv_03" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRPRIV"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRPRIV">
+            <column name="privcode" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="descr" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="update2018-02-28_usrrole_usrpriv_04" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="USRPRIV"/>
+        </preConditions>
+        <dropTable tableName="USRPRIV"/>
+    </changeSet>
+
+    <changeSet id="update2018-02-28_usrrole_usrpriv_042" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRPRIV"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRPRIV">
+            <column name="privcode" type="varchar2(30)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="descr" type="varchar2(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- USRROLE_USRPRIV -->
+
+    <changeSet id="update2018-02-28_usrrole_usrpriv_05" author="n.bizin" runOnChange="true" context="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRROLE_USRPRIV"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRROLE_USRPRIV">
+            <column name="rolecode" type="varchar(30)">
+                <constraints nullable="false" foreignKeyName="fk_USRROLE_USRPRIV_rolecode" references="USRROLE(rolecode)"/>
+            </column>
+            <column name="privcode" type="varchar(50)">
+                <constraints nullable="false" foreignKeyName="fk_USRROLE_USRPRIV_privcode" references="USRPRIV(privcode)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="update2018-02-28_usrrole_usrpriv_06" author="n.bizin" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="USRROLE_USRPRIV"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="USRROLE_USRPRIV">
+            <column name="rolecode" type="varchar2(30)">
+                <constraints nullable="false" foreignKeyName="fk_USRROLE_USRPRIV_rolecode" references="USRROLE(rolecode)"/>
+            </column>
+            <column name="privcode" type="varchar2(50)">
+                <constraints nullable="false" foreignKeyName="fk_USRROLE_USRPRIV_privcode" references="USRPRIV(privcode)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- ADD ROLES -->
+
+    <changeSet id="update2018-02-28_usrrole_usrpriv_07" author="n.bizin" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'ROLE_CREATE'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV(privcode, descr) VALUES ('ROLE_CREATE', 'Создание записей в справочнике ролей');
+            INSERT INTO USRPRIV(privcode, descr) VALUES ('ROLE_VIEW', 'Просмотр записей в справочнике ролей');
+            INSERT INTO USRPRIV(privcode, descr) VALUES ('ROLE_EDIT', 'Редактирование записей в справочнике ролей');
+            INSERT INTO USRPRIV(privcode, descr) VALUES ('ROLE_DELETE', 'Удаление записей в справочнике ролей');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

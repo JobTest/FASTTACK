@@ -1,0 +1,57 @@
+<table class="table table-striped table-bordered table-hover AccessLog-table" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+        <tr>
+            <th colspan="2" class="errorDescription"></th>
+        </tr>
+        <tr>
+            <th th:text="#{accessLog.user}"></th>
+            <td>
+                <input name="username" size="30" maxlength="15" class="form-control input-sm" />
+                <div class="fieldRemark" data-remark-field="username"></div>
+            </td>
+        </tr>
+        <tr>
+            <th th:text="#{accessLog.accessType}"></th>
+            <td>
+                <select id="accessType" name="accessType" class="select2"
+                        data-allow-clear="true"
+                        data-value='{{=filter.accessType}}'>
+                </select>
+                <div class="fieldRemark" data-remark-field="accessType"></div>
+            </td>
+        </tr>
+        <tr>
+            <th th:text="#{accessLog.itemType}"></th>
+            <td>
+                <select id="itemType" name="itemType" class="select2"
+                        data-allow-clear="true" data-value='{{=filter.itemType}}'></select>
+                <div class="fieldRemark" data-remark-field="itemType"></div>
+            </td>
+        </tr>
+        <tr>
+            <th th:text="#{accessLog.itemId}"></th>
+            <td>
+                <input name="itemId" size="30" maxlength="15" class="form-control input-sm"/>
+
+                <div class="fieldRemark" data-remark-field="itemId"></div>
+            </td>
+        </tr>
+        <tr>
+            <th th:text="#{accessLog.accessDate}"></th>
+            <td>
+                <div>
+                    <span th:text="#{common.text.from}"></span>
+                    <input name="accessDateFrom" size="15" class="form-control datepicker inputNarrow" />
+                    <span th:text="#{common.text.to}"></span>
+                    <input name="accessDateTill" size="15" class="form-control datepicker inputNarrow" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button class="btnFilter btn btn-primary" th:text="#{common.filter}"></button>
+            </td>
+        </tr>
+    </tbody>
+</table>

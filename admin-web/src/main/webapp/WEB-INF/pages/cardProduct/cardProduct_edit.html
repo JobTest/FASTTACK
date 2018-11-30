@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/standard">
+    <head>
+        <title th:text="#{cardProduct.title}"></title>
+    </head>
+    <script type="text/javascript" th:fragment="asset">
+        function extendRequireJsDependency(paths, shims, requires) {
+            paths['cardProduct.views.CardProductEditPageView'] = AppCommon.assetBaseUrl + 'cts/js/cardProduct/views/CardProductEditPageView';
+            paths['security.model'] = AppCommon.assetBaseUrl + 'cts/js/common/model/SecurityModels';
+            requires.push('cardProduct.views.CardProductEditPageView');
+        }
+    </script>
+    <body>
+        <div layout:fragment="windowTitle" th:text="#{cardProduct.title}"></div>
+        <div class="row" layout:fragment="content">
+            <div class="col-lg-6">
+                <div id="cardProduct-edit-container" class="panel panel-default" data-parsley-validate="true">
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

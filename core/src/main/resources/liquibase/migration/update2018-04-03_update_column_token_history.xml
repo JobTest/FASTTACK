@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-04-03_update_column_token_history.xml">
+
+    <changeSet id="update_column_token_history" author="d.koval" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="TOKEN_HISTORY" columnName="TOKEN_EVENT_DATE"/>
+        </preConditions>
+
+        <modifyDataType tableName="TOKEN_HISTORY" columnName="TOKEN_EVENT_DATE" newDataType="TIMESTAMP"/>
+
+    </changeSet>
+
+</databaseChangeLog>

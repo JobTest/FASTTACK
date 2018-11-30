@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="/layouts/empty">
+    <head>
+        <title th:text="#{login.title}"></title>
+    </head>
+    <body>
+        <script type="text/javascript" th:fragment="asset">
+            function extendRequireJsDependency(paths, shims, requires) {
+                paths['common.views.SimpleWizardView'] = AppCommon.assetBaseUrl + 'cts/js/common/views/SimpleWizardView';
+
+                paths['login.views.LoginView'] = AppCommon.assetBaseUrl + 'cts/js/login/views/LoginView';
+                paths['login.views.RestorePasswordView'] = AppCommon.assetBaseUrl + 'cts/js/login/views/RestorePasswordView';
+
+                paths['login.views.LoginPageView'] = AppCommon.assetBaseUrl + 'cts/js/login/views/LoginPageView';
+                requires.push('login.views.LoginPageView');
+            }
+        </script>
+        <div layout:fragment="content" class="container loginPageView">
+
+        </div>
+    </body>
+</html>

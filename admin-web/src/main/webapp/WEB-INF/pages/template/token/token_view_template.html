@@ -1,0 +1,136 @@
+<h3>{{=Common.bundles.getMessage('token.information')}}</h3>
+<table class="table table-striped table-bordered table-hover TokenView-table" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+    <tr>
+        <th th:text="#{token.status}"></th>
+        <td>{{=Common.bundles.getMessage('TokenStatus.' + dto.tokenStatus)}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.accountpan}"></th>
+        <td>{{=dto.maskedPan}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.tokenizationPath}"></th>
+        <td>{{=dto.tokenizationPath}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.bin}"></th>
+        <td>{{=dto.bin}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.number}"></th>
+        <td>{{=dto.maskedToken}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.tokenRefId}"></th>
+        <td>{{=dto.id.tokenRefId}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.tokenRequestorId}"></th>
+        <td>{{=getTokenRequestorId(dto.id.tokenRequestorId, dto.tokenRequestorTitle)}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.panInternalId}"></th>
+        <td>{{=dto.panInternalId}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.panInternalGuid}"></th>
+        <td>{{=dto.panInternalGuid}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.tokenExpdate}"></th>
+        <td>{{=dto.tokenExpdate}}</td>
+    </tr>
+    <!-- tr>
+        <th th:text="#{token.lifecycleTraceId}"></th>
+        <td>{{=dto.lifecycleTraceId}}</td>
+    </tr -->
+    <tr>
+        <th th:text="#{token.panSource}"></th>
+        <td>{{=Common.bundles.getMessage('PanSource.' + dto.panSource)}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.tokenType}"></th>
+        <td>{{=Common.bundles.getMessage('TokenType.' + dto.tokenType)}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.activeTokenCount}"></th>
+        <td>{{=dto.activeTokenCount}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.digitizeDate}"></th>
+        <td>{{=dto.digitizeDate}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.tokenStatusUpdate}"></th>
+        <td>{{=dto.tokenStatusUpdate}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.customerId}"></th>
+        <td>{{=dto.customerId}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.customerPhone}"></th>
+        <td>{{=dto.customerPhone}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.ips}"></th>
+        <td>{{=Common.bundles.getMessage('Ips.' + dto.ips)}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.clientWalletAccountId}"></th>
+        <td>{{=dto.clientWalletAccountId}}</td>
+    </tr>
+    <tr>
+        <td>
+            {{ if (backUrl) { }}
+            <a href="{{=backUrl}}" class="btn btn-default" th:text="#{common.back}"></a>
+            {{ } }}
+        </td>
+        <td>
+            <button class="btnActiveToken btn btn-primary" th:if="${@aclToken.isCanActivate()}" th:text="#{token.activate}"></button>
+
+            <button class="btnDeleteToken btn btn-danger" th:if="${@aclToken.isCanDelete()}" th:text="#{token.delete}"></button>
+
+            <button class="btnSuspendToken btn btn-primary" th:if="${@aclToken.isCanSuspend()}" th:text="#{token.suspend}"></button>
+
+            <button class="btnResumeToken btn btn-primary" th:if="${@aclToken.isCanResume()}" th:text="#{token.resume}"></button>
+
+            <!-- button class="addComment btn btn-warning" th:if="${@aclToken.isCanAddComment()}" th:text="#{token.addComment}"></button -->
+
+            <button class="updateToken btn btn-primary" th:if="${@aclToken.isCanUpdate()}" th:text="#{token.update}"></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>{{=Common.bundles.getMessage('token.deviceInfo')}}</h3>
+<table class="table table-striped table-bordered table-hover DeviceInfoView-table" xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+    <tr>
+        <th th:text="#{token.deviceName}"></th>
+        <td>{{=dto.deviceInfo.deviceName}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.serialNumber}"></th>
+        <td>{{=dto.deviceInfo.serialNumber}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.osName}"></th>
+        <td>{{=dto.deviceInfo.osName}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.osVersion}"></th>
+        <td>{{=dto.deviceInfo.osVersion}}</td>
+    </tr>
+    <tr>
+        <th th:text="#{token.imei}"></th>
+        <td>{{=dto.deviceInfo.imei}}</td>
+    </tr>
+
+    <tr>
+        <th th:text="#{token.storageTechnology}"></th>
+        <td>{{=dto.deviceInfo.storageTechnology}}</td>
+    </tr>
+    </tbody>
+</table>

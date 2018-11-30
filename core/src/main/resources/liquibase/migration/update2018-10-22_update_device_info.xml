@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-10-22_update_device_info.xml">
+
+    <changeSet id="storage_technology_update_device_info_columns_oracle" author="a.lazarchuk" runOnChange="true" context="oracle">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="DEVICE_INFO" columnName="STORAGE_TECHNOLOGY"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="DEVICE_INFO">
+            <column name="STORAGE_TECHNOLOGY" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="device_type_update_device_info_columns_oracle" author="a.lazarchuk" runOnChange="true" context="oracle">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="DEVICE_INFO" columnName="DEVICE_TYPE"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="DEVICE_INFO">
+            <column name="DEVICE_TYPE" type="VARCHAR(64)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>
