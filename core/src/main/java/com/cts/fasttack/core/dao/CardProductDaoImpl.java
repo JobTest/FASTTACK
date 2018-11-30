@@ -15,7 +15,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 @Repository("cardProductDao")
-public class CardProductDaoImpl extends GenericDaoImpl<String, CardProduct> implements CardProductDao {
+public class CardProductDaoImpl extends GenericDaoImpl<Long, CardProduct> implements CardProductDao {
 
     @Override
     public Class<CardProduct> getEntityClass() {
@@ -36,7 +36,7 @@ public class CardProductDaoImpl extends GenericDaoImpl<String, CardProduct> impl
         PageCriteria pageCriteria = createPageCriteria(getEntityClass());
         if (StringUtils.isNotBlank(filter.getProductConfigId())) {
             pageCriteria.add(Restrictions.disjunction()
-                    .add(Restrictions.ilike("id", filter.getProductConfigId(), MatchMode.ANYWHERE)));
+                    .add(Restrictions.ilike("productConfigId", filter.getProductConfigId(), MatchMode.ANYWHERE)));
 //                    .add(Restrictions.ilike("beginRange", Long.valueOf(filter.getProductConfigId()).toString(), MatchMode.ANYWHERE))); //todo the number can't use like (use like only String)
         }
         return pageCriteria.list(filter);

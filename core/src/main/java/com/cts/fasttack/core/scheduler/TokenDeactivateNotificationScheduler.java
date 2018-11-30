@@ -66,6 +66,7 @@ public class TokenDeactivateNotificationScheduler {
 
     private List<TokenInfoDto> listByTokenStatus(List<TokenStatus> tokenStatuses) throws ServiceException {
         return tokenInfoService.listByTokenStatus(tokenStatuses, true).stream()
+                .filter(tokenInfo -> tokenHelper.isSendOnlyForRequestors(tokenInfo.getId().getTokenRequestorId()))
                 .filter(tokenInfo -> tokenHelper.isWindowReminderPeriod(tokenInfo, tokenHelper.getDiffWindowReminderPeriod(tokenInfo.getTokenStatusUpdate())))
                 .map(tokenInfo -> new TokenInfoToDtoConverter().convert(tokenInfo)).collect(Collectors.toList());
     }

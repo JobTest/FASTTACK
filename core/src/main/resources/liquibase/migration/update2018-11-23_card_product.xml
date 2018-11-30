@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-11-23_card_product.xml">
+
+    <changeSet id="modify_table_card_product_oracle" author="a.lazarchuk" runOnChange="true" context="oracle">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="CARD_PRODUCT" columnName="PRODUCT_CONFIG_ID"/>
+        </preConditions>
+
+        <createSequence sequenceName="CARD_PRODUCT_ID_SEQ" startValue="1" incrementBy="1" />
+
+        <dropColumn tableName="CARD_PRODUCT" columnName="PRODUCT_CONFIG_ID" />
+
+        <addColumn tableName="CARD_PRODUCT">
+            <column name="PRODUCT_CONFIG_ID" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="id" type="number(10)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

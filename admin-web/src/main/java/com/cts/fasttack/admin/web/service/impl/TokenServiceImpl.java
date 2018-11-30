@@ -71,7 +71,7 @@ public class TokenServiceImpl implements TokenService {
     private JmsTokenInfoEventRefToTokenCommentConverter jmsTokenInfoEventRefToTokenCommentConverter;
 
     @Override
-    @ChangeLoggable(itemId = "#tokenChangeStatusDto.tokenRefId", itemType = TokenService.TOKEN_LIFECYCLE, fields = {"#tokenChangeStatusDto.tokenRequestorId", "#tokenChangeStatusDto.comment", "#tokenChangeStatusDto.tokenReason", "#tokenChangeStatusDto.tokenEventStatus"})
+    @ChangeLoggable(itemId = "#tokenChangeStatusDto.tokenRefId", itemType = TokenService.TOKEN_LIFECYCLE, fields = {"#tokenChangeStatusDto.tokenRequestorId", "#tokenChangeStatusDto.pan", "#tokenChangeStatusDto.comment", "#tokenChangeStatusDto.tokenReason", "#tokenChangeStatusDto.tokenEventStatus"})
     public TokenLifecycleJmsResponse tokenLifecycle(TokenChangeStatusDto tokenChangeStatusDto) throws ServiceException {
         try {
             tokenChangeStatusDto.setEventRef(UUID.randomUUID().toString());
@@ -128,6 +128,7 @@ public class TokenServiceImpl implements TokenService {
         tokenLifecycleDto.setMdesReason(reason.getMdesReason());
         tokenLifecycleDto.setTokenStatusUpdateReason(reason.getTokenStatusUpdateReason().name());
         tokenLifecycleDto.setEventRef(tokenInfoDto.getEventRef());
+        tokenLifecycleDto.setPan(tokenInfoDto.getPan());
         tokenActivateJmsMessage.jmsTokenLifecycleDto(tokenLifecycleDto);
         return tokenActivateJmsMessage;
     }

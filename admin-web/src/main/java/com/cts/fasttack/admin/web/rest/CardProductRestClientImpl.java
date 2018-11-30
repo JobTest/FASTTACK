@@ -22,8 +22,8 @@ public class CardProductRestClientImpl extends RestClientImpl implements CardPro
     }
 
     @Override
-    public boolean isExists(String propName) throws ServiceException {
-        return get("/secured/cardProduct/isExists/" + propName, null, Boolean.class);
+    public boolean isExists(Long id) throws ServiceException {
+        return get("/secured/cardProduct/isExists/" + id, null, Boolean.class);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class CardProductRestClientImpl extends RestClientImpl implements CardPro
     }
 
     @Override
-    public CardProductDto getCardProduct(String productConfigId) throws ServiceException {
-        return get("/secured/cardProduct/" + productConfigId, null, CardProductDto.class);
+    public CardProductDto getCardProduct(Long id) throws ServiceException {
+        return get("/secured/cardProduct/" + id, null, CardProductDto.class);
     }
 
     @Override
@@ -47,7 +47,12 @@ public class CardProductRestClientImpl extends RestClientImpl implements CardPro
     }
 
     @Override
-    public void deleteCardProduct(String productConfigId) throws ServiceException {
-        delete("/secured/cardProduct/" + productConfigId, null, ServiceExceptionHandler.INSTANCE);
+    public void deleteCardProduct(Long id) throws ServiceException {
+        delete("/secured/cardProduct/" + id, null, ServiceExceptionHandler.INSTANCE);
+    }
+
+    @Override
+    public CardProductDto getProductConfigId(Long pan) throws ServiceException {
+        return get("/secured/cardProduct/productConfigId/" + pan, null, CardProductDto.class);
     }
 }

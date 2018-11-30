@@ -11,6 +11,7 @@ import com.cts.fasttack.core.data.TokenInfoId;
 import com.cts.fasttack.core.data.TokenParameters;
 import com.cts.fasttack.core.dict.TokenEventSource;
 import com.cts.fasttack.core.dict.TokenStatus;
+import com.cts.fasttack.core.dto.CardProductDto;
 import com.cts.fasttack.core.dto.TokenHistoryDto;
 import com.cts.fasttack.core.dto.TokenHistoryList;
 import com.cts.fasttack.core.dto.TokenInfoDto;
@@ -19,8 +20,17 @@ import com.cts.fasttack.core.service.DeviceInfoService;
 import com.cts.fasttack.core.service.FEPropService;
 import com.cts.fasttack.core.service.TokenHistoryService;
 import com.cts.fasttack.core.service.TokenInfoService;
+import com.cts.fasttack.core.service.TokenRequestorService;
+import com.cts.fasttack.core.service.CardProductService;
 import com.cts.fasttack.jms.data.HeadersJmsMessage;
-import com.cts.fasttack.jms.dto.*;
+import com.cts.fasttack.jms.dto.JmsTokenInfoResponseDto;
+import com.cts.fasttack.jms.dto.TokenInquiryJmsMessage;
+import com.cts.fasttack.jms.dto.TokenSearchJmsMessage;
+import com.cts.fasttack.jms.dto.JmsTokenInquiryDto;
+import com.cts.fasttack.jms.dto.JmsTokenSearchRequestDto;
+import com.cts.fasttack.jms.dto.JmsAuditInfoDto;
+import com.cts.fasttack.jms.dto.JmsSendNotificationToCustomerRequestDto;
+import com.cts.fasttack.jms.dto.JmsTokenResponseDto;
 import com.cts.fasttack.jms.support.IntegrationBus;
 import com.cts.fasttack.logging.dto.AlertLogDto;
 import com.cts.fasttack.logging.service.AlertLogService;
@@ -33,10 +43,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.util.UUID;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 @Component
 public class TokenHelper {
@@ -61,6 +70,9 @@ public class TokenHelper {
     private DeviceInfoService deviceInfoService;
 
     @Autowired
+    private TokenRequestorService tokenRequestorService;
+
+    @Autowired
     private TokenParameters tokenParameters;
 
     @Autowired
@@ -72,11 +84,20 @@ public class TokenHelper {
     @Autowired
     private AlertLogService alertLogService;
 
+    @Autowired
+    private CardProductService cardProductService;
+
     @Value("${spring.customer.notify.token.activated:false}")
     public Boolean isCustomerNotifyToken;
 
     @Value("${spring.customerPhoneIsRequired.notify.token.activated:true}")
     public Boolean isRequiredCustomerPhone;
+
+    public boolean isSendOnlyForRequestors(String tokenRequestorId) {
+        return tokenRequestorService.getOptional(tokenRequestorId)
+                .map(tokenRequestorDto -> tokenParameters.getSendOnlyForRequestors().contains(tokenRequestorDto.getTokenRequestorTitle()))
+                .orElse(false);
+    }
 
     public JmsTokenInfoResponseDto getCurrentTokenStatus(TokenInfoDto token) throws ServiceException {
         if (token.getIps().isVisa()) {
@@ -328,6 +349,29 @@ public class TokenHelper {
                 .build();
 
         alertLogService.save(alertLogDto);
+    }
+
+    public CardProductDto getProductConfigId(Long pan) {
+        List<CardProductDto> cardProductDtos = cardProductService.listAll()
+                .stream()
+                .collect(Collectors.toList());
+
+        Collections.sort(cardProductDtos, new Comparator<CardProductDto>() {
+            @Override
+            public int compare(CardProductDto o1, CardProductDto o2) {
+                if ((o1.getBeginRange() <= o2.getBeginRange() && o2.getEndRange() < o1.getEndRange())
+                        || (o1.getBeginRange() < o2.getBeginRange() && o2.getEndRange() <= o1.getEndRange()))
+                    return 1;
+                if ((o2.getBeginRange() <= o1.getBeginRange() && o1.getEndRange() < o2.getEndRange())
+                        || (o2.getBeginRange() < o1.getBeginRange() && o1.getEndRange() <= o2.getEndRange()))
+                    return -1;
+                return 0;
+            }});
+
+        for (CardProductDto cardProductDto : cardProductDtos) {
+            if (cardProductDto.getBeginRange() < pan && pan < cardProductDto.getEndRange()) return cardProductDto;
+        }
+        return null;
     }
 
     private QueryResult<TokenHistoryList> getTokenHistories(TokenInfoDto token, String reminderPeriod) {

@@ -1,10 +1,17 @@
 package com.cts.fasttack.core.jms.processor;
 
 import com.cts.fasttack.common.core.exception.ServiceException;
+import com.cts.fasttack.core.dict.TokenStatus;
 import com.cts.fasttack.core.util.TokenHelper;
-import com.cts.fasttack.jms.data.HeadersJmsMessage;
+import com.cts.fasttack.core.service.TokenInfoService;
+import com.cts.fasttack.core.service.TokenHistoryService;
+import com.cts.fasttack.core.service.BinSetupService;
+import com.cts.fasttack.core.service.DeviceInfoService;
+import com.cts.fasttack.jms.dto.TokenCreateNotificationJmsMessage;
+import com.cts.fasttack.jms.dto.TokenNotificationJmsResponse;
+import com.cts.fasttack.jms.dto.JmsTokenCreateNotificationDto;
+import com.cts.fasttack.jms.dto.JmsTokenCreateNotificationResponseDto;
 import org.apache.camel.Exchange;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,14 +23,7 @@ import com.cts.fasttack.core.data.TokenInfoId;
 import com.cts.fasttack.core.dto.BinSetupDto;
 import com.cts.fasttack.core.dto.TokenHistoryDto;
 import com.cts.fasttack.core.dto.TokenInfoDto;
-import com.cts.fasttack.core.service.BinSetupService;
-import com.cts.fasttack.core.service.DeviceInfoService;
-import com.cts.fasttack.core.service.TokenHistoryService;
-import com.cts.fasttack.core.service.TokenInfoService;
-import com.cts.fasttack.jms.dto.JmsTokenCreateNotificationDto;
-import com.cts.fasttack.jms.dto.JmsTokenCreateNotificationResponseDto;
-import com.cts.fasttack.jms.dto.TokenCreateNotificationJmsMessage;
-import com.cts.fasttack.jms.dto.TokenNotificationJmsResponse;
+import com.cts.fasttack.jms.data.HeadersJmsMessage;
 import com.cts.fasttack.jms.dto.JmsSendNotificationToCustomerResponseDto;
 import com.cts.fasttack.jms.dto.SendNotificationToCustomerJmsMessage;
 import com.cts.fasttack.jms.processor.AbstractCamelProcessor;
@@ -76,7 +76,7 @@ public class TokenCreateNotificationProcessor extends AbstractCamelProcessor<Tok
 
             TokenInfoDto tokenInfoDto;
 
-            if (currentTokenInfoDto == null || (currentTokenInfoDto != null && currentTokenInfoDto.getTokenStatusUpdate() == null)) {
+            if (currentTokenInfoDto == null || (currentTokenInfoDto != null && (currentTokenInfoDto.getTokenStatusUpdate() == null || currentTokenInfoDto.getTokenStatus() == TokenStatus.I))) {
                 TokenCreateNotificationJmsMessage jmsMessage = (TokenCreateNotificationJmsMessage) new TokenCreateNotificationJmsMessage()
                         .jmsTokenCreateNotificationDto(tokenCreateNotificationDto)
                         .originator(Constants.ORIGINATOR).messageHistoryId(request.getMessageHistoryId());
@@ -98,6 +98,8 @@ public class TokenCreateNotificationProcessor extends AbstractCamelProcessor<Tok
                 JmsTokenCreateNotificationResponseDto tokenCreateNotificationResponseDto = integrationBus.inOut(() -> Constants.ORIGINATOR, "tokenCreateNotification",
                         jmsMessage, JmsTokenCreateNotificationResponseDto.class);
 
+                TokenStatus oldTokenStatus = null;
+
                 TokenInfoDto responseTokenInfoDto = tokenCreateNotificationToTokenInfoDtoConverter.convert(request, tokenCreateNotificationResponseDto);
 
                 if (currentTokenInfoDto != null) {
@@ -114,17 +116,23 @@ public class TokenCreateNotificationProcessor extends AbstractCamelProcessor<Tok
             		    responseTokenInfoDto.setCustomerPhone(currentTokenInfoDto.getCustomerPhone());
             	    }
             	    responseTokenInfoDto.setLifecycleTraceId(currentTokenInfoDto.getLifecycleTraceId());
+                    oldTokenStatus = currentTokenInfoDto.getTokenStatus();
                 }
 
                 if (binSetupDto != null) {
             	    responseTokenInfoDto.setBin(binSetupDto.getBin());
                 }
 
-                if (tokenHelper.isSendNotificationToCustomer(responseTokenInfoDto, responseTokenInfoDto.getCustomerPhone())) { //todo visa...
-                    publishSendNotificationToCustomer(responseTokenInfoDto);
-                }
-
                 tokenInfoDto = tokenInfoService.save(responseTokenInfoDto);
+
+                //todo update Status 'I' -> 'A'
+                if ((oldTokenStatus==null || oldTokenStatus==TokenStatus.I) && tokenInfoDto.getTokenStatus()==TokenStatus.A) {
+                    if (tokenHelper.isSendOnlyForRequestors(tokenInfoDto.getId().getTokenRequestorId())) {
+                        if (tokenHelper.isSendNotificationToCustomer(tokenInfoDto, tokenInfoDto.getCustomerPhone())) { //todo visa...
+                            publishSendNotificationToCustomer(tokenInfoDto);
+                        }
+                    }
+                }
             } else {
         		log.info("Received Token Create Notification message but another token notification has been processed before. " +
         				"Will not send notification to the bank. tokenReferenceId = " +
@@ -132,7 +140,7 @@ public class TokenCreateNotificationProcessor extends AbstractCamelProcessor<Tok
 
         		TokenInfoDto requestTokenInfoDto = tokenCreateNotificationToTokenInfoDtoConverter.convert(request, null);
 
-                requestTokenInfoDto.setTokenStatus(currentTokenInfoDto.getTokenStatus());
+                if (currentTokenInfoDto.getTokenStatus() != TokenStatus.I) requestTokenInfoDto.setTokenStatus(currentTokenInfoDto.getTokenStatus());
                 requestTokenInfoDto.setTokenStatusUpdate(currentTokenInfoDto.getTokenStatusUpdate());
                 requestTokenInfoDto.setPanInternalId(currentTokenInfoDto.getPanInternalId());
                 requestTokenInfoDto.setPanInternalGuid(currentTokenInfoDto.getPanInternalGuid());

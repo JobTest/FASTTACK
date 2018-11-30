@@ -14,6 +14,14 @@
     </div>
 
     <div class="row">
+        <label class="col-lg-4 col-sm-3 col-xs-3" for="pan" th:text="#{token.accountpan}"></label>
+        <div class="col-lg-8 col-sm-8 col-xs-8 form-group">
+            <input id="pan" name="pan" class="form-control" type="text" placeholder="{{=pan}}">
+            <div class="fieldRemark" data-remark-field="pan"></div>
+        </div>
+    </div>
+
+    <div class="row">
         <label class="col-lg-4 col-sm-3 col-xs-3" for="comment" th:text="#{token.comment}"></label>
         <div class="col-lg-8 col-sm-8 col-xs-8 form-group">
             <textarea id="comment" name="comment" rows="5" class="form-control"

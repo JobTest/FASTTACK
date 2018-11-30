@@ -6,7 +6,7 @@ import com.cts.fasttack.common.core.dto.QueryResultDto;
 import com.cts.fasttack.common.core.exception.ServiceException;
 import com.cts.fasttack.common.core.service.ExistCheckService;
 
-public interface CardProductRestClient extends ExistCheckService<String> {
+public interface CardProductRestClient extends ExistCheckService<Long> {
 
     /**
      * Get query result of CardProduct by filter
@@ -14,9 +14,9 @@ public interface CardProductRestClient extends ExistCheckService<String> {
     QueryResultDto<CardProductDto> filterCardProduct(CardProductListFilter filter) throws ServiceException;
 
     /**
-     * Get CardProduct by name
+     * Get CardProduct by id
      */
-    CardProductDto getCardProduct(String propName) throws ServiceException;
+    CardProductDto getCardProduct(Long id) throws ServiceException;
 
     /**
      * Create CardProduct
@@ -31,6 +31,7 @@ public interface CardProductRestClient extends ExistCheckService<String> {
     /**
      * Delete CardProduct
      */
-    void deleteCardProduct(String propName) throws ServiceException;
+    void deleteCardProduct(Long id) throws ServiceException;
 
+    CardProductDto getProductConfigId(Long pan) throws ServiceException;
 }

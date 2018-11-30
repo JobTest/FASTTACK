@@ -27,7 +27,6 @@ public class VisaDeviceInfoToJmsConverter extends AbstractConverter<VisaDeviceIn
         target.setDeviceManufacturer(source.getDeviceManufacturer());
         target.setDeviceBrand(source.getDeviceBrand());
         target.setDeviceModel(source.getDeviceModel());
-        target.setDeviceModel(source.getDeviceModel());
         target.setDeviceName(source.getDeviceName());
         target.setDeviceNumber(source.getDeviceNumber());
         target.setDeviceLocation(source.getDeviceLocation());

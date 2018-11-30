@@ -14,14 +14,6 @@ public class CardDataUpdateValidator implements ConstraintValidator<ValidateCard
 
     @Override
     public boolean isValid(CardDataUpdateRequestDto value, ConstraintValidatorContext context) {
-        return existTokenRefAndRequestorId(value) || existPanInternalIdOrGuid(value);
-    }
-
-    private boolean existPanInternalIdOrGuid(CardDataUpdateRequestDto value){
         return StringUtils.isNotBlank(value.getNewPanInternalId()) || StringUtils.isNotBlank(value.getNewPanInternalGUID());
-    }
-
-    private boolean existTokenRefAndRequestorId(CardDataUpdateRequestDto value){
-        return StringUtils.isNotBlank(value.getTokenRefId()) && StringUtils.isNotBlank(value.getTokenRequestorId());
     }
 }

@@ -24,7 +24,7 @@
                 if (this.validateInputs()) {
                     var response = this.model.save(null, {type: 'POST', async: false});
                     if (this.handleAjaxResponse(response)) {
-                        Common.navigateToUrl("cardProduct/view.htm?productConfigId=" + this.model.get("productConfigId"));
+                        Common.navigateToUrl("cardProduct/list.htm");
                     }
                 }
             }

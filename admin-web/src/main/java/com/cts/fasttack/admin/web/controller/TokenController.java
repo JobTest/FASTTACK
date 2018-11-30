@@ -3,6 +3,7 @@ package com.cts.fasttack.admin.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import com.cts.fasttack.admin.web.data.dict.AccessType;
 import com.cts.fasttack.admin.web.data.dict.ItemType;
 import com.cts.fasttack.admin.web.data.dto.TokenChangeStatusDto;
@@ -37,6 +41,7 @@ import com.cts.fasttack.logging.interceptor.MessageHistoryOperation;
  * @author Dmitry Koval
  */
 @Controller
+@SessionAttributes("filter")
 @RequestMapping("/token")
 @PreAuthorize("isAuthenticated()")
 public class TokenController {
@@ -49,6 +54,11 @@ public class TokenController {
 
     @Autowired
     private AccessLogService accessLogService;
+
+    @ModelAttribute("filter")
+    public TokenListFilter setFilter() {
+        return new TokenListFilter();
+    }
 
     @PreAuthorize("@aclToken.canView")
     @GetMapping("/list.htm")
@@ -72,17 +82,21 @@ public class TokenController {
     @PreAuthorize("@aclToken.canView")
     @PostMapping("/filter.json")
     @ResponseBody
-    public QueryResultDto<TokenInfoListDto> filter(@Validated @RequestBody TokenListFilter filter) throws ServiceException {
+    public QueryResultDto<TokenInfoListDto> filter(@Validated @RequestBody TokenListFilter filter, Model model) throws ServiceException {
         accessLogService.create().item(ItemType.TOKEN_INFO).type(AccessType.VIEW_ALL).fields("sort by: " + filter.getSortField() + ", page" + String.valueOf(filter.getPage())).save();
+        model.addAttribute("filter", filter);
         return tokenInfoRestClient.list(filter);
     }
 
     @PreAuthorize("@aclToken.canView")
     @GetMapping("/item.json")
     @ResponseBody
-    public TokenInfoDto getToken(@RequestParam String tokenRefId, @RequestParam String tokenRequestorId) throws ServiceException {
+    public TokenInfoDto getToken(@RequestParam String tokenRefId, @RequestParam String tokenRequestorId, @SessionAttribute("filter") TokenListFilter filter) throws ServiceException {
         accessLogService.create().item(ItemType.TOKEN_INFO).id(tokenRefId).type(AccessType.VIEW).save();
-        return tokenInfoRestClient.get(tokenRefId, tokenRequestorId);
+
+        TokenInfoDto tokenInfoDto = tokenInfoRestClient.get(tokenRefId, tokenRequestorId);
+        tokenInfoDto.setPan(filter.getPan());
+        return tokenInfoDto;
     }
 
     @PreAuthorize("@aclToken.canView and @aclToken.isCanModify(#request.tokenEventStatus)")

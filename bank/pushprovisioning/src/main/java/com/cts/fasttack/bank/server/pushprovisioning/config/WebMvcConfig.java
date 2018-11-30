@@ -38,7 +38,7 @@ public class WebMvcConfig extends DefaultWebMvcConfigurerAdapter {
 
     @Bean
     public LoggingHttpRequestFilter requestLoggingFilter() {
-        return new LoggingHttpRequestFilter(Constants.ORIGINATOR, "fasttack-pushprovisioning-tracing");
+        return new LoggingHttpRequestFilter(Constants.ORIGINATOR, "com.cts.fasttack");
     }
 
     @Bean

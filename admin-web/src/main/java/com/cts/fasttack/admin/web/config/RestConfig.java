@@ -50,7 +50,7 @@ public class RestConfig {
     public List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors() {
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(2);
         interceptors.add(new JwtClientHttpInterceptor(jwtService, AdminWebApplication.ORIGINATOR, TimeUnit.MILLISECONDS.toSeconds(adminWebRestCoreParameters.getConnectionTimeoutInMills())));
-        interceptors.add(new LoggingClientHttpRequestInterceptor("fasttack-admin-web-tracing"));
+        interceptors.add(new LoggingClientHttpRequestInterceptor("com.cts.fasttack"));
         return interceptors;
     }
 }

@@ -28,7 +28,7 @@ public class WebMvcConfig extends DefaultWebMvcConfigurerAdapter {
 
 	@Bean
 	public LoggingHttpRequestFilter requestLoggingFilter() {
-		return new LoggingHttpRequestFilter(ORIGINATOR, "fasttack-issuer-host-sv-client-tracing");
+		return new LoggingHttpRequestFilter(ORIGINATOR, "com.cts.fasttack");
 	}
 
 }

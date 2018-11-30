@@ -1,10 +1,7 @@
 package com.cts.fasttack.admin.web.data.dto;
 
-import com.cts.fasttack.admin.web.rest.CardProductRestClient;
 import com.cts.fasttack.admin.web.validation.cardProduct.RangeLengthCheck;
 import com.cts.fasttack.admin.web.validation.cardProduct.ValidateCardProductCreate;
-import com.cts.fasttack.admin.web.validation.common.UniqueIdentifier;
-import com.cts.fasttack.admin.web.validation.operation.EntityCreateOperation;
 import com.cts.fasttack.admin.web.validation.operation.RangeLengthOperation;
 import com.cts.fasttack.common.core.dto.IdentifierDto;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -13,11 +10,12 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @ValidateCardProductCreate(message = "{cardProduct.validation.create.ranges}")
-public class CardProductDto extends IdentifierDto<String> {
+public class CardProductDto extends IdentifierDto<Long> {
+
+    private Long id;
 
     @NotEmpty(message = "{cardProduct.validation.empty.productConfigId}")
     @Size(max = 30)
-    @UniqueIdentifier(groups = EntityCreateOperation.class, service = CardProductRestClient.class, message = "{cardProduct.validation.exist.productConfigId}")
     private String productConfigId;
 
     @RangeLengthCheck(groups = RangeLengthOperation.class)
@@ -25,6 +23,15 @@ public class CardProductDto extends IdentifierDto<String> {
 
     @RangeLengthCheck(groups = RangeLengthOperation.class)
     private String endRange;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getProductConfigId() {
         return productConfigId;
@@ -63,5 +70,14 @@ public class CardProductDto extends IdentifierDto<String> {
     public int hashCode() {
 
         return Objects.hash(beginRange, endRange);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "Range='" + productConfigId + '\'' +
+                " begin='" + beginRange + '\'' +
+                " end='" + endRange + '\'' +
+                '}';
     }
 }

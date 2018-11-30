@@ -17,19 +17,20 @@ public class CardDataUpdateRequestDto extends CommonTokenLifecycleRequestDto {
      * Unique ID for the token associated with the PAN.
      * This ID can be used in lieu of the token for subsequent calls, such as life cycle events
      */
-    @Size(min = 32, max = 64, message = StandardErrorCodes.Names.INVALID_FIELD_LENGTH)
+    @NotEmpty(message = StandardErrorCodes.Names.MISSING_REQUIRED_FIELD)
+    @Size(min = 1, max = 64, message = StandardErrorCodes.Names.INVALID_FIELD_LENGTH)
     private String tokenRefId;
 
     /**
      * Unique ID assigned to the initiator of the token request
      */
+    @NotEmpty(message = StandardErrorCodes.Names.MISSING_REQUIRED_FIELD)
     @Size(min = 11, max = 11, message = StandardErrorCodes.Names.INVALID_FIELD_LENGTH)
     private String tokenRequestorId;
 
     /**
      * Card number
      */
-    @NotEmpty(message = StandardErrorCodes.Names.MISSING_REQUIRED_FIELD)
     @Size(min = 13, max = 19, message = StandardErrorCodes.Names.INVALID_FIELD_LENGTH)
     @Pattern(regexp = "\\d+|^$", message = StandardErrorCodes.Names.INVALID_FIELD_FORMAT)
     private String newAccountPan;

@@ -7,6 +7,7 @@ import com.cts.fasttack.bank.client.ws.client.TokenStatusUpdated;
 import com.cts.fasttack.bank.client.ws.service.CardTokenizedService;
 import com.cts.fasttack.bank.client.ws.service.TokenStatusUpdatedService;
 import com.cts.fasttack.common.core.exception.ServiceException;
+import com.cts.fasttack.common.core.exception.StandardErrorCodes;
 import com.cts.fasttack.jms.dto.BankJmsResponseDto;
 import com.cts.fasttack.jms.dto.JmsCardTokenizedRequestDto;
 import com.cts.fasttack.jms.dto.JmsCardTokenizedResponseDto;
@@ -14,6 +15,7 @@ import com.cts.fasttack.jms.dto.JmsTokenStatusUpdatedDto;
 import com.cts.fasttack.logging.interceptor.MessageHistoryOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
 
 @Component
 public class BankSoapClientImpl implements BankSoapClient {
@@ -37,7 +39,7 @@ public class BankSoapClientImpl implements BankSoapClient {
             tokenId = "#request != null ? #request.tokenRefId : null")
     public JmsCardTokenizedResponseDto cardTokenized(JmsCardTokenizedRequestDto request) throws ServiceException {
         CardTokenized requestDto = jmsCardTokenizedDtoToDomainConverter.convert(request);
-        return cardTokenizedService.cardTokenized(requestDto);
+        return getJmsCardTokenizedResponseDto(cardTokenizedService.cardTokenized(requestDto));
     }
 
 
@@ -48,5 +50,14 @@ public class BankSoapClientImpl implements BankSoapClient {
     public BankJmsResponseDto tokenStatusUpdated(JmsTokenStatusUpdatedDto request) throws ServiceException {
         TokenStatusUpdated requestDto = jmsTokenStatusUpdatedDtoToDomainConverter.convert(request);
         return tokenStatusUpdatedService.tokenStatusUpdated(requestDto);
+    }
+
+    private JmsCardTokenizedResponseDto getJmsCardTokenizedResponseDto(JmsCardTokenizedResponseDto jmsCardTokenizedResponseDto) throws ServiceException {
+        switch (jmsCardTokenizedResponseDto.getCode()) {
+            case "1": throw new ServiceException(StandardErrorCodes.INTERNAL_SERVICE_FAILURE);
+            case "2": throw new ServiceException(StandardErrorCodes.INTERNAL_SERVICE_FAILURE);
+            case "3": throw new ServiceException(StandardErrorCodes.INTERNAL_SERVICE_FAILURE);
+            default: return jmsCardTokenizedResponseDto;
+        }
     }
 }

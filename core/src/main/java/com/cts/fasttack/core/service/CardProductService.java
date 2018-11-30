@@ -7,7 +7,7 @@ import com.cts.fasttack.core.data.CardProduct;
 import com.cts.fasttack.core.data.list.CardProductListFilter;
 import com.cts.fasttack.core.dto.CardProductDto;
 
-public interface CardProductService extends GenericService<String, CardProductDto, CardProduct> {
+public interface CardProductService extends GenericService<Long, CardProductDto, CardProduct> {
 
     QueryResult<CardProductDto> listCardProducts(CardProductListFilter filter);
 

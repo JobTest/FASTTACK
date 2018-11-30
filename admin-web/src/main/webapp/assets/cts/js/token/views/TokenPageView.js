@@ -44,7 +44,8 @@ function getTokenRequestorId(tokenRequestorId, tokenRequestorTitle) {
             tagName: "form",
             getRenderContext: function () {
                 return {
-                    tokenizationPath: ""
+                    tokenizationPath: "",
+                    pan: ""
                 }
             },
             initBeforeRender: function (opts) {
@@ -332,6 +333,11 @@ function getTokenRequestorId(tokenRequestorId, tokenRequestorTitle) {
                     );
                     Common.ajax.async("token/item.json?tokenRefId=" + tokenId.tokenRefId + "&tokenRequestorId=" + tokenId.tokenRequestorId,
                         function (data) {
+                            el.find("#pan").val(data.pan);
+                            if (data.ips=="V") {
+                                el.find("#pan").attr("readonly", "readonly");
+                            }
+
                             el.find("#tokenizationPath").val(data.tokenizationPath);
 
                             if (data.tokenizationPath=='GREEN') {

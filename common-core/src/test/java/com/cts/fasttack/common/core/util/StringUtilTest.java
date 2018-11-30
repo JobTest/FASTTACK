@@ -55,7 +55,8 @@ public class StringUtilTest {
         assertEquals("{\"UserId\":\"test\",\"CVV2\":\"******\"}", StringUtil.sensitiveFieldsHiding(text));
 
         text = "{\"UserId\":\"test\",\"PAN\":\"125342572285956945\"}";
-        assertEquals("{\"UserId\":\"test\",\"PAN\":\"******\"}", StringUtil.sensitiveFieldsHiding(text));
+//        assertEquals("{\"UserId\":\"test\",\"PAN\":\"******\"}", StringUtil.sensitiveFieldsHiding(text)); //todo
+        assertEquals("{\"UserId\":\"test\",\"PAN\":\"125342******6945\"}", StringUtil.sensitiveFieldsHiding(text));
     }
 
     @Test
@@ -82,7 +83,8 @@ public class StringUtilTest {
         assertEquals("<PassPhrase>******</PassPhrase><ns:WSPPASSPHRASE>******</ns:WSPPASSPHRASE>", StringUtil.sensitiveFieldsFromXmlHiding(text));
 
         text = "<ns3:ProvisionCardInputData xmlns:ns3=\"http://hce.everest.com/2015/04\" xmlns:ns2=\"http://schemas.datacontract.org/2004/07/MPTSAESService\" xmlns:ns4=\"http://schemas.microsoft.com/2003/10/Serialization/\"><ns3:CMSMPA_ID>0000000000000000000000000000000000000000000000000000000000008239</ns3:CMSMPA_ID><ns3:CardholderName>IA TSITSKISHVILI</ns3:CardholderName><ns3:EffectiveDate>1111</ns3:EffectiveDate><ns3:ExpiryDate>1702</ns3:ExpiryDate><ns3:PAN>4140510260908026</ns3:PAN><ns3:PSN>00</ns3:PSN><ns3:WSPPASSPHRASE>1234</ns3:WSPPASSPHRASE><ns3:WSPUSERIDENTIFIER>BOG</ns3:WSPUSERIDENTIFIER></ns3:ProvisionCardInputData>";
-        assertEquals("<ns3:ProvisionCardInputData xmlns:ns3=\"http://hce.everest.com/2015/04\" xmlns:ns2=\"http://schemas.datacontract.org/2004/07/MPTSAESService\" xmlns:ns4=\"http://schemas.microsoft.com/2003/10/Serialization/\"><ns3:CMSMPA_ID>0000000000000000000000000000000000000000000000000000000000008239</ns3:CMSMPA_ID><ns3:CardholderName>IA TSITSKISHVILI</ns3:CardholderName><ns3:EffectiveDate>1111</ns3:EffectiveDate><ns3:ExpiryDate>1702</ns3:ExpiryDate><ns3:PAN>******</ns3:PAN><ns3:PSN>00</ns3:PSN><ns3:WSPPASSPHRASE>******</ns3:WSPPASSPHRASE><ns3:WSPUSERIDENTIFIER>BOG</ns3:WSPUSERIDENTIFIER></ns3:ProvisionCardInputData>", StringUtil.sensitiveFieldsFromXmlHiding(text));
+//        assertEquals("<ns3:ProvisionCardInputData xmlns:ns3=\"http://hce.everest.com/2015/04\" xmlns:ns2=\"http://schemas.datacontract.org/2004/07/MPTSAESService\" xmlns:ns4=\"http://schemas.microsoft.com/2003/10/Serialization/\"><ns3:CMSMPA_ID>0000000000000000000000000000000000000000000000000000000000008239</ns3:CMSMPA_ID><ns3:CardholderName>IA TSITSKISHVILI</ns3:CardholderName><ns3:EffectiveDate>1111</ns3:EffectiveDate><ns3:ExpiryDate>1702</ns3:ExpiryDate><ns3:PAN>******</ns3:PAN><ns3:PSN>00</ns3:PSN><ns3:WSPPASSPHRASE>******</ns3:WSPPASSPHRASE><ns3:WSPUSERIDENTIFIER>BOG</ns3:WSPUSERIDENTIFIER></ns3:ProvisionCardInputData>", StringUtil.sensitiveFieldsFromXmlHiding(text)); //todo
+        assertEquals("<ns3:ProvisionCardInputData xmlns:ns3=\"http://hce.everest.com/2015/04\" xmlns:ns2=\"http://schemas.datacontract.org/2004/07/MPTSAESService\" xmlns:ns4=\"http://schemas.microsoft.com/2003/10/Serialization/\"><ns3:CMSMPA_ID>0000000000000000000000000000000000000000000000000000000000008239</ns3:CMSMPA_ID><ns3:CardholderName>IA TSITSKISHVILI</ns3:CardholderName><ns3:EffectiveDate>1111</ns3:EffectiveDate><ns3:ExpiryDate>1702</ns3:ExpiryDate><ns3:PAN>414051******8026</ns3:PAN><ns3:PSN>00</ns3:PSN><ns3:WSPPASSPHRASE>******</ns3:WSPPASSPHRASE><ns3:WSPUSERIDENTIFIER>BOG</ns3:WSPUSERIDENTIFIER></ns3:ProvisionCardInputData>", StringUtil.sensitiveFieldsFromXmlHiding(text));
 
         text = "<CardNum>4999999999990011</CardNum><ExpYear>2019</ExpYear><ExpMonth>05</ExpMonth><CVNum>111</CVNum>";
         assertEquals("<CardNum>******</CardNum><ExpYear>2019</ExpYear><ExpMonth>05</ExpMonth><CVNum>******</CVNum>", StringUtil.sensitiveFieldsFromXmlHiding(text));

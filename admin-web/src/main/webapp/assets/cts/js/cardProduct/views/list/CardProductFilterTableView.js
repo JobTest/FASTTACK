@@ -34,9 +34,17 @@
             template: filter_view_template,
             listColumns: [
                 {
+                    label: CommonMessages.bundles.getMessage("cardProduct.id"),
+                    name: "id",
+                    cell: TemplateCell.extend({template: _.template("<a href='{{=baseUrl}}cardProduct/view.htm?id={{=model.id}}'>{{=model.id}}</a>")}),
+                    sortable: true,
+                    editable: false
+                },
+                {
                     label: CommonMessages.bundles.getMessage("cardProduct.productConfigId"),
                     name: "productConfigId",
-                    cell: TemplateCell.extend({template: _.template("<a href='{{=baseUrl}}cardProduct/view.htm?productConfigId={{=model.productConfigId}}'>{{=model.productConfigId}}</a>")}),
+                    // cell: TemplateCell.extend({template: _.template("<a href='{{=baseUrl}}cardProduct/view.htm?productConfigId={{=model.productConfigId}}'>{{=model.productConfigId}}</a>")}),
+                    cell: "string",
                     sortable: true,
                     editable: false
                 },

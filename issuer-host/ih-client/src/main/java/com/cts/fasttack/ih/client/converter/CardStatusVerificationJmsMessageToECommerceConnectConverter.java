@@ -72,7 +72,7 @@ public class CardStatusVerificationJmsMessageToECommerceConnectConverter extends
         Card card = FACTORY.createCard();
         Long pan = jmsCardStatusVerificationDto.getCardNum();
         //FIXME remove in production mode
-        if (pan == 5355571259999092L || pan == 5355571259999068L || pan == 5355571259999126L) {
+        if (pan == 5331942212082525L || pan == 4363236300018168L) {
             card.setCardNum(5559490000000007L);
             card.setExpMonth("01");
             card.setExpYear("2020");

@@ -6,10 +6,14 @@ import com.cts.fasttack.common.core.service.GenericService;
 
 import java.util.List;
 
-public interface CardProductService extends GenericService<String, CardProductDto, CardProduct> {
+public interface CardProductService extends GenericService<Long, CardProductDto, CardProduct> {
 
     List<CardProductDto> listAll();
 
     boolean isNotCollisionRange(final List<CardProductDto> list, final CardProductDto item);
+
+    String getMessageError();
+
+    void setMessageError(String messageError);
 
 }

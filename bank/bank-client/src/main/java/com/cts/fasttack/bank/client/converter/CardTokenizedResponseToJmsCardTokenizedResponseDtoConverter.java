@@ -16,13 +16,13 @@ public class CardTokenizedResponseToJmsCardTokenizedResponseDtoConverter extends
 
     @Override
     protected void lightConvert(CardTokenizedResponse source, JmsCardTokenizedResponseDto target) {
-        target.setRequestId(source.getRequestId().getValue());
-        target.setPanInternalId(source.getPanInternalId().getValue());
-        target.setPanInternalGUID(source.getPanInternalGUID().getValue());
+        Optional.ofNullable(source.getRequestId()).ifPresent(e -> target.setRequestId(e.getValue()));
+        Optional.ofNullable(source.getPanInternalId()).ifPresent(e -> target.setPanInternalId(e.getValue()));
+        Optional.ofNullable(source.getPanInternalGUID()).ifPresent(e -> target.setPanInternalGUID(e.getValue()));
         target.setCode(source.getCode().getValue());
         Optional.ofNullable(source.getErrorMessage()).ifPresent(e -> target.setErrorMessage(e.getValue()));
         Optional.ofNullable(source.getCustomerPhone()).ifPresent(e -> target.setCustomerPhone(e.getValue()));
-        target.setCustomerId(source.getCustomerId().getValue());
-        target.setConversationId(source.getConversationId().getValue());
+        Optional.ofNullable(source.getCustomerId()).ifPresent(e -> target.setCustomerId(e.getValue()));
+        Optional.ofNullable(source.getConversationId()).ifPresent(e -> target.setConversationId(e.getValue()));
     }
 }

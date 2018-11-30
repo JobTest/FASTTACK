@@ -77,7 +77,7 @@ public class WebServicesConfiguration {
 		webServiceTemplate.setMessageFactory(messageFactory());
 
 		ClientInterceptor[] interceptors = new ClientInterceptor[] {
-				new LoggingWebServiceInterceptor("fasttack-issuer-host-sv-client-tracing", address),
+				new LoggingWebServiceInterceptor("com.cts.fasttack", address),
 				securityInterceptor() };
 		webServiceTemplate.setInterceptors(interceptors);
 		webServiceTemplate.setMessageSender(httpComponentsMessageSender());

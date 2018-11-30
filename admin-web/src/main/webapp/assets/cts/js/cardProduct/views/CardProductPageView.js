@@ -19,7 +19,7 @@
             el: "#main-container",
             template: cardProductViewTemplate,
             initBeforeRender: function (opts) {
-                this.model = new SecurityModels.CardProduct({productConfigId: Common.Url.parse().productConfigId});
+                this.model = new SecurityModels.CardProduct({id: Common.Url.parse().id});
                 this.model.fetch({async: false});
                 this.superInitBeforeRender(SimpleViewWithModel, opts);
                 this.addEvent("click .btnDelete", "_delete");

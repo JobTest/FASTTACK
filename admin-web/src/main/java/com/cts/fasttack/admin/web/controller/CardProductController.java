@@ -73,9 +73,9 @@ public class CardProductController {
     @PreAuthorize("@aclCardProduct.isCanView()")
     @GetMapping("/item.json")
     @ResponseBody
-    public CardProductDto getCardProduct(@RequestParam("productConfigId") String productConfigId) throws ServiceException {
-        accessLogService.create().item(ItemType.CARD_PROPRODUCT).id(productConfigId).type(AccessType.VIEW).save();
-        return cardProductRestClient.getCardProduct(productConfigId);
+    public CardProductDto getCardProduct(@RequestParam("id") Long id) throws ServiceException {
+        accessLogService.create().item(ItemType.CARD_PROPRODUCT).id(id).type(AccessType.VIEW).save();
+        return cardProductRestClient.getCardProduct(id);
     }
 
     @PreAuthorize("@aclCardProduct.isCanCreate()")
@@ -99,10 +99,16 @@ public class CardProductController {
     @PreAuthorize("@aclCardProduct.isCanDelete()")
     @DeleteMapping("/item.json")
     @ResponseBody
-    public JsonResponseWrapper<?> deleteCardProduct(@RequestParam String productConfigId) throws ServiceException {
-        accessLogService.create().item(ItemType.CARD_PROPRODUCT).id(productConfigId).type(AccessType.DELETE).save();
-        cardProductRestClient.deleteCardProduct(productConfigId);
-        return JsonResponseWrapper.success(productConfigId);
+    public JsonResponseWrapper<?> deleteCardProduct(@RequestParam Long id) throws ServiceException {
+        accessLogService.create().item(ItemType.CARD_PROPRODUCT).id(id).type(AccessType.DELETE).save();
+        cardProductRestClient.deleteCardProduct(id);
+        return JsonResponseWrapper.success(id);
+    }
+
+    @GetMapping("/productConfigId.json")
+    @ResponseBody
+    public CardProductDto getProductConfigId(@RequestParam("pan") Long pan) throws ServiceException {
+        return cardProductRestClient.getProductConfigId(pan);
     }
 }
 

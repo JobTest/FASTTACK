@@ -43,7 +43,7 @@ public class CardholderVerificationMethodServiceImpl extends GenericServiceImpl<
 
     @Override
     @Transactional
-    public void saveOrUpdate(DCProgressDto dcProgressDto, String accountNumber) {
+    public CardholderVerificationMethodDto saveOrUpdate(DCProgressDto dcProgressDto, String accountNumber) {
         Optional<CardholderVerificationMethodDto> cvm = getByCorrelationId(dcProgressDto.getCorrelationId());
         CardholderVerificationMethodDto dto;
         if (cvm.isPresent()) {
@@ -53,12 +53,12 @@ public class CardholderVerificationMethodServiceImpl extends GenericServiceImpl<
             dto = new CardholderVerificationMethodDto();
             setCardholderVerificationMethodDto(dcProgressDto, dto, accountNumber);
         }
-        save(dto);
+        return save(dto);
     }
 
     @Override
     @Transactional
-    public void saveOrUpdate(DCProgressDto dcProgressDto, String accountNumber, String tokenizationPath, String wpReasonCodes, String wpDeviceScore, String wpPhonenumberScore, String wpAccountScore, String colorTokenizationStandardVersion, String deviceType, String deviceName) {
+    public CardholderVerificationMethodDto saveOrUpdate(DCProgressDto dcProgressDto, String accountNumber, String tokenizationPath, String wpReasonCodes, String wpDeviceScore, String wpPhonenumberScore, String wpAccountScore, String colorTokenizationStandardVersion, String deviceType, String deviceName) {
         Optional<CardholderVerificationMethodDto> cvm = getByCorrelationId(dcProgressDto.getCorrelationId());
         CardholderVerificationMethodDto dto;
         if (cvm.isPresent()) {
@@ -68,7 +68,7 @@ public class CardholderVerificationMethodServiceImpl extends GenericServiceImpl<
             dto = new CardholderVerificationMethodDto();
             setCardholderVerificationMethodDto(dcProgressDto, dto, accountNumber, tokenizationPath, wpReasonCodes, wpDeviceScore, wpPhonenumberScore, wpAccountScore, colorTokenizationStandardVersion, deviceType, deviceName);
         }
-        save(dto);
+        return save(dto);
     }
 
     @Override

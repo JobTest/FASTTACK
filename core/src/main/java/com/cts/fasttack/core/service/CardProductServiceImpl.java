@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service("cardProductService")
-public class CardProductServiceImpl extends GenericServiceImpl<String, CardProductDto, CardProduct, CardProductDao> implements CardProductService {
+public class CardProductServiceImpl extends GenericServiceImpl<Long, CardProductDto, CardProduct, CardProductDao> implements CardProductService {
 
     private Logger logger = LogManager.getLogger(CardProductServiceImpl.class);
 
@@ -38,7 +38,7 @@ public class CardProductServiceImpl extends GenericServiceImpl<String, CardProdu
     @Override
     @Transactional
     public void saveOrUpdate(CardProductDto item) throws ServiceException {
-        logger.info("Added a new range: {}", item.getProductConfigId());
+        logger.info("Added new or Updated range: {}", item.getProductConfigId());
 
         save(item);
     }

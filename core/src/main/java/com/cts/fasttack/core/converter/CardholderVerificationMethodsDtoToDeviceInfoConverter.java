@@ -19,7 +19,8 @@ public class CardholderVerificationMethodsDtoToDeviceInfoConverter extends Abstr
     protected void lightConvert(JmsCardholderVerificationMethodsDto source, DeviceInfoDto target) {
         target.setDeviceName(source.getDeviceName());
         target.setImei(source.getSecureElementID());
-        target.setSerialNumber(source.getDeviceNumber());
+        target.setDeviceName(source.getDeviceName());
+        target.setSerialNumber(source.getSerialNumber());
         target.setTokenRefId(source.getTokenReferenceID());
         target.setDeviceType(source.getDeviceType());
     }

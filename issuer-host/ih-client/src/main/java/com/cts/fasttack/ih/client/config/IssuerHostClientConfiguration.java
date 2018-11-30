@@ -43,7 +43,7 @@ public class IssuerHostClientConfiguration {
 
     @Bean
     public ClientHttpRequestInterceptor issuerHostClientHttpRequestInterceptor() {
-        return new LoggingClientHttpRequestInterceptor("fasttack-issuer-host-client-tracing");
+        return new LoggingClientHttpRequestInterceptor("com.cts.fasttack");
     }
 
     @Bean

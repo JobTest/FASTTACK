@@ -6,7 +6,7 @@ import com.cts.fasttack.core.data.list.CardProductListFilter;
 
 import java.util.List;
 
-public interface CardProductDao extends GenericDao<String, CardProduct> {
+public interface CardProductDao extends GenericDao<Long, CardProduct> {
 
     List<CardProduct> listCardProduct(CardProductListFilter filter);
 

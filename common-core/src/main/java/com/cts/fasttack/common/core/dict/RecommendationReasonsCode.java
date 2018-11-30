@@ -3,6 +3,10 @@ package com.cts.fasttack.common.core.dict;
 import org.apache.commons.lang3.StringUtils;
 
 public enum RecommendationReasonsCode {
+    LONG_ACCOUNT_TENURE("00"),
+    GOOD_ACTIVITY_HISTORY("00"),
+    ADDITIONAL_DEVICE("00"),
+    SOFTWARE_UPDATE("00"),
     ACCOUNT_TOO_NEW_SINCE_LAUNCH("01"),
     ACCOUNT_TOO_NEW("02"),
     ACCOUNT_CARD_TOO_NEW("03"),
@@ -31,6 +35,8 @@ public enum RecommendationReasonsCode {
             return null;
         }
         switch (code) {
+            case "00":
+                return LONG_ACCOUNT_TENURE;
             case "01":
                 return ACCOUNT_TOO_NEW_SINCE_LAUNCH;
             case "02":

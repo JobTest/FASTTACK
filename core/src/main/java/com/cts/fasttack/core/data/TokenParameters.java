@@ -33,6 +33,9 @@ public class TokenParameters {
     @Value("${spring.core.token.deactivate-period:}")
     private String deactivatePeriod;
 
+    @Value("${spring.customer.notify.token.sendOnlyForRequestors:}")
+    private List<String> sendOnlyForRequestors;
+
     public String getOriginator() {
         return originator;
     }
@@ -51,6 +54,10 @@ public class TokenParameters {
 
     public String getComment() {
         return comment;
+    }
+
+    public List<String> getSendOnlyForRequestors() {
+        return sendOnlyForRequestors;
     }
 
     public List<Integer> getReminderPeriods() {

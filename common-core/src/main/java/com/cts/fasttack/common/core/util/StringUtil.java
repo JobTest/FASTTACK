@@ -42,6 +42,8 @@ public class StringUtil {
 
     private static final Set<Pattern> XML_SENSITIVE_FIELD_PATTERNS = new HashSet<>(17);
 
+    private static final Set<String> EXCEPTION_REPLACES = new HashSet<>();
+
     static {
         JSON_SENSITIVE_FIELDS.put(Pattern.compile("(\"password\"\\s*:+\\s*\".*?\")+"), "\"password\":\"" + MASKED_STRING + "\"");
         JSON_SENSITIVE_FIELDS.put(Pattern.compile("(\"Password\"\\s*:+\\s*\".*?\")+"), "\"Password\":\"" + MASKED_STRING + "\"");
@@ -66,6 +68,8 @@ public class StringUtil {
         JSON_SENSITIVE_FIELDS.put(Pattern.compile("(\"newAccountPan\"\\s*:+\\s*\".*?\")+"), "\"newAccountPan\":\"" + MASKED_STRING + "\"");
         JSON_SENSITIVE_FIELDS.put(Pattern.compile("(\"oldAccountPan\"\\s*:+\\s*\".*?\")+"), "\"oldAccountPan\":\"" + MASKED_STRING + "\"");
         JSON_SENSITIVE_FIELDS.put(Pattern.compile("(\"AccountPan\"\\s*:+\\s*\".*?\")+"), "\"AccountPan\":\"" + MASKED_STRING + "\"");
+        JSON_SENSITIVE_FIELDS.put(Pattern.compile("(\"expiryMonth\"\\s*:+\\s*\".*?\")+"), "\"expiryMonth\":\"" + MASKED_STRING + "\"");
+        JSON_SENSITIVE_FIELDS.put(Pattern.compile("(\"expiryYear\"\\s*:+\\s*\".*?\")+"), "\"expiryYear\":\"" + MASKED_STRING + "\"");
 
         XML_SENSITIVE_FIELD_NAMES.add("PassPhrase");
         XML_SENSITIVE_FIELD_NAMES.add("WSPPASSPHRASE");
@@ -86,6 +90,8 @@ public class StringUtil {
         XML_SENSITIVE_FIELD_NAMES.add("AccountPan");
         XML_SENSITIVE_FIELD_NAMES.add("Token");
         XML_SENSITIVE_FIELD_NAMES.add("token");
+        XML_SENSITIVE_FIELD_NAMES.add("expiryMonth");
+        XML_SENSITIVE_FIELD_NAMES.add("expiryYear");
 
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(PassPhrase)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(WSPPASSPHRASE)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
@@ -104,6 +110,11 @@ public class StringUtil {
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(CurrentAccountPan)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(AccountPan)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(token)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
+        XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(expiryMonth)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
+        XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(expiryYear)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
+
+        EXCEPTION_REPLACES.add("pan");
+        EXCEPTION_REPLACES.add("PAN");
     }
 
 
@@ -172,7 +183,7 @@ public class StringUtil {
                     if(XML_SENSITIVE_FIELD_NAMES.stream().anyMatch(tagNameWithValue::contains)){
                         String value = tagNameWithValue.split(">", 2)[1];
                         if(XML_SENSITIVE_FIELD_PATTERNS.stream().anyMatch(pattern -> pattern.matcher(tagNameWithValue).matches())){
-                            payload = payload.replace(tagNameWithValue, tagNameWithValue.replace(value, MASKED_STRING));
+                            payload = payload.replace(tagNameWithValue, tagNameWithValueReplaceXml(tagNameWithValue, value, MASKED_STRING));
                         }
                     }
                 }
@@ -180,6 +191,18 @@ public class StringUtil {
             }
         }
         return payload;
+    }
+
+    static String tagNameWithValueReplaceXml(String tagNameWithValue, String value, String masked) {
+        // TODO:  exception Replace
+        for (String replacementKey: EXCEPTION_REPLACES) {
+            if (tagNameWithValue.contains(replacementKey)) {
+                String displayPanOrToken = displayPanOrToken(value);
+                if (displayPanOrToken.contains("_"))
+                    return tagNameWithValue.replace(value, displayPanOrToken.replace("_", masked));
+            }
+        }
+        return tagNameWithValue.replace(value, masked);
     }
 
     /**
@@ -193,9 +216,27 @@ public class StringUtil {
     public static String replace(String source, Pattern searchPattern, String replacement) {
         Matcher matcher = searchPattern.matcher(source);
         if (matcher.find()) {
+            // TODO:  exception Replace
+            for (String replacementKey: EXCEPTION_REPLACES) {
+                if (replacement.contains(replacementKey))
+                    return exceptionReplaceJson(matcher, replacementKey, replacement);
+            }
+
             return matcher.replaceAll(replacement);
         }
         return source;
+    }
+
+    static String exceptionReplaceJson(Matcher matcher, String replacementKey, String replacement) {
+        final String doubleQuotes = "\"";
+        String group = matcher.group(1);
+        if (StringUtils.isNotBlank(group)) {
+            String replacementVal = doubleQuotes + replacementKey + doubleQuotes + ":";
+            group = group.replace(replacementVal, "").replace(doubleQuotes, "");
+            String displayPanOrToken = displayPanOrToken(group).replace("_", MASKED_STRING);
+            replacement = replacementVal + doubleQuotes + displayPanOrToken + doubleQuotes;
+        }
+        return matcher.replaceAll(replacement);
     }
 
     /**
@@ -326,7 +367,7 @@ public class StringUtil {
      * @return masked card number
      */
     public static String displayPanOrToken(String pan) {
-        Pattern pattern = Pattern.compile("([0-9]{16})");
+        Pattern pattern = Pattern.compile("([0-9]{13,19})");
         if(StringUtils.isNotBlank(pan) && pattern.matcher(pan).find()){
             return pan.substring(0,FIRST_PAN_SYMBOLS_TO_DISPLAY)+"_"+pan.substring(pan.length()-LAST_PAN_SYMBOLS_TO_DISPLAY);
         }

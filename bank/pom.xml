@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.cts.fasttack</groupId>
         <artifactId>fasttack</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.2.5-SNAPSHOT</version>
     </parent>
 
     <groupId>com.cts.fasttack.bank</groupId>
@@ -82,6 +82,15 @@
         <!-- -=| The PRODUCTION profile for 'OTP-Bank' |=- -->
         <profile>
             <id>OTP</id>
+            <modules>
+                <module>bank-common</module>
+                <module>bank-server</module>
+                <module>bank-client</module>
+            </modules>
+        </profile>
+        <!-- -=| The profile for 'UKRCARD-Bank' |=- -->
+        <profile>
+            <id>UKRCARD</id>
             <modules>
                 <module>bank-common</module>
                 <module>bank-server</module>

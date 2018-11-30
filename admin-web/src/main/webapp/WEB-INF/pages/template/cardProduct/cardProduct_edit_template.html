@@ -2,6 +2,10 @@
     <tbody>
         <tr><td class="errorDescription" colspan="2"></td></tr>
         <tr>
+            <th th:text="#{cardProduct.id}"></th>
+            <td>{{=id}}</td>
+        </tr>
+        <tr>
             <th th:text="#{cardProduct.productConfigId}"></th>
             <td>{{=productConfigId}}</td>
         </tr>
@@ -27,7 +31,7 @@
         </tr>
         <tr>
             <td>
-                <a th:href="@{'/cardProduct/view.htm?productConfigId={{=productConfigId}}'}" class="btnCancel btn btn-default" th:text="#{common.cancel}"></a>
+                <a th:href="@{'/cardProduct/view.htm?id={{=id}}'}" class="btnCancel btn btn-default" th:text="#{common.cancel}"></a>
             </td>
             <td>
                 <button class="btnSave btn btn-primary" th:text="#{common.save}"></button>

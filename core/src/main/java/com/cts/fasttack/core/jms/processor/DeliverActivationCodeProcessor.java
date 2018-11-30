@@ -7,8 +7,10 @@ import com.cts.fasttack.common.core.dict.InternationalPaymentSystem;
 import com.cts.fasttack.core.data.TokenInfoId;
 import com.cts.fasttack.core.dict.TokenStatus;
 import com.cts.fasttack.core.dto.DCProgressDto;
+import com.cts.fasttack.core.dto.DeviceInfoDto;
 import com.cts.fasttack.core.dto.TokenInfoDto;
 import com.cts.fasttack.core.service.TokenInfoService;
+import com.cts.fasttack.core.service.DeviceInfoService;
 import com.cts.fasttack.core.util.TokenHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,6 +46,9 @@ public class DeliverActivationCodeProcessor extends AbstractCamelProcessor<Activ
 
     @Autowired
     private TokenInfoService tokenInfoService;
+
+    @Autowired
+    private DeviceInfoService deviceInfoService;
 
     @Autowired
     private DCProgressService dcProgressService;
@@ -110,7 +115,7 @@ public class DeliverActivationCodeProcessor extends AbstractCamelProcessor<Activ
                     if (dcProgressDto.isPresent()) {
                         DCProgressDto getDCProgressDto = dcProgressDto.get();
                         tokenInfoDto.setCustomerPhone(getDCProgressDto.getCustomerPhone());
-                        tokenInfoDto.setIps(InternationalPaymentSystem.M); //todo tokenInfoDto.setIps(getDCProgressDto.getIps());
+                        tokenInfoDto.setIps(InternationalPaymentSystem.M);
                     }
                 }
                 tokenInfoDto.setTokenizationPath(cvmDto.getTokenizationPath());
@@ -124,8 +129,30 @@ public class DeliverActivationCodeProcessor extends AbstractCamelProcessor<Activ
                     tokenInfoDto.setDigitizeDate(new Date());
                 }
 
+                Optional<TokenInfoDto> optionalOldTokenInfoDto = tokenInfoService.getOptional(new TokenInfoId("NotYetAssigned-" + cvmDto.getCorrelationId(), cvmDto.getTokenRequestorId()));
+                if (optionalOldTokenInfoDto.isPresent()) {
+                    //todo copy old tokenInfo to update tokenInfo
+                    TokenInfoDto oldTokenInfoDto = optionalOldTokenInfoDto.get();
+                    tokenInfoDto.setPanRefId(oldTokenInfoDto.getPanRefId());
+                    tokenInfoDto.setPanSource(oldTokenInfoDto.getPanSource());
+                    tokenInfoDto.setClientWalletAccountId(oldTokenInfoDto.getClientWalletAccountId());
+                    tokenInfoDto.setBin(oldTokenInfoDto.getBin());
+
+                    //todo delete old tokenInfo with old ID
+                    tokenInfoService.delete(new TokenInfoId("NotYetAssigned-" + cvmDto.getCorrelationId(), cvmDto.getTokenRequestorId()));
+                }
+
                 tokenInfoService.save(tokenInfoDto);
 
+                final String oldDeviceId = "NotYetAssigned-" + cvmDto.getCorrelationId();
+                Optional<DeviceInfoDto> optionalDeviceInfoDto = deviceInfoService.getOptional(oldDeviceId);
+                if (optionalDeviceInfoDto.isPresent()) {
+                    DeviceInfoDto deviceInfoDto = optionalDeviceInfoDto.get();
+                    deviceInfoDto.setTokenRefId(cvmDto.getTokenRefId());
+
+                    deviceInfoService.save(deviceInfoDto);
+                    deviceInfoService.delete(oldDeviceId);
+                }
 
                 HeadersJmsMessage jmsMessage = new SendOtpJmsMessage()
                         .sendOtpDto(sendOtpDto)

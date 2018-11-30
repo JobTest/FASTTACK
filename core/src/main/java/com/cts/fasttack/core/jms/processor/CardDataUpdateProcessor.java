@@ -59,14 +59,14 @@ public class CardDataUpdateProcessor extends AbstractCamelProcessor<TokenInfoJms
                 tokenInfoService.save(tokenInfoDto);
 
                 jmsCardDataUpdateResponseDto.setCode("0");
-                String logData = "Token updated to the customer. (RequestorId = '"
-                        + tokenInfoDto.getId().getTokenRequestorId() + "' ReferenceId = '"
-                        + tokenInfoDto.getId().getTokenRefId() + "')";
+                String logData = "Token card data updated: tokenRefId = '" +
+                        tokenInfoId.getTokenRefId() + "', tokenRequestorId = '" + tokenInfoId.getTokenRequestorId() + "'";
 
                 logger.info(logData);
             } else {
                 jmsCardDataUpdateResponseDto.setCode("1");
-                String alertLogData = "tokenInfo not available because of not found.";
+                String alertLogData = "tokenInfo not available because of not found: tokenRefId = '" +
+                        tokenInfoId.getTokenRefId() + "', tokenRequestorId = '" + tokenInfoId.getTokenRequestorId() + "'";
 
                 logger.error(alertLogData);
                 saveAlertLog("BANK", alertLogData, "TOKEN_INFO_NOT_EXISTS");

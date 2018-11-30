@@ -14,6 +14,7 @@ public class CardProductDtoToDomainConverter extends AbstractConverter<CardProdu
 
     @Override
     protected void lightConvert(CardProductDto source, CardProduct target) {
+        target.setId(source.getId());
         target.setProductConfigId(source.getProductConfigId());
         target.setBeginRange(Long.valueOf(source.getBeginRange()));
         target.setEndRange(Long.valueOf(source.getEndRange()));

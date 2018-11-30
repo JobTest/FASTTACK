@@ -20,7 +20,15 @@ public class CardProductCreateValidator implements ConstraintValidator<ValidateC
 
     @Override
     public boolean isValid(CardProductDto value, ConstraintValidatorContext context) {
+
         List<CardProductDto> cardProductDtoList = cardProductService.listAll();
-        return cardProductService.isNotCollisionRange(cardProductDtoList, value);
+        boolean notCollisionRange = cardProductService.isNotCollisionRange(cardProductDtoList, value);
+
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate( "{cardProduct.validation.create.ranges}" + " " + cardProductService.getMessageError()).addConstraintViolation();
+
+        return cardProductDtoList.isEmpty()
+                ? true :
+                notCollisionRange;
     }
 }

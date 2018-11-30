@@ -12,6 +12,9 @@ public class TokenizationPathUtil {
         TokenizationPath recommendationReasonsPath = identify(recommendationReasons);
         TokenizationPath recommendedDecisionPath = identify(recommendedDecision);
 
+        if (recommendedDecision.equals("APPROVED")) {
+            return TokenizationPath.GREEN;
+        }
         if (isRecommendationReasons(recommendationReasons)) {
             return recommendationReasonsPath;
         } else if (isRecommendedDecision(recommendedDecision, recommendationReasonsPath)) {

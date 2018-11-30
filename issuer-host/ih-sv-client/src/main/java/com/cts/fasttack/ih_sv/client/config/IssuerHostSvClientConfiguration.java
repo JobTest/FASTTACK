@@ -42,7 +42,7 @@ public class IssuerHostSvClientConfiguration {
 
 	@Bean
 	public ClientHttpRequestInterceptor loggingClientHttpRequestInterceptor() {
-		return new LoggingClientHttpRequestInterceptor("fasttack-issuer-host-sv-client-tracing");
+		return new LoggingClientHttpRequestInterceptor("com.cts.fasttack");
 	}
 
 }

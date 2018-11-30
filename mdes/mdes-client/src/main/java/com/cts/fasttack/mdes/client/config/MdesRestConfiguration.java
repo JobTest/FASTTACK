@@ -75,7 +75,7 @@ public class MdesRestConfiguration {
     public List<ClientHttpRequestInterceptor> mdesClientHttpRequestInterceptors() {
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(2);
         interceptors.add(mdesAuthInterceptor());
-        interceptors.add(new LoggingClientHttpRequestInterceptor("fasttack-mdes-client-tracing"));
+        interceptors.add(new LoggingClientHttpRequestInterceptor("com.cts.fasttack"));
         return interceptors;
     }
 

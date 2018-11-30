@@ -17,7 +17,10 @@ public enum StandardErrorCodes implements ErrorCode {
     UNABLE_TO_ASSESS,
     NO_DATA_FOUND,
     INVALID_TOKEN_STATUS,
-    INCOMPATIBLE_FIELDS;
+    INCOMPATIBLE_FIELDS,
+    PARSE_EXCEPTION,
+    NOTHING_FOUND_EXCEPTION,
+    INTERNAL_EXCEPTION;
 
 
     public interface Names {
@@ -37,6 +40,9 @@ public enum StandardErrorCodes implements ErrorCode {
         String NO_DATA_FOUND = "NO_DATA_FOUND";
         String INVALID_TOKEN_STATUS = "INVALID_TOKEN_STATUS";
         String INCOMPATIBLE_FIELDS = "INCOMPATIBLE_FIELDS";
+        String PARSE_EXCEPTION = "PARSE_EXCEPTION";
+        String NOTHING_FOUND_EXCEPTION = "NOTHING_FOUND_EXCEPTION";
+        String INTERNAL_EXCEPTION = "Parse exception on bank side";
     }
 
 

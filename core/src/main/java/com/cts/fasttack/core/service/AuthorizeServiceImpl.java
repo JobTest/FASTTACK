@@ -6,15 +6,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 
 import com.cts.fasttack.common.core.converter.RecommendationReasonsConverter;
+import com.cts.fasttack.core.converter.CardholderVerificationMethodDtoToTokenInfoDtoConverter;
 import com.cts.fasttack.core.dto.CardInfoDataDto;
 import com.cts.fasttack.core.dto.Timestamp;
 import com.cts.fasttack.core.dto.DCProgressDto;
@@ -22,7 +20,10 @@ import com.cts.fasttack.core.dto.CardProductDto;
 import com.cts.fasttack.core.dto.BinSetupDto;
 import com.cts.fasttack.core.dto.TokenInfoDto;
 import com.cts.fasttack.core.dto.CvcAttemptDto;
+import com.cts.fasttack.core.dto.CardholderVerificationMethodDto;
+import com.cts.fasttack.core.dto.DeviceInfoDto;
 import com.cts.fasttack.common.core.util.TokenizationPathUtil;
+import com.cts.fasttack.core.util.TokenHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +40,7 @@ import com.cts.fasttack.common.core.util.GenericBuilder;
 import com.cts.fasttack.common.core.util.JsonUtil;
 import com.cts.fasttack.common.core.util.StringUtil;
 import com.cts.fasttack.core.converter.JmsAuthorizeServiceToDCProgressDtoConverter;
+import com.cts.fasttack.core.converter.JmsAuthorizeServiceDtoToDeviceInfoConverter;
 import com.cts.fasttack.core.dict.DCProgressStatus;
 import com.cts.fasttack.core.dict.ProvisioningDecision;
 import com.cts.fasttack.core.dict.Source;
@@ -96,7 +98,13 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     private JmsAuthorizeServiceToDCProgressDtoConverter jmsAuthorizeServiceToDCProgressDtoConverter;
 
     @Autowired
+    private CardholderVerificationMethodDtoToTokenInfoDtoConverter cardholderVerificationMethodDtoToTokenInfoDtoConverter;
+
+    @Autowired
     private CardholderVerificationMethodService cardholderVerificationMethodService;
+
+    @Autowired
+    private JmsAuthorizeServiceDtoToDeviceInfoConverter jmsAuthorizeServiceDtoToDeviceInfoConverter;
 
     @Autowired
     private BinSetupService binSetupService;
@@ -108,7 +116,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     private TokenInfoService tokenInfoService;
 
     @Autowired
-    private CardProductService cardProductService;
+    private DeviceInfoService deviceInfoService;
+
+    @Autowired
+    private TokenHelper tokenHelper;
 
     @Value("${spring.authorize.waiting-for-request-finishing}")
     private Timestamp waitingForRequestFinishing;
@@ -196,9 +207,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
                 return createResponse(dcProgressDto, authorizeServiceDto, cardInfoDataDto);
             }
 
-            if (dcProgressDto.getProvisioningDecision() != null && dcProgressDto.getProvisioningDecision().isAuth()) {
-                if (isWalletProviderDecisioningInfo(authorizeServiceDto))
-                    cardholderVerificationMethodService.saveOrUpdate(dcProgressDto, cardInfoDataDto.getAccountNumber(),
+            if (dcProgressDto.getProvisioningDecision() != null && (dcProgressDto.getProvisioningDecision().isAuth()) || dcProgressDto.getProvisioningDecision().isApproved()) {
+                CardholderVerificationMethodDto cardholderVerificationMethodDto = null;
+                if (isWalletProviderDecisioningInfo(authorizeServiceDto)) {
+                    cardholderVerificationMethodDto = cardholderVerificationMethodService.saveOrUpdate(dcProgressDto, cardInfoDataDto.getAccountNumber(),
                             tokenizationPath,
                             new RecommendationReasonsConverter().convertToReasonCodes(authorizeServiceDto.getRecommendationReasons()),
                             String.valueOf(authorizeServiceDto.getDeviceScore()),
@@ -207,13 +219,22 @@ public class AuthorizeServiceImpl implements AuthorizeService {
                             authorizeServiceDto.getRecommendationStandardVersion(),
                             authorizeServiceDto.getFormFactor(),
                             authorizeServiceDto.getDeviceName());
-                else
-                    cardholderVerificationMethodService.saveOrUpdate(dcProgressDto, cardInfoDataDto.getAccountNumber());
+                } else {
+                    cardholderVerificationMethodDto = cardholderVerificationMethodService.saveOrUpdate(dcProgressDto, cardInfoDataDto.getAccountNumber());
+                }
+                TokenInfoDto tokenInfoDto = createTokenInfoDto(cardholderVerificationMethodDto, authorizeServiceDto, cardInfoDataDto);
+                tokenInfoService.save(tokenInfoDto);
+
+                DeviceInfoDto deviceInfoDto = jmsAuthorizeServiceDtoToDeviceInfoConverter.convert(authorizeServiceDto);
+                deviceInfoDto.setTokenRefId(cardholderVerificationMethodDto.getTokenRefId());
+                deviceInfoService.save(deviceInfoDto);
             }
 
-            String productConfigId = getProductConfigId(Long.valueOf(PAN_FROM_CONFIRM_PROVISIONING));
-            if (StringUtils.isNotBlank(productConfigId)) {
-                dcProgressDto.setProductConfigID(productConfigId);
+            if (StringUtils.isNotBlank(PAN_FROM_CONFIRM_PROVISIONING)) {
+                CardProductDto cardProductDto = tokenHelper.getProductConfigId(Long.valueOf(PAN_FROM_CONFIRM_PROVISIONING));
+                if (cardProductDto!=null) {
+                    dcProgressDto.setProductConfigID(cardProductDto.getProductConfigId() );
+                }
             }
         } catch (ServiceException | BusinessLogicException e) {
             hasError = true;
@@ -231,27 +252,14 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         return createResponse(dcProgressDto, authorizeServiceDto, cardInfoDataDto);
     }
 
-    private String getProductConfigId(Long pan) {
-        List<CardProductDto> cardProductDtos = cardProductService.listAll()
-                .stream()
-                .collect(Collectors.toList());
-
-        Collections.sort(cardProductDtos, new Comparator<CardProductDto>() {
-            @Override
-            public int compare(CardProductDto o1, CardProductDto o2) {
-                if ((o1.getBeginRange() <= o2.getBeginRange() && o2.getEndRange() < o1.getEndRange())
-                        || (o1.getBeginRange() < o2.getBeginRange() && o2.getEndRange() <= o1.getEndRange()))
-                    return 1;
-                if ((o2.getBeginRange() <= o1.getBeginRange() && o1.getEndRange() < o2.getEndRange())
-                        || (o2.getBeginRange() < o1.getBeginRange() && o1.getEndRange() <= o2.getEndRange()))
-                    return -1;
-                return 0;
-            }});
-
-        for (CardProductDto cardProductDto : cardProductDtos) {
-            if (cardProductDto.getBeginRange() < pan && pan < cardProductDto.getEndRange()) return cardProductDto.getProductConfigId();
-        }
-        return null;
+    private TokenInfoDto createTokenInfoDto(CardholderVerificationMethodDto cardholderVerificationMethodDto, JmsAuthorizeServiceDto authorizeServiceDto, CardInfoDataDto cardInfoDataDto) {
+        TokenInfoDto tokenInfoDto = cardholderVerificationMethodDtoToTokenInfoDtoConverter.convert(cardholderVerificationMethodDto);
+        tokenInfoDto.setPanRefId(authorizeServiceDto.getPanUniqueReference()); //todo:  replace value from authorizeService
+        tokenInfoDto.setClientWalletAccountId(authorizeServiceDto.getPaymentAppInstanceId());
+        tokenInfoDto.setPanSource(PanSourceType.getInstance(Source.getSource(cardInfoDataDto.getSource().name())));
+        BinSetupDto binSetupDto = binSetupService.getSuitableBin(cardInfoDataDto.getAccountNumber()).orElse(null);
+        if (binSetupDto != null) tokenInfoDto.setBin(binSetupDto.getBin());
+        return tokenInfoDto;
     }
 
     private boolean isWalletProviderDecisioningInfo(JmsAuthorizeServiceDto authorizeServiceDto) {
@@ -410,7 +418,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     private JmsConfirmProvisioningResponseDto sendConfirmProvisioning(DCProgressDto dcProgressDto, CardInfoDataDto cardInfoDataDto, String originator, Long messageHistoryId, PanSourceType panSourceType, String paymentAppInstId, String tokenizationPath, String deviceName) throws ServiceException {
         JmsConfirmProvisioningDto jmsConfirmProvisioningDto = new JmsConfirmProvisioningDto();
         jmsConfirmProvisioningDto.setRequestId(dcProgressDto.getRequestId());
-        jmsConfirmProvisioningDto.setConversationId(dcProgressDto.getRequestId());
+        jmsConfirmProvisioningDto.setConversationId(dcProgressDto.getCorrelationId());
         jmsConfirmProvisioningDto.setPan(cardInfoDataDto.getAccountNumber());
         jmsConfirmProvisioningDto.setExpiryMonth(cardInfoDataDto.getExpiryMonth());
         jmsConfirmProvisioningDto.setExpiryYear(cardInfoDataDto.getExpiryYear());
@@ -508,7 +516,11 @@ public class AuthorizeServiceImpl implements AuthorizeService {
                     }
                     if ("N".equals(jmsCardStatusVerificationResponseDto.getCvResult())) {
                         if (!cvcAttemptDto.isPresent()) {
-                            cvcAttemptService.save(new CvcAttemptDto(dcProgressDto.getPanInternalId(), dcProgressDto.getPanInternalGUID(), new Date(), 1));
+                            String hostCode = jmsCardStatusVerificationResponseDto.getHostCode();
+                            boolean isHostCode = hostCode.equals("005");
+                            if (!isHostCode) {
+                                cvcAttemptService.save(new CvcAttemptDto(dcProgressDto.getPanInternalId(), dcProgressDto.getPanInternalGUID(), new Date(), 1));
+                            }
                         } else {
                             if(DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate())) {
                                 cvcAttemptDto.get().setFailures(cvcAttemptDto.get().getFailures() + 1);

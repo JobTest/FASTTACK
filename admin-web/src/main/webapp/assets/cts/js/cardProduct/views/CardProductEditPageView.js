@@ -19,7 +19,7 @@
             el: "#cardProduct-edit-container",
             template: cardProductEditTemplate,
             initBeforeRender: function (opts) {
-                this.model = new SecurityModels.CardProduct({productConfigId: Common.Url.parse().productConfigId});
+                this.model = new SecurityModels.CardProduct({id: Common.Url.parse().id});
                 this.model.fetch({async: false});
                 this.superInitBeforeRender(InputAwareViewWithValidation, opts);
                 this.addEvent('click .btnSave', "_save");
@@ -28,7 +28,7 @@
                 if (this.validateInputs()) {
                     var response = this.model.save(null, {type: 'PUT', async: false});
                     if (this.handleAjaxResponse(response)) {
-                        Common.navigateToUrl("cardProduct/view.htm?productConfigId=" + this.model.get("productConfigId"));
+                        Common.navigateToUrl("cardProduct/view.htm?id=" + this.model.get("id"));
                     }
                 }
             }

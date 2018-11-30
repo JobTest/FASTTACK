@@ -29,7 +29,7 @@ public class WebMvcConfig extends DefaultWebMvcConfigurerAdapter {
 
     @Bean
     public LoggingHttpRequestFilter requestLoggingFilter() {
-        return new LoggingHttpRequestFilter(ORIGINATOR, "fasttack-mdes-client-tracing");
+        return new LoggingHttpRequestFilter(ORIGINATOR, "com.cts.fasttack");
     }
 
 }

@@ -59,10 +59,10 @@
 
         SecurityModels.CardProduct = Backbone.DeepModel.extend({
             url: AppCommon.baseUrl + "cardProduct/item.json",
-            idAttribute: "productConfigId",
+            idAttribute: "id",
             sync: function(method, model, options) {
                 if (model.id != undefined && ['read', 'delete'].indexOf(method.toLowerCase()) != -1) {
-                    options.url = this.url + "?productConfigId=" + model.id;
+                    options.url = this.url + "?id=" + model.id;
                 }
                 return Backbone.sync.apply(this, arguments);
             }

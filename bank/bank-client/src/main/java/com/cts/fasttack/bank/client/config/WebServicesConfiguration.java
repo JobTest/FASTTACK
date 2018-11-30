@@ -83,8 +83,8 @@ public class WebServicesConfiguration {
         webServiceTemplate.setMessageFactory(messageFactory());
 
         ClientInterceptor[] interceptors = isSecurityHeaderFromAlfaBank()
-                ? new ClientInterceptor[]{ new LoggingWebServiceInterceptor("fasttack-bank-client-tracing", address), securityInterceptor() }
-                : new ClientInterceptor[]{ new LoggingWebServiceInterceptor("fasttack-bank-client-tracing", address) };
+                ? new ClientInterceptor[]{ new LoggingWebServiceInterceptor("com.cts.fasttack", address), securityInterceptor() }
+                : new ClientInterceptor[]{ new LoggingWebServiceInterceptor("com.cts.fasttack", address) };
         webServiceTemplate.setInterceptors(interceptors);
         webServiceTemplate.setMessageSender(httpComponentsMessageSender());
         return webServiceTemplate;
@@ -105,7 +105,7 @@ public class WebServicesConfiguration {
         webServiceTemplate.setDefaultUri(address);
         webServiceTemplate.setMessageFactory(messageFactory());
 
-        ClientInterceptor[] interceptors = new ClientInterceptor[]{new LoggingWebServiceInterceptor("fasttack-bank-client-tracing", address)};
+        ClientInterceptor[] interceptors = new ClientInterceptor[]{new LoggingWebServiceInterceptor("com.cts.fasttack", address)};
         webServiceTemplate.setInterceptors(interceptors);
         webServiceTemplate.setMessageSender(httpComponentsMessageSender());
         return webServiceTemplate;

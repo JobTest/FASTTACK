@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.cts.fasttack</groupId>
         <artifactId>fasttack</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.2.5-SNAPSHOT</version>
     </parent>
 
     <groupId>com.cts.fasttack.ih</groupId>
@@ -66,6 +66,13 @@
             <id>OTP</id>
             <modules>
                 <module>ih-client</module>
+            </modules>
+        </profile>
+        <!-- -=| The PRODUCTION profile for 'UKRCARD-Bank' |=- -->
+        <profile>
+            <id>UKRCARD</id>
+            <modules>
+                <module>ih-sv-client</module>
             </modules>
         </profile>
     </profiles>

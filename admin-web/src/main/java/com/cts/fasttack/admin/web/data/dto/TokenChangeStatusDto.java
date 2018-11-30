@@ -13,6 +13,8 @@ public class TokenChangeStatusDto {
 
     private String tokenRequestorId;
 
+    private String pan;
+
     private String comment;
 
     private String tokenReason;
@@ -41,6 +43,14 @@ public class TokenChangeStatusDto {
 
     public void setTokenRequestorId(String tokenRequestorId) {
         this.tokenRequestorId = tokenRequestorId;
+    }
+
+    public String getPan() {
+        return pan;
+    }
+
+    public void setPan(String pan) {
+        this.pan = pan;
     }
 
     public String getComment() {

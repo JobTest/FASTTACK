@@ -40,6 +40,8 @@ public class TokenInfoDto {
      */
     private String maskedPan;
 
+    private String pan;
+
     /**
      * Masked token number
      */
@@ -166,6 +168,14 @@ public class TokenInfoDto {
 
     public void setMaskedPan(String maskedPan) {
         this.maskedPan = maskedPan;
+    }
+
+    public String getPan() {
+        return pan;
+    }
+
+    public void setPan(String pan) {
+        this.pan = pan;
     }
 
     public String getMaskedToken() {

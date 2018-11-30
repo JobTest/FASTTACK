@@ -28,9 +28,9 @@ public interface CardholderVerificationMethodService extends GenericService<Long
      *  Save or update by CorrelationID
      * @param dcProgressDto
      */
-    void saveOrUpdate(DCProgressDto dcProgressDto, String accountNumber);
+    CardholderVerificationMethodDto saveOrUpdate(DCProgressDto dcProgressDto, String accountNumber);
 
-    void saveOrUpdate(DCProgressDto dcProgressDto, String accountNumber, String tokenizationPath, String wpReasonCodes, String wpDeviceScore, String wpPhonenumberScore, String wpAccountScore, String colorTokenizationStandardVersion, String deviceType, String deviceName);
+    CardholderVerificationMethodDto saveOrUpdate(DCProgressDto dcProgressDto, String accountNumber, String tokenizationPath, String wpReasonCodes, String wpDeviceScore, String wpPhonenumberScore, String wpAccountScore, String colorTokenizationStandardVersion, String deviceType, String deviceName);
 
     void saveOrUpdate(CardholderVerificationMethodDto cvmDto);
 

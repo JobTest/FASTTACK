@@ -17,6 +17,7 @@ import com.cts.fasttack.core.converter.TokenCreateNotificationToTokenInfoDtoConv
 import com.cts.fasttack.core.converter.TokenNotificationDtoToTokenHistoryConverter;
 import com.cts.fasttack.core.converter.TokenNotificationStatusToJmsDtoConverter;
 import com.cts.fasttack.core.data.TokenInfoId;
+import com.cts.fasttack.core.dict.DeviceType;
 import com.cts.fasttack.core.dict.TokenStatus;
 import com.cts.fasttack.core.dto.BinSetupDto;
 import com.cts.fasttack.core.dto.TokenHistoryDto;
@@ -25,28 +26,17 @@ import com.cts.fasttack.core.service.BinSetupService;
 import com.cts.fasttack.core.service.DeviceInfoService;
 import com.cts.fasttack.core.service.TokenHistoryService;
 import com.cts.fasttack.core.service.TokenInfoService;
+import com.cts.fasttack.core.util.TokenHelper;
+import com.cts.fasttack.jms.data.HeadersJmsMessage;
 import com.cts.fasttack.jms.data.JmsMessage;
-import com.cts.fasttack.jms.dto.BankJmsResponseDto;
-import com.cts.fasttack.jms.dto.JmsExpirationDateDto;
-import com.cts.fasttack.jms.dto.JmsTokenCreateNotificationDto;
-import com.cts.fasttack.jms.dto.JmsTokenCreateNotificationResponseDto;
-import com.cts.fasttack.jms.dto.JmsTokenDetailsDto;
-import com.cts.fasttack.jms.dto.JmsTokenInquiryDto;
-import com.cts.fasttack.jms.dto.JmsTokenInquiryResponseDto;
-import com.cts.fasttack.jms.dto.JmsTokenNotificationDto;
-import com.cts.fasttack.jms.dto.JmsTokenStatusUpdatedDto;
-import com.cts.fasttack.jms.dto.JmsVtsDeviceInfo;
-import com.cts.fasttack.jms.dto.TokenCreateNotificationJmsMessage;
-import com.cts.fasttack.jms.dto.TokenInquiryJmsMessage;
-import com.cts.fasttack.jms.dto.TokenNotificationJmsMessage;
-import com.cts.fasttack.jms.dto.TokenNotificationJmsResponse;
-import com.cts.fasttack.jms.dto.TokenStatusUpdatedJmsMessage;
+import com.cts.fasttack.jms.dto.*;
 import com.cts.fasttack.jms.processor.AbstractCamelProcessor;
 import com.cts.fasttack.jms.support.IntegrationBus;
 import com.cts.fasttack.logging.dto.AlertLogDto;
 import com.cts.fasttack.logging.service.AlertLogService;
 import com.cts.fasttack.logging.service.CallingContext;
 import org.apache.camel.Exchange;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +48,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TokenNotificationProcessor extends AbstractCamelProcessor<TokenNotificationJmsMessage, TokenNotificationJmsResponse> {
+
+	public static final String NOTIFICATION_TYPE = "TOKEN_ACTIVATED";
 
 	private Logger logger = LogManager.getLogger(CardholderVerificationMethodsProcessor.class);
 
@@ -97,6 +89,9 @@ public class TokenNotificationProcessor extends AbstractCamelProcessor<TokenNoti
     @Autowired
     private JmsVtsDeviceInfoToDtoConverter jmsVtsDeviceInfoToDtoConverter;
 
+	@Autowired
+	private TokenHelper tokenHelper;
+
     @Value("${spring.binSetup.defaultSendCardTokenized}")
     private boolean defaultSendCardTokenized;
 
@@ -107,9 +102,13 @@ public class TokenNotificationProcessor extends AbstractCamelProcessor<TokenNoti
 
             TokenInfoDto tokenInfoDto = tokenInfoService.getOptional(new TokenInfoId(tokenNotificationDto.getTokenReferenceID(), tokenNotificationDto.getTokenRequestorID())).orElse(null);
 
-            if (tokenInfoDto != null && tokenInfoDto.getTokenStatusUpdate() != null) {
+			if (tokenInfoDto != null) {
                 if (InternationalPaymentSystem.V.equals(tokenInfoDto.getIps())) {
                 	if (tokenInfoDto.getTokenStatusUpdate() == null || tokenInfoDto.getTokenStatusUpdate().before(tokenNotificationDto.getDateTimeOfEvent())) {
+						//todo update Status 'I' -> 'A'
+						TokenStatus oldTokenStatus = tokenInfoDto.getTokenStatus();
+						TokenStatus newTokenStatus = TokenStatus.valueOf(String.valueOf(tokenNotificationDto.getEncryptedData().getTokenInfo().getTokenStatus().charAt(0)));
+
                 	    tokenInfoDto.setTokenStatus(TokenStatus.valueOf(String.valueOf(tokenNotificationDto.getEncryptedData().getTokenInfo().getTokenStatus().charAt(0))));
                 	    tokenInfoDto.setTokenStatusUpdate(tokenNotificationDto.getDateTimeOfEvent());
 
@@ -128,6 +127,15 @@ public class TokenNotificationProcessor extends AbstractCamelProcessor<TokenNoti
                                     .originator(callingContext.getOriginator());
                             integrationBus.inOut(() -> Constants.ORIGINATOR, "notifyTokenUpdated", jmsMessage, BankJmsResponseDto.class);
                         }
+
+						//todo update Status 'I' -> 'A'
+						if (oldTokenStatus==TokenStatus.I && newTokenStatus==TokenStatus.A) {
+							if (tokenHelper.isSendOnlyForRequestors(tokenInfoDto.getId().getTokenRequestorId())) {
+								if (tokenHelper.isSendNotificationToCustomer(tokenInfoDto, tokenInfoDto.getCustomerPhone())) { //todo visa...
+									publishSendNotificationToCustomer(tokenInfoDto);
+								}
+							}
+						}
                 	} else {
                 		log.info("Received Token Notification message but more recent notification has been processed before. " +
                 				"Will not update TOKEN_INFO nor send notification to the bank. tokenReferenceId = " +
@@ -162,7 +170,7 @@ public class TokenNotificationProcessor extends AbstractCamelProcessor<TokenNoti
             			"tokenInquiry",
             			new TokenInquiryJmsMessage().tokenInquiryRequestDto(tokenInquiryRequestDto),
             			JmsTokenInquiryResponseDto.class);
-            	
+
             	if ("00".equals(tokenInquiryResponseDto.getActionCode())) {
             	    if (!tokenInquiryResponseDto.getTokenDetails().isEmpty()) {
             		    JmsTokenDetailsDto tokenDetailsDto = tokenInquiryResponseDto.getTokenDetails().get(0);
@@ -226,6 +234,12 @@ public class TokenNotificationProcessor extends AbstractCamelProcessor<TokenNoti
                         if (tokenCreateNotificationDto.getDeviceInfo() != null) {
                         	deviceInfoService.save(jmsVtsDeviceInfoToDtoConverter.convert(tokenCreateNotificationDto.getDeviceInfo(), tokenInfoDto));
                         }
+
+						if (tokenHelper.isSendOnlyForRequestors(responseTokenInfoDto.getId().getTokenRequestorId())) {
+							if (tokenHelper.isSendNotificationToCustomer(responseTokenInfoDto, responseTokenInfoDto.getCustomerPhone())) { //todo visa...
+								publishSendNotificationToCustomer(responseTokenInfoDto);
+							}
+						}
             	    } else {
             	    	throw new ServiceException(new SimpleErrorCode("Token info not found locally and no data received in Token Inquiry response from VTS"),
             	    			tokenNotificationDto.getTokenReferenceID(),
@@ -277,7 +291,15 @@ public class TokenNotificationProcessor extends AbstractCamelProcessor<TokenNoti
 
     		deviceInfo.setDeviceName(tokenDetailsDto.getDeviceInformation().getDeviceName());
     		deviceInfo.setDeviceNumber(tokenDetailsDto.getDeviceInformation().getDeviceNumber());
-    		deviceInfo.setDeviceType(tokenDetailsDto.getDeviceInformation().getDeviceType());
+			String getDeviceType = tokenDetailsDto.getDeviceInformation().getDeviceType();
+			if (StringUtils.isNotBlank(getDeviceType)) {
+				int deviceTypeId = Integer.valueOf(getDeviceType);
+				DeviceType deviceType = (0<deviceTypeId && deviceTypeId<=5)
+						? DeviceType.valueOfType(deviceTypeId)
+						: DeviceType.UNKNOWN;
+				deviceInfo.setDeviceType(deviceType.name());
+			}
+
     		deviceInfo.setDeviceID(tokenNotificationDto.getDeviceID());
 
     		result.setDeviceInfo(deviceInfo);
@@ -292,4 +314,13 @@ public class TokenNotificationProcessor extends AbstractCamelProcessor<TokenNoti
     	
     	return result;
     }
+
+	private JmsSendNotificationToCustomerResponseDto publishSendNotificationToCustomer(TokenInfoDto tokenInfoDto) throws ServiceException {
+		tokenInfoDto.setReminderPeriod(String.valueOf(tokenHelper.getDiffHours(tokenInfoDto.getTokenStatusUpdate())));
+		HeadersJmsMessage jmsMessage = new SendNotificationToCustomerJmsMessage()
+				.jmsSendNotificationToCustomerRequestDto(tokenHelper.createJmsSendCreateNotificationToCustomerRequestDto(tokenInfoDto, NOTIFICATION_TYPE))
+				.originator(Constants.ORIGINATOR);
+
+		return integrationBus.inOut(() -> "BANK", "sendNotificationToCustomer", jmsMessage, JmsSendNotificationToCustomerResponseDto.class);
+	}
 }

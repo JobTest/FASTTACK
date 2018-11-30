@@ -6,23 +6,49 @@ import com.cts.fasttack.admin.web.dao.CardProductDao;
 import com.cts.fasttack.admin.web.data.domain.CardProduct;
 import com.cts.fasttack.admin.web.data.dto.CardProductDto;
 
+import com.cts.fasttack.admin.web.security.service.CurrentUserService;
 import com.cts.fasttack.admin.web.service.CardProductService;
 import com.cts.fasttack.common.core.service.GenericServiceImpl;
+import com.cts.fasttack.common.core.util.GenericBuilder;
+import com.cts.fasttack.logging.dto.AlertLogDto;
+import com.cts.fasttack.logging.service.AlertLogService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("cardProductService")
-public class CardProductServiceImpl extends GenericServiceImpl<String, CardProductDto, CardProduct, CardProductDao> implements CardProductService {
+public class CardProductServiceImpl extends GenericServiceImpl<Long, CardProductDto, CardProduct, CardProductDao> implements CardProductService {
+
+    private Logger logger = LogManager.getLogger(CardProductServiceImpl.class);
+
+    private String messageError = "";
+
+    @Autowired
+    private AlertLogService alertLogService;
+
+    @Autowired
+    private CurrentUserService currentUserService;
 
     @Autowired
     public CardProductServiceImpl(CardProductDao dao, CardProductToDtoConverter domainToDtoConverter, CardProductDtoToDomainConverter dtoToDomainConverter) {
         super(dao, domainToDtoConverter, dtoToDomainConverter);
+    }
+
+    @Override
+    public String getMessageError() {
+        return messageError;
+    }
+
+    @Override
+    public void setMessageError(String messageError) {
+        this.messageError = messageError;
     }
 
     @Override
@@ -35,25 +61,50 @@ public class CardProductServiceImpl extends GenericServiceImpl<String, CardProdu
 
     @Override
     public boolean isNotCollisionRange(final List<CardProductDto> list, final CardProductDto item) {
-        boolean isNotDouble = isNotDouble(list, item);
-        boolean isOutSide = isOutSide(list, item);
-        boolean isInSide = isInSide(list, item);
+        if (item.getBeginRange().equals(item.getEndRange())) {
+            saveLog("A Begin Range can't equals a End Range", item, null);
+            return false;
+        }
+        if (item.getBeginRange().length() != item.getEndRange().length()) {
+            saveLog("Ranges can't have different length", item, null);
+            return false;
+        }
+        if (!isNotDouble(list, item)) {
+            Optional<CardProductDto> cardProductDto = list.parallelStream()
+                    .filter(cpd -> cpd.equals(item))
+                    .findAny();
+            saveLog("Ranges can't occur again", item, cardProductDto.get());
+            return false;
+        }
 
-        return item.getBeginRange().length() == item.getEndRange().length()
-                && Long.valueOf(item.getBeginRange()) < Long.valueOf(item.getEndRange())
-                && isNotDouble
-                && (isOutSide || isInSide);
-    }
+        long itemBegin = Long.valueOf(item.getBeginRange());
+        long itemEnd = Long.valueOf(item.getEndRange());
 
-    private void sortByExtension (final List<CardProductDto> list) {
-        Collections.sort(list, new Comparator<CardProductDto>() {
-            @Override
-            public int compare(CardProductDto o1, CardProductDto o2) {
-                if (o1.equals(o2)) return 0;
-                if (Long.valueOf(o1.getBeginRange()) <= Long.valueOf(o2.getBeginRange()) && Long.valueOf(o2.getEndRange()) <= Long.valueOf(o1.getEndRange())) return 1;
-                if (Long.valueOf(o2.getBeginRange()) <= Long.valueOf(o1.getBeginRange()) && Long.valueOf(o1.getEndRange()) <= Long.valueOf(o2.getEndRange())) return -1;
-                return 0;
-            }});
+        if (itemEnd < itemBegin) {
+            saveLog("A End Range could not be less a Begin Range", item, null);
+            return false;
+        }
+
+        for (CardProductDto cardProductDto: list) {
+            long cardProductBegin = Long.valueOf(cardProductDto.getBeginRange());
+            long cardProductEnd = Long.valueOf(cardProductDto.getEndRange());
+
+            final boolean insideEnd = cardProductBegin <= itemEnd && itemEnd <= cardProductEnd;
+            final boolean insideBegin = cardProductBegin <= itemBegin && itemBegin <= cardProductEnd;
+            final boolean outsideEnd = itemEnd < cardProductBegin || cardProductEnd < itemEnd;
+            final boolean outsideBegin = itemBegin < cardProductBegin || cardProductEnd < itemBegin;
+            final boolean onlyInsideEnd = itemEnd == cardProductEnd;
+            final boolean onlyInsideBegin = itemBegin == cardProductBegin;
+
+            boolean collisionRange = (outsideBegin && insideEnd && !onlyInsideEnd)
+                    || (outsideEnd && insideBegin && !onlyInsideBegin);
+
+            if (collisionRange) {
+                saveLog("Ranges can't intersect", item, cardProductDto);
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isNotDouble(final List<CardProductDto> list, final CardProductDto item) {
@@ -62,42 +113,21 @@ public class CardProductServiceImpl extends GenericServiceImpl<String, CardProdu
                 : false;
     }
 
-    private boolean isInSide(final List<CardProductDto> list, final CardProductDto item) {
-        boolean notNullAndNotEqual = list!=null && !list.isEmpty() && item!=null
-                ? !list.contains(item)
-                : false;
-        if (!notNullAndNotEqual) return false;
-
-        sortByExtension(list);
-        for (CardProductDto cardProduct: list) {
-            if (Long.valueOf(item.getBeginRange()) <= Long.valueOf(cardProduct.getEndRange())) {
-                if (Long.valueOf(cardProduct.getBeginRange()) <= Long.valueOf(item.getBeginRange())) {
-                    return Long.valueOf(item.getEndRange()) <= Long.valueOf(cardProduct.getEndRange())
-                            ? true
-                            : false;
-                }
-            }
-        }
-
-        CardProductDto lastItem = list.get(list.size()-1);
-        return Long.valueOf(item.getEndRange()) <= Long.valueOf(lastItem.getEndRange())
-                ? true
-                : false;
+    private void saveLog(String event, CardProductDto data1, CardProductDto data2) {
+        String logData = event + " " + data1 + " " + data2;
+        logger.warn(logData);
+        saveAlertLog(currentUserService.getCurrentUser().getUsername(), logData, "PRODUCT_VALID_ERROR");
+        if (data2!=null) setMessageError("\n\r" + data2.toString());
     }
 
-    private boolean isOutSide(final List<CardProductDto> list, final CardProductDto item) {
-        boolean isNotNull = list!=null && !list.isEmpty() && item!=null;
-        if (!isNotNull) return false;
+    private void saveAlertLog(String originator, String data, String event) {
+        AlertLogDto alertLogDto = GenericBuilder.of(AlertLogDto::new)
+                .with(AlertLogDto::setEvent, event)
+                .with(AlertLogDto::setOriginator, originator)
+                .with(AlertLogDto::setData, data)
+                .with(AlertLogDto::setDate, new Date())
+                .build();
 
-        sortByExtension(list);
-        CardProductDto lastItem = list.get(list.size()-1);
-
-        boolean  isBothSides = Long.valueOf(item.getBeginRange()) <= Long.valueOf(lastItem.getBeginRange()) && Long.valueOf(lastItem.getEndRange()) <= Long.valueOf(item.getEndRange());
-        boolean   isLeftSide = Long.valueOf(item.getEndRange()) <= Long.valueOf(lastItem.getBeginRange());
-        boolean isRightSides = Long.valueOf(lastItem.getEndRange()) <= Long.valueOf(item.getBeginRange());
-        boolean     notEqual = !lastItem.equals(item);
-        boolean    isOutSide = isBothSides || isLeftSide || isRightSides;
-
-        return notEqual && isOutSide;
+        alertLogService.save(alertLogDto);
     }
 }

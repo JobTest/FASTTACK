@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.cts.fasttack</groupId>
         <artifactId>fasttack</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.2.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>ear</artifactId>
@@ -638,24 +638,6 @@
             <type>war</type>
         </dependency>
         <dependency>
-            <groupId>com.cts.fasttack.parent</groupId>
-            <artifactId>visa-client</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>com.cts.fasttack.parent</groupId>
-            <artifactId>visa-vnts-server</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>com.cts.fasttack.parent</groupId>
-            <artifactId>visa-vtis-server</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
             <groupId>com.cts.fasttack</groupId>
             <artifactId>admin-web</artifactId>
             <version>${project.version}</version>
@@ -688,6 +670,24 @@
                 <dependency>
                     <groupId>com.cts.fasttack.bank</groupId>
                     <artifactId>pushprovisioning</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-client</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vnts-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vtis-server</artifactId>
                     <version>${project.version}</version>
                     <type>war</type>
                 </dependency>
@@ -809,6 +809,24 @@
                 <dependency>
                     <groupId>com.cts.fasttack.bank</groupId>
                     <artifactId>pushprovisioning</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-client</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vnts-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vtis-server</artifactId>
                     <version>${project.version}</version>
                     <type>war</type>
                 </dependency>
@@ -937,6 +955,24 @@
                     <version>${project.version}</version>
                     <type>war</type>
                 </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-client</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vnts-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vtis-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
             </dependencies>
 
             <build>
@@ -1055,6 +1091,24 @@
                 <dependency>
                     <groupId>com.cts.fasttack.bank</groupId>
                     <artifactId>pushprovisioning</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-client</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vnts-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vtis-server</artifactId>
                     <version>${project.version}</version>
                     <type>war</type>
                 </dependency>
@@ -1180,6 +1234,24 @@
                     <version>${project.version}</version>
                     <type>war</type>
                 </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-client</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vnts-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vtis-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
             </dependencies>
 
             <build>
@@ -1302,6 +1374,24 @@
                     <version>${project.version}</version>
                     <type>war</type>
                 </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-client</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vnts-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vtis-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
             </dependencies>
 
             <build>
@@ -1418,6 +1508,24 @@
                     <version>${project.version}</version>
                     <type>war</type>
                 </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-client</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vnts-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.cts.fasttack.parent</groupId>
+                    <artifactId>visa-vtis-server</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
             </dependencies>
 
             <build>
@@ -1498,6 +1606,107 @@
                                     <artifactId>admin-web</artifactId>
                                     <contextRoot>fasttack-admin-web</contextRoot>
                                 </webModule>
+                            </modules>
+
+                            <archive>
+                                <manifestEntries>
+                                    <Implementation-Title>${activatedProfileId}</Implementation-Title>
+                                    <Major-Version>${project.version}</Major-Version>
+                                    <Implementation-Version>${project.version}</Implementation-Version>
+                                    <Build-Number>${build.number}</Build-Number>
+                                    <Build-Time>${maven.build.timestamp}</Build-Time>
+                                    <Build-OS>${os.name}</Build-OS>
+                                </manifestEntries>
+                                <addMavenDescriptor>true</addMavenDescriptor>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+        <!-- -=| The PRODUCTION profile for 'UKRCARD-Bank' |=- -->
+        <profile>
+            <id>UKRCARD</id>
+
+            <dependencies>
+                <dependency>
+                    <groupId>com.cts.fasttack.ih</groupId>
+                    <artifactId>ih-sv-client</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <finalName>${project.parent.artifactId}</finalName>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-ear-plugin</artifactId>
+                        <version>2.10.1</version>
+                        <configuration>
+                            <version>6</version>
+                            <initializeInOrder>true</initializeInOrder>
+                            <generateApplicationXml>true</generateApplicationXml>
+                            <defaultLibBundleDir>lib/</defaultLibBundleDir>
+                            <skinnyWars>true</skinnyWars>
+                            <modules>
+                                <webModule>
+                                    <groupId>com.cts.fasttack</groupId>
+                                    <artifactId>service-registry</artifactId>
+                                    <contextRoot>fasttack-service-registry</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack</groupId>
+                                    <artifactId>core</artifactId>
+                                    <contextRoot>fasttack-core</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack.crypto</groupId>
+                                    <artifactId>crypto-server</artifactId>
+                                    <contextRoot>fasttack-crypto-server</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack.mdes</groupId>
+                                    <artifactId>mdes-client</artifactId>
+                                    <contextRoot>fasttack-mdes-client</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack.bank</groupId>
+                                    <artifactId>bank-client</artifactId>
+                                    <contextRoot>fasttack-bank-client</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack.ih</groupId>
+                                    <artifactId>ih-sv-client</artifactId>
+                                    <contextRoot>fasttack-issuer-host-sv-client</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack.mdes</groupId>
+                                    <artifactId>mdes-server</artifactId>
+                                    <contextRoot>${mdes.server.contextPath}</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack.bank</groupId>
+                                    <artifactId>bank-server</artifactId>
+                                    <contextRoot>${bank.server.contextPath}</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack</groupId>
+                                    <artifactId>sms-server</artifactId>
+                                    <contextRoot>fasttack-sms-server</contextRoot>
+                                </webModule>
+                                <webModule>
+                                    <groupId>com.cts.fasttack</groupId>
+                                    <artifactId>admin-web</artifactId>
+                                    <contextRoot>fasttack-admin-web</contextRoot>
+                                </webModule>
+                                <!--<webModule>-->
+                                    <!--<groupId>com.cts.fasttack.bank</groupId>-->
+                                    <!--<artifactId>pushprovisioning</artifactId>-->
+                                    <!--<contextRoot>${bank.push.provisioning.contextPath}</contextRoot>-->
+                                <!--</webModule>-->
                             </modules>
 
                             <archive>

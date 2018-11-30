@@ -17,6 +17,6 @@ public class TokenCommentValidator implements ConstraintValidator<ValidateTokenC
 
     @Override
     public boolean isValid(TokenChangeStatusDto value, ConstraintValidatorContext context) {
-        return value.getIps().equals("V") || value.getIps().equals("M") && StringUtils.isNotBlank(value.getComment());
+        return value.getIps().equals("V") || value.getIps().equals("M") && (StringUtils.isNotBlank(value.getComment()) && StringUtils.isNotBlank(value.getPan()));
     }
 }

@@ -6,7 +6,7 @@
 
     <groupId>com.cts.fasttack</groupId>
     <artifactId>fasttack</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>FASTTACK</name>
 
@@ -78,6 +78,13 @@
                 <resources>
                     <resource>
                         <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/dev/jboss-log4j.xml</exclude>
+                            <exclude>**/dev/log4j2.xml</exclude>
+                            <exclude>**/prod/jboss-log4j.xml</exclude>
+                            <exclude>**/prod/log4j2.xml</exclude>
+                        </excludes>
+                        <filtering>false</filtering>
                     </resource>
                 </resources>
             </build>
@@ -124,6 +131,13 @@
                 <resources>
                     <resource>
                         <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/dev/jboss-log4j.xml</exclude>
+                            <exclude>**/dev/log4j2.xml</exclude>
+                            <exclude>**/prod/jboss-log4j.xml</exclude>
+                            <exclude>**/prod/log4j2.xml</exclude>
+                        </excludes>
+                        <filtering>false</filtering>
                     </resource>
                 </resources>
             </build>
@@ -191,10 +205,38 @@
                             <exclude>**/fasttack-vnts-server-application.properties</exclude>
                             <exclude>**/fasttack-vtis-server-application.properties</exclude>
                             <exclude>**/fasttack-admin-web-application.properties</exclude>
+                            <exclude>**/jboss-log4j.xml</exclude>
+                            <exclude>**/log4j2.xml</exclude>
                         </excludes>
                         <filtering>false</filtering>
                     </resource>
                 </resources>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/src/main/resources/dev</directory>
+                                            <includes>
+                                                <include>**/*.xml</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
 
             <modules>
@@ -254,10 +296,38 @@
                             <exclude>**/fasttack-vnts-server-application.properties</exclude>
                             <exclude>**/fasttack-vtis-server-application.properties</exclude>
                             <exclude>**/fasttack-admin-web-application.properties</exclude>
+                            <exclude>**/jboss-log4j.xml</exclude>
+                            <exclude>**/log4j2.xml</exclude>
                         </excludes>
                         <filtering>false</filtering>
                     </resource>
                 </resources>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/src/main/resources/dev</directory>
+                                            <includes>
+                                                <include>**/*.xml</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
 
             <modules>
@@ -318,10 +388,38 @@
                             <exclude>**/fasttack-vnts-server-application.properties</exclude>
                             <exclude>**/fasttack-vtis-server-application.properties</exclude>
                             <exclude>**/fasttack-admin-web-application.properties</exclude>
+                            <exclude>**/jboss-log4j.xml</exclude>
+                            <exclude>**/log4j2.xml</exclude>
                         </excludes>
                         <filtering>false</filtering>
                     </resource>
                 </resources>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/src/main/resources/prod</directory>
+                                            <includes>
+                                                <include>**/*.xml</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
 
             <modules>
@@ -382,10 +480,38 @@
                             <exclude>**/fasttack-vnts-server-application.properties</exclude>
                             <exclude>**/fasttack-vtis-server-application.properties</exclude>
                             <exclude>**/fasttack-admin-web-application.properties</exclude>
+                            <exclude>**/jboss-log4j.xml</exclude>
+                            <exclude>**/log4j2.xml</exclude>
                         </excludes>
                         <filtering>false</filtering>
                     </resource>
                 </resources>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/src/main/resources/dev</directory>
+                                            <includes>
+                                                <include>**/*.xml</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
 
             <modules>
@@ -422,7 +548,7 @@
                 <mdes.server.contextPath>/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
                 <bank.server.contextPath>/ft/uia</bank.server.contextPath>
                 <bank.push.provisioning.contextPath>/ft/pp</bank.push.provisioning.contextPath>
-                <visa.vnts.contextPath>/visa/vnts</visa.vnts.contextPath>
+                <visa.vnts.contextPath>/vnts</visa.vnts.contextPath>
                 <visa.vtis.contextPath>/ft/vtis</visa.vtis.contextPath>
             </properties>
 
@@ -446,10 +572,38 @@
                             <exclude>**/fasttack-vnts-server-application.properties</exclude>
                             <exclude>**/fasttack-vtis-server-application.properties</exclude>
                             <exclude>**/fasttack-admin-web-application.properties</exclude>
+                            <exclude>**/jboss-log4j.xml</exclude>
+                            <exclude>**/log4j2.xml</exclude>
                         </excludes>
                         <filtering>false</filtering>
                     </resource>
                 </resources>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/src/main/resources/prod</directory>
+                                            <includes>
+                                                <include>**/*.xml</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
 
             <modules>
@@ -468,6 +622,96 @@
                 <module>service-registry</module>
             </modules>
         </profile>
+
+
+        <!-- -=| The PRODUCTION profile for 'UKRCARD-Bank' |=- -->
+        <profile>
+            <id>UKRCARD</id>
+
+            <repositories>
+                <repository>
+                    <id>ProfITsoft</id>
+                    <url>http://192.168.1.100:12345/portal/content/repositories/CTS/</url>
+                </repository>
+            </repositories>
+
+            <properties>
+                <activatedProfileId>UKRCARD</activatedProfileId>
+                <!-- - -->
+                <mdes.server.contextPath>/ft/mcissuerapi/issuerServices/1/0</mdes.server.contextPath>
+                <bank.server.contextPath>/ft/uia</bank.server.contextPath>
+            </properties>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/fasttack-service-registry-application.properties</exclude>
+                            <exclude>**/fasttack-core-application.properties</exclude>
+                            <exclude>**/fasttack-crypto-server-application.properties</exclude>
+                            <exclude>**/fasttack-bank-client-application.properties</exclude>
+                            <exclude>**/fasttack-bank-pushprovisioning-application.properties</exclude>
+                            <exclude>**/fasttack-bank-server-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-client-application.properties</exclude>
+                            <exclude>**/fasttack-issuer-host-sv-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-client-application.properties</exclude>
+                            <exclude>**/fasttack-mdes-server-application.properties</exclude>
+                            <exclude>**/fasttack-sms-server-application.properties</exclude>
+                            <exclude>**/fasttack-visa-client-application.properties</exclude>
+                            <exclude>**/fasttack-vnts-server-application.properties</exclude>
+                            <exclude>**/fasttack-vtis-server-application.properties</exclude>
+                            <exclude>**/fasttack-admin-web-application.properties</exclude>
+                            <exclude>**/jboss-log4j.xml</exclude>
+                            <exclude>**/log4j2.xml</exclude>
+                        </excludes>
+                        <filtering>false</filtering>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/src/main/resources/prod</directory>
+                                            <includes>
+                                                <include>**/*.xml</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+            <modules>
+                <module>service-registry</module>
+                <module>common-core</module>
+                <module>core</module>
+                <module>crypto</module>
+                <module>jms</module>
+                <module>mdes</module>
+                <module>ear</module>
+                <module>logging</module>
+                <module>bank</module>
+                <module>issuer-host</module>
+                <module>sms</module>
+                <module>admin-web</module>
+            </modules>
+        </profile>
+
 
         <!-- -=| ? |=- -->
         <profile>

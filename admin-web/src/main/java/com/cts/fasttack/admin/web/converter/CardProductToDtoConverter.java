@@ -6,7 +6,7 @@ import com.cts.fasttack.common.core.converter.IdentifierToDtoConverter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CardProductToDtoConverter extends IdentifierToDtoConverter<String, CardProduct, CardProductDto> {
+public class CardProductToDtoConverter extends IdentifierToDtoConverter<Long, CardProduct, CardProductDto> {
     @Override
     protected CardProductDto generateTarget() {
         return new CardProductDto();
@@ -14,6 +14,7 @@ public class CardProductToDtoConverter extends IdentifierToDtoConverter<String, 
 
     @Override
     public void convert(CardProduct source, CardProductDto target) {
+        target.setId(source.getId());
         target.setProductConfigId(source.getProductConfigId());
         target.setBeginRange(source.getBeginRange().toString());
         target.setEndRange(source.getEndRange().toString());

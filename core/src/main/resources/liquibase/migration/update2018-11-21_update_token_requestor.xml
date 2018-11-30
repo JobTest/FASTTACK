@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="update2018-11-21_update_token_requestor.xml">
+
+    <changeSet id="update_table_token_requestor_postgresql" author="a.lazarchuk" runOnChange="true" context="postgresql">
+        <sql>
+            TRUNCATE TABLE TOKEN_REQUESTOR;
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010030273', 'APPLE_PAY');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010075001', 'GOOGLE_PAY');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010069887', 'GARMIN_PAY');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010077056', 'FITBIT_PAY');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010075338', 'VISA_CHECKOUT');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010075839', 'NETFLIX');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('50110030273', 'APPLE_PAY');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010075449', 'FACEBOOK');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010075196', 'MICROSOFT_PAY');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('40010043095', 'SAMSUNG_PAY');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('50139059239', 'SAMSUNG_PAY');
+            INSERT INTO TOKEN_REQUESTOR (tokenrequestor_id, tokenrequestor_title) VALUES('50120834693', 'GOOGLE_PAY');
+        </sql>
+    </changeSet>
+
+    <changeSet id="update_table_token_requestor_oracle" author="a.lazarchuk" runOnChange="true" context="oracle">
+        <sql>
+            TRUNCATE TABLE TOKEN_REQUESTOR;
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010030273', 'APPLE_PAY');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010075001', 'GOOGLE_PAY');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010069887', 'GARMIN_PAY');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010077056', 'FITBIT_PAY');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010075338', 'VISA_CHECKOUT');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010075839', 'NETFLIX');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('50110030273', 'APPLE_PAY');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010075449', 'FACEBOOK');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010075196', 'MICROSOFT_PAY');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('40010043095', 'SAMSUNG_PAY');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('50139059239', 'SAMSUNG_PAY');
+            INSERT INTO TOKEN_REQUESTOR (TOKENREQUESTOR_ID, TOKENREQUESTOR_TITLE) VALUES('50120834693', 'GOOGLE_PAY');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

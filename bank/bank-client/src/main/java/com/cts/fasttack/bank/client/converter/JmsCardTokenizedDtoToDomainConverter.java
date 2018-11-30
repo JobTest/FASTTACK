@@ -6,11 +6,15 @@ import com.cts.fasttack.common.core.converter.AbstractConverter;
 import com.cts.fasttack.jms.dto.JmsCardTokenizedRequestDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import java.text.SimpleDateFormat;
 
 @Component
 public class JmsCardTokenizedDtoToDomainConverter extends AbstractConverter<JmsCardTokenizedRequestDto, CardTokenized> {
 
     private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
+
+    @Value("${fasttack.changeDateFormat:yyyy-MM-dd'T'HH:mm:ssXXX}")
+    private String changeDateFormat;
 
     @Value("${spring.client.ws.cardTokenized.useDeviceName:false}")
     private Boolean useDeviceName;
@@ -22,6 +26,7 @@ public class JmsCardTokenizedDtoToDomainConverter extends AbstractConverter<JmsC
 
     @Override
     protected void lightConvert(JmsCardTokenizedRequestDto source, CardTokenized target) {
+        SimpleDateFormat sdf = new SimpleDateFormat(changeDateFormat);
 
         target.setRequestId(source.getRequestId());
         target.setConversationId(source.getConversationId());
@@ -35,7 +40,7 @@ public class JmsCardTokenizedDtoToDomainConverter extends AbstractConverter<JmsC
         target.setToken(source.getToken());
         target.setTokenExpiryMonth(source.getTokenExpiryMonth());
         target.setTokenExpiryYear(source.getTokenExpiryYear());
-        target.setTokenActivationDate(source.getTokenActivationDate().toString());
+        target.setTokenActivationDate(sdf.format(source.getTokenActivationDate()));
         target.setIps(source.getIps());
         target.setPanSource(source.getPanSource());
         target.setPaymentAppInstId(source.getPaymentAppInstId());

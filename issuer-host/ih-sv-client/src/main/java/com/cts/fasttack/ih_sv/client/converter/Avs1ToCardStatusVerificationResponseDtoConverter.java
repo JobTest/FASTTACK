@@ -25,23 +25,28 @@ public class Avs1ToCardStatusVerificationResponseDtoConverter
 		target.setTranCode(code);
 
 		switch (code) {
-		case "000":
-			target.setCvResult("M");
-			break;
-		case "001":
-			target.setCvResult("N");
-			target.setHostCode("000");
-			target.setTranCode("000");
-			break;
-		case "002":
-			target.setCvResult("P");
-			target.setHostCode("000");
-			target.setTranCode("000");
-			break;
-		default:
-			target.setCvResult("P");
-			target.setErrorCode(code);
-			break;
+			case "000":
+				target.setCvResult("M");
+				break;
+			case "001":
+				target.setCvResult("N");
+				target.setHostCode(code);
+				target.setTranCode("000");
+				break;
+			case "002":
+				target.setCvResult("P");
+				target.setHostCode(code);
+				target.setTranCode("000");
+				break;
+			case "005":
+				target.setCvResult("N");
+				target.setHostCode(code);
+				target.setTranCode("000");
+				break;
+			default:
+				target.setCvResult("P");
+				target.setErrorCode(code);
+				break;
 		}
 	}
 

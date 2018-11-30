@@ -6,7 +6,7 @@ import com.cts.fasttack.common.core.dao.GenericDaoImpl;
 import org.springframework.stereotype.Repository;
 
 @Repository("cardProductDao")
-public class CardProductDaoImpl extends GenericDaoImpl<String, CardProduct> implements CardProductDao {
+public class CardProductDaoImpl extends GenericDaoImpl<Long, CardProduct> implements CardProductDao {
 
     @Override
     public Class<CardProduct> getEntityClass() {

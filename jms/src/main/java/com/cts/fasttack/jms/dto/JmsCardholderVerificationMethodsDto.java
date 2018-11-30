@@ -25,6 +25,8 @@ public class JmsCardholderVerificationMethodsDto {
 
     private String deviceNumber;
 
+    private String serialNumber;
+
     private String deviceName;
 
     private String version;
@@ -139,6 +141,14 @@ public class JmsCardholderVerificationMethodsDto {
 
     public void setDeviceNumber(String deviceNumber) {
         this.deviceNumber = deviceNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getDeviceName() {

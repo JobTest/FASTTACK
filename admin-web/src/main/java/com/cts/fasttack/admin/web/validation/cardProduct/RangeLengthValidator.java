@@ -15,7 +15,7 @@ public class RangeLengthValidator implements ConstraintValidator<RangeLengthChec
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         return StringUtils.isNotBlank(value)
-                    && (value.length()==16 || value.length()==19)
+                    && (16 <= value.length() && value.length() <= 19)
                 ? true
                 : false;
     }

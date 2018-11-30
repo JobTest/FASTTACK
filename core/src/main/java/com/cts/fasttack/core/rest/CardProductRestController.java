@@ -6,6 +6,7 @@ import com.cts.fasttack.common.core.exception.ServiceException;
 import com.cts.fasttack.core.data.list.CardProductListFilter;
 import com.cts.fasttack.core.dto.CardProductDto;
 import com.cts.fasttack.core.service.CardProductService;
+import com.cts.fasttack.core.util.TokenHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,11 +29,14 @@ public class CardProductRestController {
     private CardProductService cardProductService;
 
     @Autowired
+    private TokenHelper tokenHelper;
+
+    @Autowired
     protected QueryResultToDtoConverter<CardProductDto> queryResultToDtoConverter;
 
-    @GetMapping("/isExists/{productConfigId}")
-    public Boolean isExistsCardProduct(@PathVariable String productConfigId) throws ServiceException {
-        return cardProductService.isExists(productConfigId);
+    @GetMapping("/isExists/{id}")
+    public Boolean isExistsCardProduct(@PathVariable Long id) throws ServiceException {
+        return cardProductService.isExists(id);
     }
 
     @PostMapping("/list")
@@ -41,10 +45,10 @@ public class CardProductRestController {
         return queryResultToDtoConverter.convert(cardProductService.listCardProducts(filter));
     }
 
-    @GetMapping("/{productConfigId}")
+    @GetMapping("/{id}")
     @ResponseBody
-    public CardProductDto getCardProduct(@PathVariable String productConfigId) throws ServiceException {
-        return cardProductService.getOptional(productConfigId)
+    public CardProductDto getCardProduct(@PathVariable Long id) throws ServiceException {
+        return cardProductService.getOptional(id)
                 .orElse(new CardProductDto());
     }
 
@@ -59,8 +63,14 @@ public class CardProductRestController {
         cardProductService.saveOrUpdate(cardProductDto);
     }
 
-    @DeleteMapping("/{productConfigId}")
-    public void deleteCardProduct(@PathVariable String productConfigId) throws ServiceException {
-        cardProductService.delete(productConfigId);
+    @DeleteMapping("/{id}")
+    public void deleteCardProduct(@PathVariable Long id) throws ServiceException {
+        cardProductService.delete(id);
+    }
+
+    @GetMapping("/productConfigId/{pan}")
+    @ResponseBody
+    public CardProductDto getProductConfigId(@PathVariable Long pan) throws ServiceException {
+        return tokenHelper.getProductConfigId(pan);
     }
 }

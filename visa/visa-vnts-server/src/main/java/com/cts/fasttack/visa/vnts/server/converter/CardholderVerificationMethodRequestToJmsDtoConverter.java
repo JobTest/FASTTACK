@@ -28,7 +28,6 @@ public class CardholderVerificationMethodRequestToJmsDtoConverter extends Abstra
             if (isInteger(source.getDeviceInfo().getDeviceType())) {
                 target.setDeviceType( DeviceType.valueOfType(Integer.parseInt(source.getDeviceInfo().getDeviceType())).name() );
             }
-            target.setDeviceName(source.getDeviceInfo().getDeviceName());
     	}
 
         target.setEncryptedData(source.getCardholderInfo().getEncryptedData());

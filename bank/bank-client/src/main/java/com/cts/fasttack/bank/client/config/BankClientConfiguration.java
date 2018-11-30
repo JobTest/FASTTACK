@@ -38,7 +38,7 @@ public class BankClientConfiguration {
 
     @Bean
     public ClientHttpRequestInterceptor loggingClientHttpRequestInterceptor() {
-        return new LoggingClientHttpRequestInterceptor("fasttack-bank-client-tracing");
+        return new LoggingClientHttpRequestInterceptor("com.cts.fasttack");
     }
 
 }

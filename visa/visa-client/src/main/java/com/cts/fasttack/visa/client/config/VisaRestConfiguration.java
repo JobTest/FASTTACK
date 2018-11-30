@@ -67,7 +67,7 @@ public class VisaRestConfiguration {
     public List<ClientHttpRequestInterceptor> visaClientHttpRequestInterceptors() {
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(2);
         interceptors.add(new BasicAuthorizationInterceptor(connectionParameters.getBasicAuthUsername(), connectionParameters.getBasicAuthPassword()));
-        interceptors.add(new LoggingClientHttpRequestInterceptor("fasttack-visa-client-tracing"));
+        interceptors.add(new LoggingClientHttpRequestInterceptor("com.cts.fasttack"));
         interceptors.add((request, body, execution) -> {
             request.getHeaders().setAccept(Collections.singletonList(MediaType.APPLICATION_XML));
             return execution.execute(request, body);

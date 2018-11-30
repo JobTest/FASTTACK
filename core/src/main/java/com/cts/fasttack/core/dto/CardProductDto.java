@@ -2,11 +2,12 @@ package com.cts.fasttack.core.dto;
 
 
 import com.cts.fasttack.common.core.dto.IdentifierDto;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-public class CardProductDto extends IdentifierDto<String> {
+public class CardProductDto extends IdentifierDto<Long> {
+
+    private Long id;
 
     private String productConfigId;
 
@@ -16,7 +17,17 @@ public class CardProductDto extends IdentifierDto<String> {
 
     @Override
     public boolean isNew() {
-        return StringUtils.isBlank(getProductConfigId());
+        return id == null || id < 1;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getProductConfigId() {
