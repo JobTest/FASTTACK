@@ -48,9 +48,11 @@ public class SendOtpWebServiceImpl extends WebServiceClient implements SendOtpWe
         wsRequest.setPanInternalId(request.getPanInternalId());
         wsRequest.setRequestId(OBJECT_FACTORY.createRequestId(request.getRequestId()));
         if (StringUtils.isNotBlank(request.getDeviceType())) wsRequest.setDeviceType(OBJECT_FACTORY.createDeviceType(request.getDeviceType()));
-        if (StringUtils.isNotBlank(request.getTokenRefId())) wsRequest.setDeviceType(OBJECT_FACTORY.createTokenRefId(request.getTokenRefId()));
+        if (StringUtils.isNotBlank(request.getTokenRefId())) wsRequest.setTokenRefId(OBJECT_FACTORY.createTokenRefId(request.getTokenRefId()));
         if (StringUtils.isNotBlank(request.getTokenRequestorId())) wsRequest.setTokenRequestorId(OBJECT_FACTORY.createTokenRequestorId(request.getTokenRequestorId()));
         if (StringUtils.isNotBlank(request.getLastFourOfPAN())) wsRequest.setLastFourOfPAN(OBJECT_FACTORY.createLastFourOfPAN(request.getLastFourOfPAN()));
+
+
 
         return executeWithResponse(() -> sendOtpResponseToDtoConverter.convert(
                         SendOTPResponse.class.cast(

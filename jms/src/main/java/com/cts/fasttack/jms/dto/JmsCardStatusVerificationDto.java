@@ -7,6 +7,8 @@ package com.cts.fasttack.jms.dto;
  */
 public class JmsCardStatusVerificationDto {
 
+    private String requestId;
+
     /**
      * Merchant unique ID
      */
@@ -41,6 +43,14 @@ public class JmsCardStatusVerificationDto {
      * CVV2/CVC code
      */
     private String cvNum;
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
 
     public String getMerchantId() {
         return merchantId;

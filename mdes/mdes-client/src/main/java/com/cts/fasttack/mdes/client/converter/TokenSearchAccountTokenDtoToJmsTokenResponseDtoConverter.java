@@ -10,6 +10,7 @@ import com.cts.fasttack.jms.dto.TokenSearchAccountTokenDto;
  * {@link TokenSearchAccountTokenDto} to {@link JmsTokenResponseDto} converter.
  *
  * @author v.semerkov
+ * @author d.ishchenko
  */
 @Component
 public class TokenSearchAccountTokenDtoToJmsTokenResponseDtoConverter extends AbstractConverter<TokenSearchAccountTokenDto, JmsTokenResponseDto> {
@@ -28,7 +29,7 @@ public class TokenSearchAccountTokenDtoToJmsTokenResponseDtoConverter extends Ab
         target.setTokenSuffix(source.getTokenSuffix());
         target.setTokenExpirationDate(source.getExpirationDate());
         target.setCorrelationId(source.getCorrelationId());
-        target.setCurrentStatusCode(source.getCurrentStatusCode());
+        target.setCurrentStatusCode(toVtsStyleStatusCode(source.getCurrentStatusCode()));
         target.setCurrentStatusDescription(source.getCurrentStatusDescription());
         target.setCurrentStatusDateTime(source.getCurrentStatusDateTime());
         target.setDigitizationRequestDateTime(source.getDigitizationRequestDateTime());
@@ -39,7 +40,25 @@ public class TokenSearchAccountTokenDtoToJmsTokenResponseDtoConverter extends Ab
         target.setTokenActivatedDateTime(source.getTokenActivatedDateTime());
         target.setTokenRequestorId(source.getTokenRequestorId());
         target.setTokenRequestorName(source.getTokenRequestorName());
-        target.setTokenType(source.getTokenType());
+        target.setTokenType(toVtsStyleTokenType(source.getTokenType()));
         target.setDevice(tokenSearchAccountTokenDeviceDtoToJmsDeviceResponseDtoConverter.convert(source.getDevice()));
+    }
+
+    private String toVtsStyleStatusCode(String statusCode) {
+        if ("U".equals(statusCode)) {
+            return "I";
+        } else {
+            return statusCode;
+        }
+    }
+
+    private String toVtsStyleTokenType(String tokenType) {
+        if ("C".equals(tokenType)) {
+            return "H";
+        } else if ("F".equals(tokenType)) {
+            return "C";
+        } else {
+            return tokenType;
+        }
     }
 }

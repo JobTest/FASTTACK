@@ -24,15 +24,20 @@ public class ReasonCodeValidator implements ConstraintValidator<ValidateReasonCo
         if("V".equals(value.getIps())) {
             return true;
         }
-        switch (TokenAction.getInstance(value.getAction())) {
-            case Activate:
-                return ActivateReasonCode.getInstance(value.getReasonCode()) != null;
-            case Resume:
-                return ResumeReasonCode.getInstance(value.getReasonCode()) != null;
-            case Suspend:
-                return SuspendReasonCode.getInstance(value.getReasonCode()) != null;
-            case Deactivate:
-                return DeleteReasonCode.getInstance(value.getReasonCode()) != null;
+        
+        TokenAction tokenAction = TokenAction.getInstance(value.getAction());
+
+        if (tokenAction != null) {
+            switch (tokenAction) {
+                case Activate:
+                    return ActivateReasonCode.getInstance(value.getReasonCode()) != null;
+                case Resume:
+                    return ResumeReasonCode.getInstance(value.getReasonCode()) != null;
+                case Suspend:
+                    return SuspendReasonCode.getInstance(value.getReasonCode()) != null;
+                case Deactivate:
+                    return DeleteReasonCode.getInstance(value.getReasonCode()) != null;
+            }
         }
         return false;
     }

@@ -118,6 +118,17 @@
         });
 
 
+        SecurityModels.Card = Backbone.Model.extend({
+            url: AppCommon.baseUrl + "card/item.json",
+            sync: function(method, model, options) {
+                if (model.attributes.tokenRefId != undefined && model.attributes.tokenRequestorId != undefined && ['read', 'delete'].indexOf(method.toLowerCase()) != -1) {
+                    options.url = this.url + "?tokenRefId=" + model.attributes.tokenRefId + "&tokenRequestorId=" + model.attributes.tokenRequestorId;
+                }
+                return Backbone.sync.apply(this, arguments);
+            }
+        });
+
+
         SecurityModels.MessageHistory = Backbone.DeepModel.extend({
             url: AppCommon.baseUrl + "messageHistory/item.json",
             sync: function(method, model, options) {

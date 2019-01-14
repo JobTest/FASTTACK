@@ -102,7 +102,9 @@ public class TokenController {
     @PreAuthorize("@aclToken.canView and @aclToken.isCanModify(#request.tokenEventStatus)")
     @PostMapping("/lifecycle.json")
     @ResponseBody
-    public TokenLifecycleJmsResponse tokenLifecycle(@Validated @RequestBody TokenChangeStatusDto request) throws ServiceException {
+    public TokenLifecycleJmsResponse tokenLifecycle(@Validated @RequestBody TokenChangeStatusDto request, @SessionAttribute("filter") TokenListFilter filter) throws ServiceException {
+        request.setPan(filter.getPan());
+
         accessLogService.create().item(ItemType.TOKEN_INFO).id(request.getTokenRefId()).type(AccessType.UPDATE_TOKEN_STATUS).save();
         return tokenService.tokenLifecycle(request);
     }

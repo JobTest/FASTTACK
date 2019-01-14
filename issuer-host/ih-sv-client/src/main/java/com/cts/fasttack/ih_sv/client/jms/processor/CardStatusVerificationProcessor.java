@@ -64,6 +64,7 @@ public class CardStatusVerificationProcessor
 			String encryptedData = cryptoResponse.getText();
 
 			Avs1Request avs1Request = encryptedCardInfoToAvs1Converter.convert(encryptedData, encryptionKeyIndex);
+			avs1Request.setRequestId(request.getCardStatusVerificationDto().getRequestId());
 
 			Avs1Response avs1Response = avs1Service.avs1(avs1Request, StringUtil.displayPanOrToken(cardInfo.getPan()));
 

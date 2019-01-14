@@ -74,10 +74,14 @@ The ActiveMQ message broker should be started.
 Settings example in fasttack-core-application.properties file:
 ```shell
 spring.activemq.broker-url=tcp://localhost:61616 #URL of the ActiveMQ broker.
+jms.activemq.broker-url=tcp://localhost:61616 #URL of the external ActiveMQ broker.
+jms.activemq.broker-url=vm://localhost?broker.persistent=false&broker.useJmx=false #URL of the embedded ActiveMQ broker.
 spring.activemq.user=admin # Login user of the broker.
 spring.activemq.password=admin # Login password of the broker.
 spring.activemq.pool.enabled=true Whether a PooledConnectionFactory should be created instead of a regular ConnectionFactory.
-spring.activemq.pool.max-connections=8 # Maximum number of pooled connections.
+spring.activemq.pool.max-connections=200 # Maximum number of pooled all connections.
+spring.activemq.pool.maximum-active-session-per-connection=50 # Maximum number of pooled active-session connection.
+spring.activemq.pool.max-sessions-per-connection=50 # Maximum number of pooled session connection.
 ```
 
 ####2. JBoss EAP 7

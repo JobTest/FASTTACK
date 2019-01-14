@@ -28,8 +28,8 @@ public class TokenDetailsToJmsDtoConverter extends AbstractConverter<TokenDetail
         target.setDeactivationDate(source.getDeactivationDate());
         target.setDeviceInformation(deviceInfoToJmsDtoConverter.convert(source.getDeviceInformation()));
         target.setEntityOfLastAction(source.getEntityOfLastAction());
-        target.setLastFourOfPan(source.getLastFourOfPan());
-        target.setLastFourOfPreviousPan(source.getLastFourOfPreviousPan());
+        target.setLastFourOfPan(source.getLastFourOfPAN());
+        target.setLastFourOfPreviousPan(source.getLastFourOfPreviousPAN());
         target.setLastTokenStatusUpdatedTime(source.getLastTokenStatusUpdatedTime());
         target.setOperatorID(source.getOperatorID());
         target.setOtpCodeExpiration(source.getOtpCodeExpiration());

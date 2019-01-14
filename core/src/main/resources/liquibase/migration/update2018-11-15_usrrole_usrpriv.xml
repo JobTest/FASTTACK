@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+        logicalFilePath="update2018-11-15_usrrole_usrpriv.xml">
+
+    <changeSet id="card_create_view_privilege" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'CARD_VIEW'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('CARD_VIEW', 'Просмотр информации о карте');
+        </sql>
+    </changeSet>
+
+    <changeSet id="card_create_update_privilege" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM USRPRIV WHERE PRIVCODE = 'CARD_UPDATE'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRPRIV (PRIVCODE,DESCR) VALUES('CARD_UPDATE', 'Перевыпуск карты');
+        </sql>
+    </changeSet>
+
+    <changeSet id="assign_card_privilege" author="a.lazarchuk" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">SELECT COUNT(*) FROM USRROLE WHERE ROLECODE = 'CTS_ADMIN'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'CARD_VIEW');
+            INSERT INTO USRROLE_USRPRIV (ROLECODE, PRIVCODE) VALUES('CTS_ADMIN', 'CARD_UPDATE');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

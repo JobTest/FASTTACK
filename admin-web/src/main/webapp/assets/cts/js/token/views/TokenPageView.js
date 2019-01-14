@@ -38,6 +38,7 @@ function getTokenRequestorId(tokenRequestorId, tokenRequestorTitle) {
     function ($, SimpleViewWithModel, InputAwareViewWithValidation, SimpleModalPanelView, Common, SecurityModels, tokenViewTemplate, tokenLifecycleTemplate, tokenCommentTemplate, tokenUpdateTemplate, Grid, CommonAjax) {
 
         var tokenId = Common.Url.parse();
+        var pan = "";
 
         var TokenLifecycleInputsView = InputAwareViewWithValidation.extend({
             template: tokenLifecycleTemplate,
@@ -63,6 +64,7 @@ function getTokenRequestorId(tokenRequestorId, tokenRequestorTitle) {
                 if (this.validateInputs()) {
                     this.model.attributes.tokenReason = data;
                     this.model.attributes.ips = ips;
+                    if (this.model.attributes.pan==null) this.model.attributes.pan = pan;
                     return this.model.save(null, {async: false});
                 }
                 return false;
@@ -333,8 +335,11 @@ function getTokenRequestorId(tokenRequestorId, tokenRequestorTitle) {
                     );
                     Common.ajax.async("token/item.json?tokenRefId=" + tokenId.tokenRefId + "&tokenRequestorId=" + tokenId.tokenRequestorId,
                         function (data) {
-                            el.find("#pan").val(data.pan);
+                            pan = data.pan;
+                            el.find("#pan").val(pan);
                             if (data.ips=="V") {
+                                el.find("#pan").attr("readonly", "readonly");
+                            } else if (data.ips=="M" && data.pan!=null) {
                                 el.find("#pan").attr("readonly", "readonly");
                             }
 

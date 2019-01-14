@@ -1,6 +1,7 @@
 package com.cts.fasttack.core.jms.processor;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.camel.Exchange;
@@ -67,6 +68,12 @@ public class TokenLifecycleProcessor extends AbstractCamelProcessor<TokenLifecyc
                 response.setErrorCode(responseDto.getErrorCode());
                 response.setMessage(messageSourceService.getMessage(responseDto.getErrorCode()));
             } else {
+                if (tokenLifecycleIpsJmsMessage.getJmsTokenActivateIpsDto().getTokenRefID().contains("NotYetAssigned")) {
+                    tokenLifecycleIpsJmsMessage.getJmsTokenActivateIpsDto().setTokenRefID(null);
+                    tokenLifecycleIpsJmsMessage.getJmsTokenActivateIpsDto().setPaymentAppInstanceId(tokenInfoDto.getClientWalletAccountId());
+                } else {
+                    tokenLifecycleIpsJmsMessage.getJmsTokenActivateIpsDto().setPan(null);
+                }
                 integrationBus.inOut(() -> "MDES", "tokenLifecycle", tokenLifecycleIpsJmsMessage, TokenLifecycleMdesJmsResponseDto.class);
                 response.setCodeStatus("00");
             }
@@ -74,6 +81,7 @@ public class TokenLifecycleProcessor extends AbstractCamelProcessor<TokenLifecyc
                 TokenStatus tokenStatus = TokenStatus.valueOfFirstWord(jmsTokenLifecycleDto.getStatus());
                 tokenStatus = tokenStatus.isResume() ? TokenStatus.A : tokenStatus;
                 tokenInfoDto.setTokenStatus(tokenStatus);
+                tokenInfoDto.setTokenStatusUpdate(new Date());
                 tokenInfoService.save(tokenInfoDto);
                 tokenHistoryService.save(jmsTokenLifecycleDtoToTokenHistoryConverter.convert(jmsTokenLifecycleDto, String.valueOf(request.getMessageHistoryId()), tokenLifecycleIpsJmsMessage.getJmsTokenActivateIpsDto(), response.getCodeStatus(), tokenStatus, tokenInfoDto.getTokenExpdate()));
             }

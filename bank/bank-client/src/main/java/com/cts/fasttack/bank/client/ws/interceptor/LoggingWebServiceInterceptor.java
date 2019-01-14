@@ -42,9 +42,9 @@ public class LoggingWebServiceInterceptor extends SoapEnvelopeLoggingInterceptor
     @Override
     public boolean handleRequest(MessageContext messageContext) throws WebServiceClientException {
         if(log.isDebugEnabled() || log.isTraceEnabled()){
-            String id = UUID.randomUUID().toString();
-            messageContext.setProperty(LoggingMessage.ID_KEY, id);
             SaajSoapMessage message = (SaajSoapMessage) messageContext.getRequest();
+            String id = getId(StringUtil.getElementsByTagName(getMessageSource(message.getPayloadSource()), "ns3:requestId"));
+            messageContext.setProperty(LoggingMessage.ID_KEY, id);
             Iterator<MimeHeader> headers = ObjectUtil.uncheckedCast(message.getSaajMessage().getMimeHeaders().getAllHeaders());
             Iterable<MimeHeader> headersIterable = () -> headers;
             logPayload(message, new LoggingMessage(LoggingMessage.REQUEST_MESSAGE, id)
@@ -93,7 +93,7 @@ public class LoggingWebServiceInterceptor extends SoapEnvelopeLoggingInterceptor
                 log.debug(loggingMessage.resetPayload(StringUtil.sensitiveFieldsFromXmlHiding(messageSource)));
             }
             if(log.isTraceEnabled()){
-                log.trace(loggingMessage.resetPayload(messageSource));
+                if (!messageSource.contains("password")) log.trace(loggingMessage.resetPayload(messageSource));
             }
         }
         long end = System.currentTimeMillis();
@@ -118,5 +118,9 @@ public class LoggingWebServiceInterceptor extends SoapEnvelopeLoggingInterceptor
             }
         }
         return null;
+    }
+
+    private String getId(String id) {
+        return id!=null ? id : UUID.randomUUID().toString();
     }
 }

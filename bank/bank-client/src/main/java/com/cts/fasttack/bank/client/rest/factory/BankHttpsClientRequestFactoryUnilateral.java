@@ -38,6 +38,7 @@ public class BankHttpsClientRequestFactoryUnilateral extends SimpleClientHttpReq
 
         if (tlsEnabled) {
             Assert.notNull(jksTrustStore, "TrustStore file must be set");
+            Assert.isTrue(jksTrustStore.exists(), "Not found a TrustStore file " + jksTrustStore);
 
             try {
                 socketFactory = SSLContexts.custom().loadTrustMaterial(jksTrustStore.getFile())

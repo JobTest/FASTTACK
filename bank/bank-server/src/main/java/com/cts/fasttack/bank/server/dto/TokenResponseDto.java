@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * Token info response DTO.
  *
  * @author v.semerkov
+ * @author d.ishchenko
  */
 public class TokenResponseDto {
 
@@ -15,11 +16,13 @@ public class TokenResponseDto {
 
     private String panExpirationDate;
 
-    private String tokenUniqueReference;
+    private String tokenRefId;
 
     private String tokenSuffix;
 
-    private String tokenExpirationDate;
+    private String tokenExpiryMonth;
+
+    private String tokenExpiryYear;
 
     private String correlationId;
 
@@ -50,6 +53,12 @@ public class TokenResponseDto {
 
     private String tokenType;
 
+    private String panInternalId;
+
+    private String panInternalGUID;
+
+    private String ips;
+
     private DeviceResponseDto device;
 
     public String getAccountPanSuffix() {
@@ -68,12 +77,12 @@ public class TokenResponseDto {
         this.panExpirationDate = panExpirationDate;
     }
 
-    public String getTokenUniqueReference() {
-        return tokenUniqueReference;
+    public String getTokenRefId() {
+        return tokenRefId;
     }
 
-    public void setTokenUniqueReference(String tokenUniqueReference) {
-        this.tokenUniqueReference = tokenUniqueReference;
+    public void setTokenRefId(String tokenRefId) {
+        this.tokenRefId = tokenRefId;
     }
 
     public String getTokenSuffix() {
@@ -84,12 +93,20 @@ public class TokenResponseDto {
         this.tokenSuffix = tokenSuffix;
     }
 
-    public String getTokenExpirationDate() {
-        return tokenExpirationDate;
+    public String getTokenExpiryMonth() {
+        return tokenExpiryMonth;
     }
 
-    public void setTokenExpirationDate(String tokenExpirationDate) {
-        this.tokenExpirationDate = tokenExpirationDate;
+    public void setTokenExpiryMonth(String tokenExpiryMonth) {
+        this.tokenExpiryMonth = tokenExpiryMonth;
+    }
+
+    public String getTokenExpiryYear() {
+        return tokenExpiryYear;
+    }
+
+    public void setTokenExpiryYear(String tokenExpiryYear) {
+        this.tokenExpiryYear = tokenExpiryYear;
     }
 
     public String getCorrelationId() {
@@ -194,6 +211,30 @@ public class TokenResponseDto {
 
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
+    }
+
+    public String getPanInternalId() {
+        return panInternalId;
+    }
+
+    public void setPanInternalId(String panInternalId) {
+        this.panInternalId = panInternalId;
+    }
+
+    public String getPanInternalGUID() {
+        return panInternalGUID;
+    }
+
+    public void setPanInternalGUID(String panInternalGUID) {
+        this.panInternalGUID = panInternalGUID;
+    }
+
+    public String getIps() {
+        return ips;
+    }
+
+    public void setIps(String ips) {
+        this.ips = ips;
     }
 
     public DeviceResponseDto getDevice() {

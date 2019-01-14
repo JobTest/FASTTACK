@@ -12,6 +12,7 @@ import com.cts.fasttack.logging.interceptor.MessageHistoryOperation;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Path.Node;
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,17 @@ public class CardDataUpdateController extends AbstractBankRestController {
     public CardDataUpdateResponseDto cardDataUpdate(@RequestBody(required = false) CardDataUpdateRequestDto request) throws ServiceException {
         return processRequest(request, new CardDataUpdateResponseDto(), response -> {
             Set<ConstraintViolation<CardDataUpdateRequestDto>> violations = validator.validate(request);
+
             if (!violations.isEmpty()) {
-                setResponseErrorAttributes(response, violations.iterator().next().getMessage(), BankErrorCodes.INVALID_INPUT.getCode());
+                ConstraintViolation<CardDataUpdateRequestDto> violation = violations.iterator().next();
+
+                String fieldName = null;
+
+                for (Node node : violation.getPropertyPath()) {
+                    fieldName = node.getName();
+                }
+
+                setResponseErrorAttributes(response, violation.getMessage(), BankErrorCodes.INVALID_INPUT.getCode(), fieldName);
             } else {
                 JmsCardDataUpdateResponseDto jmsCardDataUpdateResponseDto = cardDataUpdateService.cardDataUpdate(request, response);
 

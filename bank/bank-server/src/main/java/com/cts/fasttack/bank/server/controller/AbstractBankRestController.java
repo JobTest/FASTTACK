@@ -7,12 +7,17 @@ import com.cts.fasttack.common.core.exception.CryptographyException;
 import com.cts.fasttack.common.core.exception.ServiceException;
 import com.cts.fasttack.common.core.exception.StandardErrorCodes;
 import com.cts.fasttack.common.core.messages.MessageSourceService;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author a.lipavets
  */
 public class AbstractBankRestController {
+
+    protected final Logger log = LogManager.getLogger(getClass());
 
     @Autowired
     private MessageSourceService messageSourceService;
@@ -36,6 +41,7 @@ public class AbstractBankRestController {
             return response;
         } catch (Exception e) {
             setResponseErrorAttributes(response, StandardErrorCodes.INTERNAL_SERVICE_FAILURE.name(), BankErrorCodes.INTERNAL_ERROR.getCode());
+            log.error("Exception while processing message with requestId = " + request.getRequestId(), e);
         }
         response.setRequestId(request.getRequestId());
         return response;

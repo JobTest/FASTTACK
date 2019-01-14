@@ -117,7 +117,7 @@ public class UpdateTokenProcessor extends AbstractCamelProcessor<UpdateTokenJmsM
                 }
             }
 
-            return null;
+            throw new ServiceException(StandardErrorCodes.NO_DATA_FOUND);
         });
     }
 
@@ -126,8 +126,12 @@ public class UpdateTokenProcessor extends AbstractCamelProcessor<UpdateTokenJmsM
         JmsUpdateTokenDto updateTokenDto = request.getUpdateTokenDto();
         if (tokenInfoDto != null) {
             JmsGetCardInfoShortResponseDto bankResponseByPan = getBankResponseByPan(request.getUpdateTokenDto().getNewPan());
-            updateTokenDto.setNewPanInternalId(bankResponseByPan.getCardID());
-            updateTokenDto.setNewPanInternalGuid(bankResponseByPan.getCardGUID());
+            if (bankResponseByPan.getCardID() != null) {
+                updateTokenDto.setNewPanInternalId(bankResponseByPan.getCardID());
+            }
+            if (bankResponseByPan.getCardGUID() != null) {
+                updateTokenDto.setNewPanInternalGuid(bankResponseByPan.getCardGUID());
+            }
 
             UpdateTokenJmsResponse response = new UpdateTokenJmsResponse();
             if (tokenInfoDto.getIps().isVisa()) {
@@ -135,11 +139,11 @@ public class UpdateTokenProcessor extends AbstractCamelProcessor<UpdateTokenJmsM
 
                 if (StringUtils.isNotBlank(updateTokenDto.getNewPan())) {
 
-                    updateResult = integrationBus.inOut(() -> "VTS", "tokenLifecycle", createUpdatePan(request, properties, tokenInfoDto), TokenLifecycleVtsJmsResponseDto.class);
+                    updateResult = integrationBus.inOut(() -> "VTS", "tokenLifecycle", createUpdatePan(request, properties), TokenLifecycleVtsJmsResponseDto.class);
 
                 } else if (StringUtils.isNotBlank(updateTokenDto.getNewExpDate())) {
 
-                    updateResult = integrationBus.inOut(() -> "VTS", "tokenLifecycle", createUpdateExpDate(request, properties, tokenInfoDto), TokenLifecycleVtsJmsResponseDto.class);
+                    updateResult = integrationBus.inOut(() -> "VTS", "tokenLifecycle", createUpdateExpDate(request, properties), TokenLifecycleVtsJmsResponseDto.class);
 
                 } else {
                     response.setCodeStatus("01");
@@ -261,13 +265,13 @@ public class UpdateTokenProcessor extends AbstractCamelProcessor<UpdateTokenJmsM
         return cardHolderInfoRequestDto;
     }
 
-    private TokenLifecycleIpsJmsMessage createUpdatePan(UpdateTokenJmsMessage request, Map<String, String> properties, TokenInfoDto tokenInfoDto) {
-        return updateTokenJmsMessageToTokenLifecycleIpsConverter.convert(request, properties, tokenInfoDto, createCardHolderInfo(request.getUpdateTokenDto(), TokenStatus.U_P), TokenStatus.U_P);
+    private TokenLifecycleIpsJmsMessage createUpdatePan(UpdateTokenJmsMessage request, Map<String, String> properties) {
+        return updateTokenJmsMessageToTokenLifecycleIpsConverter.convert(request, properties, createCardHolderInfo(request.getUpdateTokenDto(), TokenStatus.U_P), TokenStatus.U_P);
     }
 
 
-    private TokenLifecycleIpsJmsMessage createUpdateExpDate(UpdateTokenJmsMessage request, Map<String, String> properties, TokenInfoDto tokenInfoDto) {
-        return updateTokenJmsMessageToTokenLifecycleIpsConverter.convert(request, properties, tokenInfoDto, createCardHolderInfo(request.getUpdateTokenDto(), TokenStatus.U_EX), TokenStatus.U_EX);
+    private TokenLifecycleIpsJmsMessage createUpdateExpDate(UpdateTokenJmsMessage request, Map<String, String> properties) {
+        return updateTokenJmsMessageToTokenLifecycleIpsConverter.convert(request, properties, createCardHolderInfo(request.getUpdateTokenDto(), TokenStatus.U_EX), TokenStatus.U_EX);
     }
 
 

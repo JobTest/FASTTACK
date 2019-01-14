@@ -29,6 +29,19 @@ import com.cts.fasttack.core.dto.TokenDto;
 import com.cts.fasttack.core.dto.CardholderVerificationMethodDto;
 import com.cts.fasttack.jms.dto.JmsSendNotificationToCustomerResponseDto;
 import com.cts.fasttack.jms.dto.SendNotificationToCustomerJmsMessage;
+import com.cts.fasttack.jms.dto.NotifyServiceJmsMessage;
+import com.cts.fasttack.jms.dto.CommonMdesJmsResponseDto;
+import com.cts.fasttack.jms.dto.JmsNotifyServiceDto;
+import com.cts.fasttack.jms.dto.JmsCardTokenizedResponseDto;
+import com.cts.fasttack.jms.dto.JmsCardTokenizedRequestDto;
+import com.cts.fasttack.jms.dto.CardTokenizedJmsMessage;
+import com.cts.fasttack.jms.dto.JmsSendNotificationToCustomerRequestDto;
+import com.cts.fasttack.jms.dto.JmsGetCustomerIDMessageDto;
+import com.cts.fasttack.jms.dto.GetCustomerIDJmsMessage;
+import com.cts.fasttack.jms.dto.JmsGetCustomerIDResponseDto;
+import com.cts.fasttack.jms.dto.JmsGetCardInfoShortMessageDto;
+import com.cts.fasttack.jms.dto.GetCardInfoShortJmsMessage;
+import com.cts.fasttack.jms.dto.JmsGetCardInfoShortResponseDto;
 import com.cts.fasttack.core.service.BinSetupService;
 import com.cts.fasttack.core.service.CardholderVerificationMethodService;
 import com.cts.fasttack.core.service.DCProgressService;
@@ -39,18 +52,6 @@ import com.cts.fasttack.core.util.TokenHelper;
 import com.cts.fasttack.crypto.client.dto.CryptoResponseDto;
 import com.cts.fasttack.crypto.client.rest.MdesCryptoRestClient;
 import com.cts.fasttack.jms.data.HeadersJmsMessage;
-import com.cts.fasttack.jms.dto.CardTokenizedJmsMessage;
-import com.cts.fasttack.jms.dto.CommonMdesJmsResponseDto;
-import com.cts.fasttack.jms.dto.GetCardInfoShortJmsMessage;
-import com.cts.fasttack.jms.dto.GetCustomerIDJmsMessage;
-import com.cts.fasttack.jms.dto.JmsGetCardInfoShortMessageDto;
-import com.cts.fasttack.jms.dto.JmsGetCardInfoShortResponseDto;
-import com.cts.fasttack.jms.dto.JmsGetCustomerIDMessageDto;
-import com.cts.fasttack.jms.dto.JmsGetCustomerIDResponseDto;
-import com.cts.fasttack.jms.dto.JmsNotifyServiceDto;
-import com.cts.fasttack.jms.dto.JmsCardTokenizedRequestDto;
-import com.cts.fasttack.jms.dto.JmsCardTokenizedResponseDto;
-import com.cts.fasttack.jms.dto.NotifyServiceJmsMessage;
 import com.cts.fasttack.jms.processor.AbstractCamelProcessor;
 import com.cts.fasttack.jms.support.IntegrationBus;
 import com.cts.fasttack.logging.dto.AlertLogDto;
@@ -173,10 +174,10 @@ public class NotifyServiceActivatedProcessor extends AbstractCamelProcessor<Noti
                 if (tokenHelper.isSendOnlyForRequestors(serviceDto.getTokenRequestorId())) {
                     if (currentTokenInfoDto != null && tokenHelper.isSendNotificationToCustomer(currentTokenInfoDto, tokenInfoDto, ctResponse.getCustomerPhone())) { //todo master...
                         String fillCustomerPhone = fillCustomerPhone(currentTokenInfoDto, ctResponse.getCustomerPhone());
-                        publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone);
+                        publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone, request.getNotifyServiceDto().getRequestId());
                     } else if (tokenHelper.isSendNotificationToCustomer(tokenInfoDto, ctResponse.getCustomerPhone())) {
                         String fillCustomerPhone = ctResponse.getCustomerPhone();
-                        publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone);
+                        publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone, request.getNotifyServiceDto().getRequestId());
                     }
                 }
                 saveTokenInfo(tokenInfoDto, ctResponse.getCustomerId(), ctResponse.getPanInternalId(), ctResponse.getPanInternalGUID(), ctResponse.getCustomerPhone(), serviceDto.getCorrelationId());
@@ -187,10 +188,10 @@ public class NotifyServiceActivatedProcessor extends AbstractCamelProcessor<Noti
                     try {
                         if (tokenHelper.isSendNotificationToCustomer(currentTokenInfoDto, tokenInfoDto, currentTokenInfoDto.getCustomerPhone())) { //todo master...
                             String fillCustomerPhone = fillCustomerPhone(currentTokenInfoDto, currentTokenInfoDto.getCustomerPhone());
-                            publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone);
+                            publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone, request.getNotifyServiceDto().getRequestId());
                         } else if (tokenHelper.isSendNotificationToCustomer(tokenInfoDto, currentTokenInfoDto.getCustomerPhone())) {
                             String fillCustomerPhone = currentTokenInfoDto.getCustomerPhone();
-                            publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone);
+                            publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone, request.getNotifyServiceDto().getRequestId());
                         }
                     } catch (ServiceException e) {
                         log.error("Error while async process getCardInfoShort and customerIdentifier", e);
@@ -206,10 +207,10 @@ public class NotifyServiceActivatedProcessor extends AbstractCamelProcessor<Noti
                             try {
                                 if (tokenHelper.isSendNotificationToCustomer(currentTokenInfoDto, tokenInfoDto, currentTokenInfoDto.getCustomerPhone())) { //todo master...
                                     String fillCustomerPhone = fillCustomerPhone(currentTokenInfoDto, currentTokenInfoDto.getCustomerPhone());
-                                    publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone);
+                                    publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone, request.getNotifyServiceDto().getRequestId());
                                 } else if (tokenHelper.isSendNotificationToCustomer(tokenInfoDto, currentTokenInfoDto.getCustomerPhone())) {
                                     String fillCustomerPhone = currentTokenInfoDto.getCustomerPhone();
-                                    publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone);
+                                    publishSendNotificationToCustomer(tokenInfoDto, fillCustomerPhone, request.getNotifyServiceDto().getRequestId());
                                 }
                             } catch (ServiceException e) {
                                 log.error("Error while async process getCardInfoShort and customerIdentifier", e);
@@ -329,9 +330,12 @@ public class NotifyServiceActivatedProcessor extends AbstractCamelProcessor<Noti
     }
 
 
-    private JmsSendNotificationToCustomerResponseDto publishSendNotificationToCustomer(TokenInfoDto tokenInfoDto, String customerPhone) throws ServiceException {
+    private JmsSendNotificationToCustomerResponseDto publishSendNotificationToCustomer(TokenInfoDto tokenInfoDto, String customerPhone, String requestId) throws ServiceException {
+        JmsSendNotificationToCustomerRequestDto jmsSendCreateNotificationToCustomerRequestDto = tokenHelper.createJmsSendCreateNotificationToCustomerRequestDto(tokenInfoDto, NOTIFICATION_TYPE, customerPhone);
+        jmsSendCreateNotificationToCustomerRequestDto.setRequestId(requestId);
+
         HeadersJmsMessage jmsMessage = new SendNotificationToCustomerJmsMessage()
-                .jmsSendNotificationToCustomerRequestDto(tokenHelper.createJmsSendCreateNotificationToCustomerRequestDto(tokenInfoDto, NOTIFICATION_TYPE, customerPhone))
+                .jmsSendNotificationToCustomerRequestDto(jmsSendCreateNotificationToCustomerRequestDto)
                 .originator(callingContext.getOriginator());
 
         return integrationBus.inOut(() -> "BANK", "sendNotificationToCustomer", jmsMessage, JmsSendNotificationToCustomerResponseDto.class);

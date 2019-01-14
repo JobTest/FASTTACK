@@ -8,6 +8,8 @@ import com.cts.fasttack.common.core.dict.InternationalPaymentSystem;
 import com.cts.fasttack.core.dict.TokenStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -40,6 +42,7 @@ import com.cts.fasttack.jms.support.IntegrationBus;
  * @author a.lipavets
  */
 @Service("tokenInfoService")
+@Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class TokenInfoServiceImpl extends GenericServiceImpl<TokenInfoId, TokenInfoDto, TokenInfo, TokenInfoDao> implements TokenInfoService {
 
     @Autowired

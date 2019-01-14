@@ -3,9 +3,12 @@ package com.cts.fasttack.core.dto;
 
 import com.cts.fasttack.common.core.dto.IdentifierDto;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
-public class CardProductDto extends IdentifierDto<Long> {
+public class CardProductDto extends IdentifierDto<Long> implements Comparable<CardProductDto> {
 
     private Long id;
 
@@ -14,6 +17,8 @@ public class CardProductDto extends IdentifierDto<Long> {
     private Long beginRange;
 
     private Long endRange;
+
+    private Long length;
 
     @Override
     public boolean isNew() {
@@ -54,6 +59,14 @@ public class CardProductDto extends IdentifierDto<Long> {
         this.endRange = endRange;
     }
 
+    public Long getLength() {
+        return length;
+    }
+
+    public void setLength(Long length) {
+        this.length = length;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,5 +80,41 @@ public class CardProductDto extends IdentifierDto<Long> {
     public int hashCode() {
 
         return Objects.hash(beginRange, endRange);
+    }
+
+    @Override
+    public int compareTo(CardProductDto that) {
+        length = endRange - beginRange;
+
+        if ((id) > (that.id))
+            return 1;
+        if ((id) < (that.id))
+            return -1;
+        return 0;
+    }
+
+    public static void sortByLengthRange(List<CardProductDto> cardProductDtos) {
+        Collections.sort(cardProductDtos, new Comparator<CardProductDto>() {
+            @Override
+            public int compare(CardProductDto o1, CardProductDto o2) {
+                o1.setLength(o1.getEndRange()-o1.getBeginRange());
+                o2.setLength(o2.getEndRange()-o2.getBeginRange());
+
+                if ((o1.getLength()) > (o2.getLength()))
+                    return 1;
+                if ((o1.getLength()) < (o2.getLength()))
+                    return -1;
+                return 0;
+            }});
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "Range='" + productConfigId + '\'' +
+                ", length=" + length +
+                ", begin=" + beginRange +
+                ", end=" + endRange +
+                '}';
     }
 }

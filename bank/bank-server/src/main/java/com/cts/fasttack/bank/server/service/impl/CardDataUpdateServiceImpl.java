@@ -11,9 +11,12 @@ import com.cts.fasttack.jms.dto.TokenInfoJmsMessage;
 import com.cts.fasttack.jms.support.IntegrationBus;
 import com.cts.fasttack.logging.service.CallingContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 @Service("cardDataUpdateService")
+@Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CardDataUpdateServiceImpl implements CardDataUpdateService {
 
     @Autowired

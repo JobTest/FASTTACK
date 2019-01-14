@@ -1,8 +1,21 @@
 package com.cts.fasttack.common.core.util;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -92,6 +105,8 @@ public class StringUtil {
         XML_SENSITIVE_FIELD_NAMES.add("token");
         XML_SENSITIVE_FIELD_NAMES.add("expiryMonth");
         XML_SENSITIVE_FIELD_NAMES.add("expiryYear");
+        XML_SENSITIVE_FIELD_NAMES.add("password");
+        XML_SENSITIVE_FIELD_NAMES.add("Password");
 
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(PassPhrase)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(WSPPASSPHRASE)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
@@ -112,9 +127,15 @@ public class StringUtil {
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(token)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(expiryMonth)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
         XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(expiryYear)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
+        XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(password)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
+        XML_SENSITIVE_FIELD_PATTERNS.add(Pattern.compile("<.*(Password)\\b\\s*.*>.*", Pattern.CASE_INSENSITIVE));
 
         EXCEPTION_REPLACES.add("pan");
         EXCEPTION_REPLACES.add("PAN");
+        EXCEPTION_REPLACES.add("AccountPan");
+        EXCEPTION_REPLACES.add("cardNum");
+        EXCEPTION_REPLACES.add("CardNum");
+        EXCEPTION_REPLACES.add("cardNumber");
     }
 
 
@@ -218,7 +239,7 @@ public class StringUtil {
         if (matcher.find()) {
             // TODO:  exception Replace
             for (String replacementKey: EXCEPTION_REPLACES) {
-                if (replacement.contains(replacementKey))
+                if (replacement.contains("\"" + replacementKey + "\""))
                     return exceptionReplaceJson(matcher, replacementKey, replacement);
             }
 
@@ -237,6 +258,46 @@ public class StringUtil {
             replacement = replacementVal + doubleQuotes + displayPanOrToken + doubleQuotes;
         }
         return matcher.replaceAll(replacement);
+    }
+
+    public static String getElementsByTagName(String xmlText, String tagName) {
+        try {
+            Node node = xmlConvert(xmlText).getElementsByTagName(tagName).item(0);
+            return node!= null ? node.getTextContent() : null;
+        } catch (IOException|SAXException|ParserConfigurationException ex) {
+            return null;
+        }
+    }
+
+    public static String getAsString(String jsonText, String memberName) {
+        try {
+            JsonObject jsonObject = jsonConvert(jsonText);
+            Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
+
+            JsonElement jsonElement = jsonObject.get(memberName);
+            if (jsonElement!=null) {
+                return jsonElement.getAsString();
+            } else {
+                for (Map.Entry<String, JsonElement> entry : entries) {
+                    try {
+                        JsonElement entryJsonElement = entry.getValue().getAsJsonObject().get(memberName);
+                        if (entryJsonElement != null) return entryJsonElement.getAsString();
+                    } catch (IllegalStateException ex) { }
+                }
+            }
+        } catch (JsonSyntaxException|MalformedJsonException ex) {}
+        return null;
+    }
+
+    private static Document xmlConvert(String text) throws IOException, SAXException, ParserConfigurationException {
+        return DocumentBuilderFactory.newInstance()
+                .newDocumentBuilder()
+                .parse(new InputSource(new StringReader(text)));
+    }
+
+    private static JsonObject jsonConvert(String text) throws JsonSyntaxException, MalformedJsonException {
+        return new JsonParser().parse(text)
+                .getAsJsonObject();
     }
 
     /**

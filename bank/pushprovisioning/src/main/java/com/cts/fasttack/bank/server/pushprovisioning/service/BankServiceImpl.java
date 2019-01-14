@@ -8,6 +8,7 @@ import com.cts.fasttack.bank.server.pushprovisioning.dto.CreateOpaquePaymentCard
 import com.cts.fasttack.bank.server.pushprovisioning.dto.EncryptedPaymentInstrument;
 import com.cts.fasttack.common.core.dict.InternationalPaymentSystem;
 import com.cts.fasttack.common.core.exception.ServiceException;
+import com.cts.fasttack.common.core.exception.StandardErrorCodes;
 import com.cts.fasttack.common.core.util.JsonUtil;
 import com.cts.fasttack.crypto.client.dto.CreateInAppProvisioningDataCryptoResponse;
 import com.cts.fasttack.crypto.client.dto.CreateOpaqueCardCryptoResponse;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BankServiceImpl implements BankService {
 
-    @Autowired
+    @Autowired(required = false)
     private VisaSecurityService visaSecurityService;
 
     @Autowired
@@ -52,7 +53,8 @@ public class BankServiceImpl implements BankService {
             String epiAsJson = JsonUtil.toJson(epi);
 
             CreateOpaqueCardCryptoResponse response = new CreateOpaqueCardCryptoResponse();
-            response.setOpaqueBody(visaSecurityService.createSharedSecretJwe(epiAsJson));
+            if (visaSecurityService!=null) response.setOpaqueBody(visaSecurityService.createSharedSecretJwe(epiAsJson));
+            else throw new ServiceException(StandardErrorCodes.CRYPTOGRAPHY_ERROR);
             return response;
         }
         // create opaque body for MDES

@@ -1,5 +1,6 @@
 package com.cts.fasttack.ih_sv.client.config;
 
+import com.cts.fasttack.common.core.config.PropertyClientConnectionManager;
 import com.cts.fasttack.ih_sv.client.rest.factory.IssuerHostSvHttpsClientRequestFactoryUnilateral;
 import com.cts.fasttack.ih_sv.client.rest.factory.IssuerHostSvHttpsClientRequestFactoryBilateral;
 import com.cts.fasttack.ih_sv.client.ws.interceptor.LoggingWebServiceInterceptor;
@@ -53,6 +54,10 @@ public class WebServicesConfiguration {
 	@Value("${spring.client.ws.readTimeoutInMills}")
 	private int readTimeout;
 
+	private int defaultMaxPerRoute = PropertyClientConnectionManager.DEFAULT_MAX_PER_ROUTE;
+
+	private int maxTotal = PropertyClientConnectionManager.MAX_TOTAL;
+
 	@Autowired(required = false)
 	@Qualifier("issuerHostSvHttpsClientRequestFactoryUnilateral")
 	private IssuerHostSvHttpsClientRequestFactoryUnilateral httpsClientRequestFactoryUnilateral;
@@ -95,9 +100,15 @@ public class WebServicesConfiguration {
 		Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
 				.register("http", PlainConnectionSocketFactory.getSocketFactory())
 				.register("https", sslConnectionSocketFactory).build();
+
+		PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+		poolingHttpClientConnectionManager.setDefaultMaxPerRoute(defaultMaxPerRoute);
+		poolingHttpClientConnectionManager.setMaxTotal(maxTotal);
+//        poolingHttpClientConnectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("locahost", 8088)), 50);
+
 		CloseableHttpClient httpClient = HttpClientBuilder.create()
 				.addInterceptorFirst(new HttpComponentsMessageSender.RemoveSoapHeadersInterceptor())
-				.setConnectionManager(new PoolingHttpClientConnectionManager(socketFactoryRegistry))
+				.setConnectionManager(poolingHttpClientConnectionManager) //todo: new
 				.setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(connectionTimeout)
 						.setSocketTimeout(readTimeout).build())
 				.build();

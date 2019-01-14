@@ -64,7 +64,7 @@ public class CardDataUpdateProcessor extends AbstractCamelProcessor<TokenInfoJms
 
                 logger.info(logData);
             } else {
-                jmsCardDataUpdateResponseDto.setCode("1");
+                jmsCardDataUpdateResponseDto.setCode("2");
                 String alertLogData = "tokenInfo not available because of not found: tokenRefId = '" +
                         tokenInfoId.getTokenRefId() + "', tokenRequestorId = '" + tokenInfoId.getTokenRequestorId() + "'";
 

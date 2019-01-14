@@ -1,5 +1,6 @@
 package com.cts.fasttack.mdes.client.jms.route;
 
+import com.cts.fasttack.common.core.config.PropertyActiveMQConnectionFactory;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ public class TokenLifecycleMdesRouteBuilder extends RouteBuilder{
 
     @Override
     public void configure() throws Exception {
-        from("jms:queue:FASTTACK.MDES.tokenLifecycle").routeId("tokenLifecycle")
+        from("jms:queue:FASTTACK.MDES.tokenLifecycle?concurrentConsumers=" + PropertyActiveMQConnectionFactory.CONCURRENT_CONSUMERS).routeId("tokenLifecycle")
                 .process("tokenLifecycleMdesProcessor");
     }
 }

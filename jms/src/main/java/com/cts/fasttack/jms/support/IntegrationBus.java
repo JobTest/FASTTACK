@@ -2,6 +2,7 @@ package com.cts.fasttack.jms.support;
 
 import java.util.Date;
 
+import com.cts.fasttack.common.core.util.StringUtil;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.ExchangeTimedOutException;
 import org.apache.camel.ProducerTemplate;
@@ -25,6 +26,9 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 /**
  * Публикует сообщения в указанный JMS topic в рамках паттерна Publisher-Subscriber.
  * Сообщения преобразуются в JSON.
+ *
+ * @see http://camel.apache.org/jms.html
+ * @see https://uberconf.com/blog/bruce_snyder/2010/06/tuning_jms_message_consumption_in_spring
  */
 @Component
 public class IntegrationBus {
@@ -70,22 +74,24 @@ public class IntegrationBus {
         }
 
         StringBuilder fullQueueName = new StringBuilder(GLOBAL_QUEUE_PREFIX).append(".").append(area.name()).append(".").append(queue);
+        String messageJson = JsonUtil.toJson(message);
+        String stan = getStan(messageJson, "requestId");
         try {
         	if (new Date().getTime() - delayAfterJmsConfig < jmsConfiguration.getConfiguredAt()) {
         		throw ServiceException.withDescription(StandardErrorCodes.INTERNAL_SERVICE_FAILURE, "JMS configuration not yet finished");
         	}
 
-        	String messageJson = JsonUtil.toJson(message);
             String encryptedJson = jmsCryptoRestClient.encrypt(messageJson).getText();
             if (log.isDebugEnabled()) {
-                log.debug("Sending inOut request to queue '" + fullQueueName + "' with message: " + encryptedJson);
+                log.debug(stan + " sending inOut request to queue '" + fullQueueName + "'");
             }
             String encryptedResult = producerTemplate.requestBody("jms:" + fullQueueName.toString() + "?exchangePattern=InOut&requestTimeout=" + requestTimeout + "&timeToLive=" + timeToLive
-                    + "&asyncConsumer=true&asyncStartListener=true&concurrentConsumers=10"
+//            String encryptedResult = producerTemplate.requestBody("jms:" + fullQueueName.toString() + "?exchangePattern=InOut&requestTimeout=" + 0 + "&timeToLive=" + 0 //TODO:  spring.jms.inOut.requestTimeoutInMills = spring.jms.inOut.timeToLiveInMills = 0
+                    + "&maxMessagesPerTask=1"
                     + "&useMessageIDAsCorrelationID=true", encryptedJson, String.class);
 
             if (log.isDebugEnabled()) {
-                log.debug("Received response from queue '" + fullQueueName + "': " + encryptedResult);
+                log.debug(stan + " received response from queue '" + fullQueueName + "'");
             }
             String result = jmsCryptoRestClient.decrypt(encryptedResult).getText();
             JmsResponseMessage<T> response = JsonUtil.fromJson(result, TypeFactory.defaultInstance().constructParametricType(JmsResponseMessage.class, responseClass));
@@ -95,12 +101,19 @@ public class IntegrationBus {
             return response.getRawMessage();
         } catch (CamelExecutionException e) {
             if (e.getCause() != null && e.getCause().getClass() == ExchangeTimedOutException.class) {
-                log.error("Message processing timeout exceeded for the queue '" + fullQueueName + "'. " +
-                        "The corresponding processor doesn't exist or is too busy.", e);
+                String errorLog = stan + " for the queue '" + fullQueueName + "'. Connect to host failed: connect timed out.";
+                log.error(errorLog);
+                throw ServiceException.withDescription(StandardErrorCodes.INTERNAL_SERVICE_FAILURE, errorLog);
             } else {
-                log.error("Error in async processing on the queue '" + fullQueueName + "'", e);
+                String errorLog = stan + ". Error in async processing on the queue '" + fullQueueName + "'.";
+                log.error(errorLog);
+                throw ServiceException.withDescription(StandardErrorCodes.INTERNAL_SERVICE_FAILURE, errorLog);
             }
-            throw new ServiceException(StandardErrorCodes.INTERNAL_SERVICE_FAILURE);
         }
+    }
+
+    private String getStan(String jsonText, String memberName) {
+        String requestId = StringUtil.getAsString(jsonText, memberName);
+        return requestId!= null ? "STAN: '" + requestId + "'" : "";
     }
 }

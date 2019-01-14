@@ -25,7 +25,7 @@ public class TokenInfoRequestDto extends CommonTokenLifecycleRequestDto {
      * Unique ID for the token associated with the PAN.
      * This ID can be used in lieu of the token for subsequent calls, such as life cycle events
      */
-    @Size(min = 24, max = 64, message = StandardErrorCodes.Names.INVALID_FIELD_LENGTH)
+    @Size(min = 1, max = 64, message = StandardErrorCodes.Names.INVALID_FIELD_LENGTH)
     private String tokenRefId;
 
     /**

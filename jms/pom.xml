@@ -120,6 +120,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Connection for embedded JMS instance (JNDI) -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-kahadb-store</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

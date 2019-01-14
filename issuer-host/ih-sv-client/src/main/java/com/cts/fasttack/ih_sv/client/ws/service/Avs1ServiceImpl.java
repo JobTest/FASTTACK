@@ -3,6 +3,8 @@ package com.cts.fasttack.ih_sv.client.ws.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
@@ -18,6 +20,7 @@ import com.cts.fasttack.logging.interceptor.MessageHistoryOperation;
  * @author d.ishchenko
  */
 @Service
+@Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Avs1ServiceImpl extends WebServiceClient implements Avs1Service {
 
     @Value("${spring.client.ws.avs1SoapAction}")

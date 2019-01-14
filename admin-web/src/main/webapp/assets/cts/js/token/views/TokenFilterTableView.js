@@ -72,7 +72,7 @@ function getTokenRequestorId(tokenRequestorId, tokenRequestorTitle) {
                     label: "",
                     cellTemplate: "<tr><td class='sortable renderable'><a href='{{=baseUrl}}token/view.htm?tokenRefId={{=model.tokenId.tokenRefId}}&tokenRequestorId={{=model.tokenId.tokenRequestorId}}'>{{=model.maskedPan}}</a></td></tr>" +
                     "<tr><td class='sortable renderable'><a href='{{=baseUrl}}token/view.htm?tokenRefId={{=model.tokenId.tokenRefId}}&tokenRequestorId={{=model.tokenId.tokenRequestorId}}'>{{=model.panInternalId}}</a></td></tr>" +
-                    "<tr><td class='sortable renderable'><a href='{{=baseUrl}}token/view.htm?tokenRefId={{=model.tokenId.tokenRefId}}&tokenRequestorId={{=model.tokenId.tokenRequestorId}}'>{{=model.bin}}</a></td></tr>",
+                    "<tr><td class='sortable renderable'><a href='{{=baseUrl}}token/view.htm?tokenRefId={{=model.tokenId.tokenRefId}}&tokenRequestorId={{=model.tokenId.tokenRequestorId}}'>{{=model.maskedToken}}</a></td></tr>",
                     headerCell: Backgrid.HeaderCell.extend({
                         render: function () {
                             this.$el.html("<a>" + CommonMessages.bundles.getMessage("token.maskedPan.panInternalId.bin") + "<b class='sort-caret'></b></a>");
@@ -122,7 +122,7 @@ function getTokenRequestorId(tokenRequestorId, tokenRequestorTitle) {
                     name: "tokenStatus",
                     label: "",
                     cellTemplate: "<tr><td class='sortable renderable'><a href='{{=baseUrl}}token/view.htm?tokenRefId={{=model.tokenId.tokenRefId}}&tokenRequestorId={{=model.tokenId.tokenRequestorId}}'>{{=Common.bundles.getMessage('TokenStatus.' + model.tokenStatus)}}</a></td></tr>" +
-                    "<tr><td class='sortable renderable'><a href='{{=baseUrl}}token/view.htm?tokenRefId={{=model.tokenId.tokenRefId}}&tokenRequestorId={{=model.tokenId.tokenRequestorId}}'>{{=model.tokenEventDate}}</a></td></tr>",
+                    "<tr><td class='sortable renderable'><a href='{{=baseUrl}}token/view.htm?tokenRefId={{=model.tokenId.tokenRefId}}&tokenRequestorId={{=model.tokenId.tokenRequestorId}}'>{{=model.tokenStatusUpdate}}</a></td></tr>",
                     headerCell: Backgrid.HeaderCell.extend({
                         render: function () {
                             this.$el.html("<a>" + CommonMessages.bundles.getMessage("token.tokenStatus.tokenEventDate") + "<b class='sort-caret'></b></a>");

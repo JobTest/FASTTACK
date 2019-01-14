@@ -29,7 +29,7 @@ public class AlfaBankAuthenticationProvider implements AuthenticationProvider {
 
     private static final Logger log = LogManager.getLogger(AlfaBankAuthenticationProvider.class);
 
-    private static final String SYSTEM_NAME = "СTS";
+    private static final String SYSTEM_NAME = "CTS";
 
     @Autowired
     private AlfaBankAuthenticationHelper alfaBankAuthenticationHelper;

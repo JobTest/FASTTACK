@@ -48,15 +48,20 @@ public class StringUtilTest {
         String text = "{\"UserId\":\"test111\",\"Password\":\"12345678\"}";
         assertEquals("{\"UserId\":\"test111\",\"Password\":\"******\"}", StringUtil.sensitiveFieldsHiding(text));
 
-        text = "{\"UserId\":\"test111\",\"Password\":\"12345678\",\"ActivationCode\":\"12345678\",\"mobilePin\":\"12345678\",\"MobilPin\":\"12345678\",\"cardNumber\":\"12345678\"}";
-        assertEquals("{\"UserId\":\"test111\",\"Password\":\"******\",\"ActivationCode\":\"******\",\"mobilePin\":\"******\",\"MobilPin\":\"******\",\"cardNumber\":\"******\"}", StringUtil.sensitiveFieldsHiding(text));
+        text = "{\"UserId\":\"test111\",\"Password\":\"12345678\",\"ActivationCode\":\"12345678\",\"mobilePin\":\"12345678\",\"MobilPin\":\"12345678\",\"cardNumber\":\"12345678\"}"; //fixme old
+//        assertEquals("{\"UserId\":\"test111\",\"Password\":\"******\",\"ActivationCode\":\"******\",\"mobilePin\":\"******\",\"MobilPin\":\"******\",\"cardNumber\":\"******\"}", StringUtil.sensitiveFieldsHiding(text)); //todo old
+        text = "{\"UserId\":\"test111\",\"Password\":\"12345678\",\"ActivationCode\":\"12345678\",\"mobilePin\":\"12345678\",\"MobilPin\":\"12345678\",\"cardNumber\":\"4999999999990011\"}";
+        assertEquals("{\"UserId\":\"test111\",\"Password\":\"******\",\"ActivationCode\":\"******\",\"mobilePin\":\"******\",\"MobilPin\":\"******\",\"cardNumber\":\"499999******0011\"}", StringUtil.sensitiveFieldsHiding(text));
 
         text = "{\"UserId\":\"test\",\"CVV2\":\"685\"}";
         assertEquals("{\"UserId\":\"test\",\"CVV2\":\"******\"}", StringUtil.sensitiveFieldsHiding(text));
 
         text = "{\"UserId\":\"test\",\"PAN\":\"125342572285956945\"}";
-//        assertEquals("{\"UserId\":\"test\",\"PAN\":\"******\"}", StringUtil.sensitiveFieldsHiding(text)); //todo
+//        assertEquals("{\"UserId\":\"test\",\"PAN\":\"******\"}", StringUtil.sensitiveFieldsHiding(text)); //todo old
         assertEquals("{\"UserId\":\"test\",\"PAN\":\"125342******6945\"}", StringUtil.sensitiveFieldsHiding(text));
+
+        text = "{\"TokenActivateRequest\":{\"CommentText\":\"xxx\",\"ReasonCode\":\"C\",\"AccountPan\":\"1234567890123456\",\"PaymentAppInstanceId\":\"E029361010194\",\"AuditInfo\":{\"UserId\":\"admin@cts.com\",\"UserName\":\"Admin\",\"Organization\":\"BANK ALFA\"}}}";
+        assertEquals("{\"TokenActivateRequest\":{\"CommentText\":\"xxx\",\"ReasonCode\":\"C\",\"AccountPan\":\"123456******3456\",\"PaymentAppInstanceId\":\"E029361010194\",\"AuditInfo\":{\"UserId\":\"admin@cts.com\",\"UserName\":\"Admin\",\"Organization\":\"BANK ALFA\"}}}", StringUtil.sensitiveFieldsHiding(text));
     }
 
     @Test
@@ -83,11 +88,12 @@ public class StringUtilTest {
         assertEquals("<PassPhrase>******</PassPhrase><ns:WSPPASSPHRASE>******</ns:WSPPASSPHRASE>", StringUtil.sensitiveFieldsFromXmlHiding(text));
 
         text = "<ns3:ProvisionCardInputData xmlns:ns3=\"http://hce.everest.com/2015/04\" xmlns:ns2=\"http://schemas.datacontract.org/2004/07/MPTSAESService\" xmlns:ns4=\"http://schemas.microsoft.com/2003/10/Serialization/\"><ns3:CMSMPA_ID>0000000000000000000000000000000000000000000000000000000000008239</ns3:CMSMPA_ID><ns3:CardholderName>IA TSITSKISHVILI</ns3:CardholderName><ns3:EffectiveDate>1111</ns3:EffectiveDate><ns3:ExpiryDate>1702</ns3:ExpiryDate><ns3:PAN>4140510260908026</ns3:PAN><ns3:PSN>00</ns3:PSN><ns3:WSPPASSPHRASE>1234</ns3:WSPPASSPHRASE><ns3:WSPUSERIDENTIFIER>BOG</ns3:WSPUSERIDENTIFIER></ns3:ProvisionCardInputData>";
-//        assertEquals("<ns3:ProvisionCardInputData xmlns:ns3=\"http://hce.everest.com/2015/04\" xmlns:ns2=\"http://schemas.datacontract.org/2004/07/MPTSAESService\" xmlns:ns4=\"http://schemas.microsoft.com/2003/10/Serialization/\"><ns3:CMSMPA_ID>0000000000000000000000000000000000000000000000000000000000008239</ns3:CMSMPA_ID><ns3:CardholderName>IA TSITSKISHVILI</ns3:CardholderName><ns3:EffectiveDate>1111</ns3:EffectiveDate><ns3:ExpiryDate>1702</ns3:ExpiryDate><ns3:PAN>******</ns3:PAN><ns3:PSN>00</ns3:PSN><ns3:WSPPASSPHRASE>******</ns3:WSPPASSPHRASE><ns3:WSPUSERIDENTIFIER>BOG</ns3:WSPUSERIDENTIFIER></ns3:ProvisionCardInputData>", StringUtil.sensitiveFieldsFromXmlHiding(text)); //todo
+//        assertEquals("<ns3:ProvisionCardInputData xmlns:ns3=\"http://hce.everest.com/2015/04\" xmlns:ns2=\"http://schemas.datacontract.org/2004/07/MPTSAESService\" xmlns:ns4=\"http://schemas.microsoft.com/2003/10/Serialization/\"><ns3:CMSMPA_ID>0000000000000000000000000000000000000000000000000000000000008239</ns3:CMSMPA_ID><ns3:CardholderName>IA TSITSKISHVILI</ns3:CardholderName><ns3:EffectiveDate>1111</ns3:EffectiveDate><ns3:ExpiryDate>1702</ns3:ExpiryDate><ns3:PAN>******</ns3:PAN><ns3:PSN>00</ns3:PSN><ns3:WSPPASSPHRASE>******</ns3:WSPPASSPHRASE><ns3:WSPUSERIDENTIFIER>BOG</ns3:WSPUSERIDENTIFIER></ns3:ProvisionCardInputData>", StringUtil.sensitiveFieldsFromXmlHiding(text)); //todo old
         assertEquals("<ns3:ProvisionCardInputData xmlns:ns3=\"http://hce.everest.com/2015/04\" xmlns:ns2=\"http://schemas.datacontract.org/2004/07/MPTSAESService\" xmlns:ns4=\"http://schemas.microsoft.com/2003/10/Serialization/\"><ns3:CMSMPA_ID>0000000000000000000000000000000000000000000000000000000000008239</ns3:CMSMPA_ID><ns3:CardholderName>IA TSITSKISHVILI</ns3:CardholderName><ns3:EffectiveDate>1111</ns3:EffectiveDate><ns3:ExpiryDate>1702</ns3:ExpiryDate><ns3:PAN>414051******8026</ns3:PAN><ns3:PSN>00</ns3:PSN><ns3:WSPPASSPHRASE>******</ns3:WSPPASSPHRASE><ns3:WSPUSERIDENTIFIER>BOG</ns3:WSPUSERIDENTIFIER></ns3:ProvisionCardInputData>", StringUtil.sensitiveFieldsFromXmlHiding(text));
 
         text = "<CardNum>4999999999990011</CardNum><ExpYear>2019</ExpYear><ExpMonth>05</ExpMonth><CVNum>111</CVNum>";
-        assertEquals("<CardNum>******</CardNum><ExpYear>2019</ExpYear><ExpMonth>05</ExpMonth><CVNum>******</CVNum>", StringUtil.sensitiveFieldsFromXmlHiding(text));
+//        assertEquals("<CardNum>******</CardNum><ExpYear>2019</ExpYear><ExpMonth>05</ExpMonth><CVNum>******</CVNum>", StringUtil.sensitiveFieldsFromXmlHiding(text)); //todo old
+        assertEquals("<CardNum>499999******0011</CardNum><ExpYear>2019</ExpYear><ExpMonth>05</ExpMonth><CVNum>******</CVNum>", StringUtil.sensitiveFieldsFromXmlHiding(text));
 
         text = "<sab:confirmProvisioningResponse><sab:panInternalId>43434</sab:panInternalId><sab:pan>258</sab:pan><PAN>258</PAN></sab:confirmProvisioningResponse>";
         assertEquals("<sab:confirmProvisioningResponse><sab:panInternalId>43434</sab:panInternalId><sab:pan>******</sab:pan><PAN>******</PAN></sab:confirmProvisioningResponse>", StringUtil.sensitiveFieldsFromXmlHiding(text));
@@ -117,7 +123,8 @@ public class StringUtilTest {
                 "sJIMBcQ6pjWylzoI+cA=\n" +
                 "</ds:SignatureValue>\n" +
                 "</ds:Signature></ECommerceConnect>";
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><ECommerceConnect xmlns:ns2=\"http://www.w3.org/2001/04/xmlenc#\" xmlns:ns3=\"http://www.w3.org/2000/09/xmldsig#\"><Message id=\"1\" version=\"1.0\"><XMLPayRequest><RequestData><MerchantID>******</MerchantID><TerminalID>******</TerminalID><Transactions><Transaction Id=\"2\"><Authorization><PayData><Invoice><OrderID>3468</OrderID><Date>20180511160036</Date><TotalAmount>0</TotalAmount><Currency>980</Currency><Description>Account verification</Description></Invoice><Card><CardNum>******</CardNum><ExpYear>2020</ExpYear><ExpMonth>01</ExpMonth><CVNum>******</CVNum></Card></PayData></Authorization></Transaction></Transactions></RequestData></XMLPayRequest></Message><ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\">\n" +
+//        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><ECommerceConnect xmlns:ns2=\"http://www.w3.org/2001/04/xmlenc#\" xmlns:ns3=\"http://www.w3.org/2000/09/xmldsig#\"><Message id=\"1\" version=\"1.0\"><XMLPayRequest><RequestData><MerchantID>******</MerchantID><TerminalID>******</TerminalID><Transactions><Transaction Id=\"2\"><Authorization><PayData><Invoice><OrderID>3468</OrderID><Date>20180511160036</Date><TotalAmount>0</TotalAmount><Currency>980</Currency><Description>Account verification</Description></Invoice><Card><CardNum>******</CardNum><ExpYear>2020</ExpYear><ExpMonth>01</ExpMonth><CVNum>******</CVNum></Card></PayData></Authorization></Transaction></Transactions></RequestData></XMLPayRequest></Message><ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\">\n" + //todo old
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><ECommerceConnect xmlns:ns2=\"http://www.w3.org/2001/04/xmlenc#\" xmlns:ns3=\"http://www.w3.org/2000/09/xmldsig#\"><Message id=\"1\" version=\"1.0\"><XMLPayRequest><RequestData><MerchantID>******</MerchantID><TerminalID>******</TerminalID><Transactions><Transaction Id=\"2\"><Authorization><PayData><Invoice><OrderID>3468</OrderID><Date>20180511160036</Date><TotalAmount>0</TotalAmount><Currency>980</Currency><Description>Account verification</Description></Invoice><Card><CardNum>555949******0007</CardNum><ExpYear>2020</ExpYear><ExpMonth>01</ExpMonth><CVNum>******</CVNum></Card></PayData></Authorization></Transaction></Transactions></RequestData></XMLPayRequest></Message><ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\">\n" +
                 "<ds:SignedInfo>\n" +
                 "<ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n" +
                 "<ds:SignatureMethod Algorithm=\"http://www.w3.org/2000/09/xmldsig#rsa-sha1\"/>\n" +
@@ -137,6 +144,9 @@ public class StringUtilTest {
                 "</ds:SignatureValue>\n" +
                 "</ds:Signature></ECommerceConnect>",
                 StringUtil.sensitiveFieldsFromXmlHiding(text));
+
+        text = "<ns3:authenticate xmlns:ns3=\"http://sab/\" xmlns:ns4=\"http://ws.wso2.org/dataservice\"><ns3:user>test1@cts.com</ns3:user><ns3:password>!QAZse4</ns3:password></ns3:authenticate>";
+        assertEquals("<ns3:authenticate xmlns:ns3=\"http://sab/\" xmlns:ns4=\"http://ws.wso2.org/dataservice\"><ns3:user>test1@cts.com</ns3:user><ns3:password>******</ns3:password></ns3:authenticate>", StringUtil.sensitiveFieldsFromXmlHiding(text));
     }
 
     @Test

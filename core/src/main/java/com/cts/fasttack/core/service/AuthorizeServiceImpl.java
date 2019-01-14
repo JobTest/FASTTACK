@@ -13,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.cts.fasttack.common.core.converter.RecommendationReasonsConverter;
 import com.cts.fasttack.core.converter.CardholderVerificationMethodDtoToTokenInfoDtoConverter;
+import com.cts.fasttack.core.dict.TokenStatus;
 import com.cts.fasttack.core.dto.CardInfoDataDto;
 import com.cts.fasttack.core.dto.Timestamp;
 import com.cts.fasttack.core.dto.DCProgressDto;
@@ -30,6 +31,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import com.cts.fasttack.common.core.dict.InternationalPaymentSystem;
 import com.cts.fasttack.common.core.dict.PanSourceType;
@@ -64,6 +67,7 @@ import com.cts.fasttack.logging.service.CallingContext;
  * @author a.lipavets
  */
 @Service
+@Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class AuthorizeServiceImpl implements AuthorizeService {
 
     private final Logger log = LogManager.getLogger(getClass());
@@ -188,8 +192,13 @@ public class AuthorizeServiceImpl implements AuthorizeService {
                 log.info("Start working Confirm Provisioning and Account Status Verification");
                 try {
                     String originator = callingContext.getOriginator();
-                    confirmProvisioning(dcProgressDto, cardInfoDataDto, originator, messageHistoryId, PanSourceType.K, authorizeServiceDto.getPaymentAppInstanceId(), tokenizationPath, authorizeServiceDto.getDeviceName());
-                    verifyCardStatus(cardInfoDataDto, authorizeServiceDto, dcProgressDto, originator, messageHistoryId);
+                    Thread threadConfirmProvisioning = new Thread(taskConfirmProvisioning(dcProgressDto, cardInfoDataDto, originator, messageHistoryId, PanSourceType.K, authorizeServiceDto.getPaymentAppInstanceId(), tokenizationPath, authorizeServiceDto.getDeviceName()));
+                    Thread threadVerifyCardStatus = new Thread(taskVerifyCardStatus(cardInfoDataDto, authorizeServiceDto, dcProgressDto, originator, messageHistoryId));
+
+                    threadConfirmProvisioning.start();
+                    threadVerifyCardStatus.start();
+                    threadConfirmProvisioning.join();
+                    threadVerifyCardStatus.join();
                 } catch (Exception e) {
                     log.error("Error while async process confirmProvisioning and verifyCardStatus", e);
                     throw new ServiceException(StandardErrorCodes.INTERNAL_SERVICE_FAILURE);
@@ -259,6 +268,8 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         tokenInfoDto.setPanSource(PanSourceType.getInstance(Source.getSource(cardInfoDataDto.getSource().name())));
         BinSetupDto binSetupDto = binSetupService.getSuitableBin(cardInfoDataDto.getAccountNumber()).orElse(null);
         if (binSetupDto != null) tokenInfoDto.setBin(binSetupDto.getBin());
+        tokenInfoDto.setTokenStatus(TokenStatus.I);
+        tokenInfoDto.setTokenStatusUpdate(new Date());
         return tokenInfoDto;
     }
 
@@ -392,21 +403,33 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     	}
     }
 
+    private Runnable taskConfirmProvisioning(DCProgressDto dcProgressDto, CardInfoDataDto cardInfoDataDto, String originator, Long messageHistoryId, PanSourceType panSourceType, String paymentAppInstId, String tokenizationPath, String deviceName) {
+        return () -> {
+            try {
+                confirmProvisioning(dcProgressDto, cardInfoDataDto, originator, messageHistoryId, panSourceType, paymentAppInstId, tokenizationPath, deviceName);
+            } catch (ServiceException e) {
+                log.error("Error while async process confirmProvisioning", e);
+            }
+        };
+    }
+
     private void confirmProvisioning(DCProgressDto dcProgressDto, CardInfoDataDto cardInfoDataDto, String originator, Long messageHistoryId, PanSourceType panSourceType, String paymentAppInstId, String tokenizationPath, String deviceName) throws ServiceException {
         JmsConfirmProvisioningResponseDto jmsConfirmProvisioningResponseDto = null;
-        try {
-            jmsConfirmProvisioningResponseDto = sendConfirmProvisioning(dcProgressDto, cardInfoDataDto, originator, messageHistoryId, panSourceType, paymentAppInstId, tokenizationPath, deviceName);
-            if ("0".equals(jmsConfirmProvisioningResponseDto.getCode())) {
-                dcProgressDto.setProvisioningDecision(ProvisioningDecision.getInstanceByCaption(jmsConfirmProvisioningResponseDto.getDecision()));
-                dcProgressDto.setProvisioningStatus(StringUtils.isNumeric(jmsConfirmProvisioningResponseDto.getCode()) ? DCProgressStatus.values()[Integer.parseInt(jmsConfirmProvisioningResponseDto.getCode())] : null);
-                dcProgressDto.setPanInternalId(jmsConfirmProvisioningResponseDto.getPanInternalId());
-                dcProgressDto.setPanInternalGUID(jmsConfirmProvisioningResponseDto.getPanInternalGUID());
-                dcProgressDto.setCustomerPhone(jmsConfirmProvisioningResponseDto.getCustomerPhone());
-                dcProgressDto.setProductConfigID(jmsConfirmProvisioningResponseDto.getProductConfigID());
+        synchronized(dcProgressDto) {
+            try {
+                jmsConfirmProvisioningResponseDto = sendConfirmProvisioning(dcProgressDto, cardInfoDataDto, originator, messageHistoryId, panSourceType, paymentAppInstId, tokenizationPath, deviceName);
+                if ("0".equals(jmsConfirmProvisioningResponseDto.getCode())) {
+                    dcProgressDto.setProvisioningDecision(ProvisioningDecision.getInstanceByCaption(jmsConfirmProvisioningResponseDto.getDecision()));
+                    dcProgressDto.setProvisioningStatus(StringUtils.isNumeric(jmsConfirmProvisioningResponseDto.getCode()) ? DCProgressStatus.values()[Integer.parseInt(jmsConfirmProvisioningResponseDto.getCode())] : null);
+                    dcProgressDto.setPanInternalId(jmsConfirmProvisioningResponseDto.getPanInternalId());
+                    dcProgressDto.setPanInternalGUID(jmsConfirmProvisioningResponseDto.getPanInternalGUID());
+                    dcProgressDto.setCustomerPhone(jmsConfirmProvisioningResponseDto.getCustomerPhone());
+                    dcProgressDto.setProductConfigID(jmsConfirmProvisioningResponseDto.getProductConfigID());
+                }
+            } catch (ServiceException e) {
+                dcProgressDto.setProvisioningDecision(ProvisioningDecision.DECL);
+                dcProgressDto.setProvisioningError(StandardErrorCodes.valueOf(e.getErrorCode().name()));
             }
-        } catch (ServiceException e) {
-            dcProgressDto.setProvisioningDecision(ProvisioningDecision.DECL);
-            dcProgressDto.setProvisioningError(StandardErrorCodes.valueOf(e.getErrorCode().name()));
         }
         if (jmsConfirmProvisioningResponseDto != null && ("1".equals(jmsConfirmProvisioningResponseDto.getCode()) || "3".equals(jmsConfirmProvisioningResponseDto.getCode()))) {
             throw new ServiceException(StandardErrorCodes.INTERNAL_SERVICE_FAILURE);
@@ -437,6 +460,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
                         .originator(originator).messageHistoryId(messageHistoryId), JmsConfirmProvisioningResponseDto.class);
     }
 
+    private Runnable taskVerifyCardStatus(CardInfoDataDto cardInfoDataDto, JmsAuthorizeServiceDto authorizeServiceDto, DCProgressDto dcProgressDto, String originator, Long messageHistoryId) {
+        return () -> verifyCardStatus(cardInfoDataDto, authorizeServiceDto, dcProgressDto, originator, messageHistoryId);
+    }
+
     /**
      * Verifies card status.
      */
@@ -461,80 +488,83 @@ public class AuthorizeServiceImpl implements AuthorizeService {
             jmsCardStatusVerificationDto.setExpYear("20" + cardInfoDataDto.getExpiryYear());
             jmsCardStatusVerificationDto.setExpMonth(cardInfoDataDto.getExpiryMonth());
             jmsCardStatusVerificationDto.setCvNum(cardInfoDataDto.getSecurityCode());
+            jmsCardStatusVerificationDto.setRequestId(authorizeServiceDto.getRequestId());
 
             HeadersJmsMessage jmsMessage = new CardStatusVerificationJmsMessage()
                     .cardStatusVerificationDto(jmsCardStatusVerificationDto).messageHistoryId(messageHistoryId)
                     .originator(originator);
 
-            try {
-                Optional<CvcAttemptDto> cvcAttemptDto = Optional.empty();
-                if(StringUtils.isNotBlank(dcProgressDto.getPanInternalId()) && StringUtils.isNotBlank(dcProgressDto.getPanInternalGUID())) {
-                    cvcAttemptDto = cvcAttemptService.getByPanInternalIdAndGUID(dcProgressDto.getPanInternalId(), dcProgressDto.getPanInternalGUID());
-                }
-                int cvcAttempt = defaultCvcAttempt;
-                if(binSetupDto != null){
-					if (binSetupDto.getCvcAttempt() != null) {
-						cvcAttempt = binSetupDto.getCvcAttempt();
-					}
-                }
-                if(!cvcAttemptDto.isPresent() ||  (cvcAttemptDto.get().getFailures() <= cvcAttempt) || !DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate()) ) {
-                    if (cvcAttemptDto.isPresent() && (cvcAttemptDto.get().getFailures() >= cvcAttempt) && DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate())) {
-                        log.warn("ASV request not send - CVC_ATTEMPTS didn't pass");
-                        dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
-                        dcProgressDto.setAsvErr(CVC_ATTEMPTS_ERROR);
-                        return;
+            synchronized(dcProgressDto) {
+                try {
+                    Optional<CvcAttemptDto> cvcAttemptDto = Optional.empty();
+                    if (StringUtils.isNotBlank(dcProgressDto.getPanInternalId()) && StringUtils.isNotBlank(dcProgressDto.getPanInternalGUID())) {
+                        cvcAttemptDto = cvcAttemptService.getByPanInternalIdAndGUID(dcProgressDto.getPanInternalId(), dcProgressDto.getPanInternalGUID());
                     }
-
-                    log.info("Sending ASV request");
-                    JmsCardStatusVerificationResponseDto jmsCardStatusVerificationResponseDto = integrationBus.inOut(jmsMessage::getOriginator, "cardStatusVerification", jmsMessage, JmsCardStatusVerificationResponseDto.class);
-
-                    // Set ASV_STATUS
-                    if ("000".equals(jmsCardStatusVerificationResponseDto.getHostCode()) && "M".equals(jmsCardStatusVerificationResponseDto.getCvResult())) {
-                        dcProgressDto.setAsvStatus(DCProgressStatus.SUCCESS);
+                    int cvcAttempt = defaultCvcAttempt;
+                    if (binSetupDto != null) {
+                        if (binSetupDto.getCvcAttempt() != null) {
+                            cvcAttempt = binSetupDto.getCvcAttempt();
+                        }
                     }
-                    if (("000".equals(jmsCardStatusVerificationResponseDto.getTranCode()) && "N".equals(jmsCardStatusVerificationResponseDto.getCvResult()))
-                            || !"000".equals(jmsCardStatusVerificationResponseDto.getHostCode())) {
-                        dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
-                    }
+                    if (!cvcAttemptDto.isPresent() || (cvcAttemptDto.get().getFailures() <= cvcAttempt) || !DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate())) {
+                        if (cvcAttemptDto.isPresent() && (cvcAttemptDto.get().getFailures() >= cvcAttempt) && DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate())) {
+                            log.warn("ASV request not send - CVC_ATTEMPTS didn't pass");
+                            dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
+                            dcProgressDto.setAsvErr(CVC_ATTEMPTS_ERROR);
+                            return;
+                        }
 
-                    if (jmsCardStatusVerificationResponseDto.getErrorCode() != null) {
-                    	if (!"000".equals(jmsCardStatusVerificationResponseDto.getErrorCode())) {
+                        log.info("Sending ASV request");
+                        JmsCardStatusVerificationResponseDto jmsCardStatusVerificationResponseDto = integrationBus.inOut(jmsMessage::getOriginator, "cardStatusVerification", jmsMessage, JmsCardStatusVerificationResponseDto.class);
+
+                        // Set ASV_STATUS
+                        if ("000".equals(jmsCardStatusVerificationResponseDto.getHostCode()) && "M".equals(jmsCardStatusVerificationResponseDto.getCvResult())) {
+                            dcProgressDto.setAsvStatus(DCProgressStatus.SUCCESS);
+                        }
+                        if (("000".equals(jmsCardStatusVerificationResponseDto.getTranCode()) && "N".equals(jmsCardStatusVerificationResponseDto.getCvResult()))
+                                || !"000".equals(jmsCardStatusVerificationResponseDto.getHostCode())) {
+                            dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
+                        }
+
+                        if (jmsCardStatusVerificationResponseDto.getErrorCode() != null) {
+                            if (!"000".equals(jmsCardStatusVerificationResponseDto.getErrorCode())) {
+                                dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
+                                dcProgressDto.setAsvErr(CVC_RESULT_ERROR);
+                                return;
+                            }
+                        }
+
+                        if ("000".equals(jmsCardStatusVerificationResponseDto.getTranCode()) && "P".equals(jmsCardStatusVerificationResponseDto.getCvResult())) {
                             dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
                             dcProgressDto.setAsvErr(CVC_RESULT_ERROR);
                             return;
-                    	}
-                    }
+                        }
 
-                    if("000".equals(jmsCardStatusVerificationResponseDto.getTranCode()) && "P".equals(jmsCardStatusVerificationResponseDto.getCvResult())){
-                        dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
-                        dcProgressDto.setAsvErr(CVC_RESULT_ERROR);
-                        return;
-                    }
-
-                    if ((cvcAttemptDto.isPresent() && "M".equals(jmsCardStatusVerificationResponseDto.getCvResult())) || (cvcAttemptDto.isPresent() && !DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate()))) {
-                        cvcAttemptService.delete(cvcAttemptDto.get().getId());
-                    }
-                    if ("N".equals(jmsCardStatusVerificationResponseDto.getCvResult())) {
-                        if (!cvcAttemptDto.isPresent()) {
-                            String hostCode = jmsCardStatusVerificationResponseDto.getHostCode();
-                            boolean isHostCode = hostCode.equals("005");
-                            if (!isHostCode) {
-                                cvcAttemptService.save(new CvcAttemptDto(dcProgressDto.getPanInternalId(), dcProgressDto.getPanInternalGUID(), new Date(), 1));
-                            }
-                        } else {
-                            if(DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate())) {
-                                cvcAttemptDto.get().setFailures(cvcAttemptDto.get().getFailures() + 1);
+                        if ((cvcAttemptDto.isPresent() && "M".equals(jmsCardStatusVerificationResponseDto.getCvResult())) || (cvcAttemptDto.isPresent() && !DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate()))) {
+                            cvcAttemptService.delete(cvcAttemptDto.get().getId());
+                        }
+                        if ("N".equals(jmsCardStatusVerificationResponseDto.getCvResult())) {
+                            if (!cvcAttemptDto.isPresent()) {
+                                String hostCode = jmsCardStatusVerificationResponseDto.getHostCode();
+                                boolean isHostCode = hostCode.equals("005");
+                                if (!isHostCode) {
+                                    cvcAttemptService.save(new CvcAttemptDto(dcProgressDto.getPanInternalId(), dcProgressDto.getPanInternalGUID(), new Date(), 1));
+                                }
                             } else {
-                                cvcAttemptDto.get().setLastDate(new Date());
-                                cvcAttemptDto.get().setFailures(1);
+                                if (DateUtils.isSameDay(new Date(), cvcAttemptDto.get().getLastDate())) {
+                                    cvcAttemptDto.get().setFailures(cvcAttemptDto.get().getFailures() + 1);
+                                } else {
+                                    cvcAttemptDto.get().setLastDate(new Date());
+                                    cvcAttemptDto.get().setFailures(1);
+                                }
+                                cvcAttemptService.save(cvcAttemptDto.get());
                             }
-                            cvcAttemptService.save(cvcAttemptDto.get());
                         }
                     }
+                } catch (ServiceException e) {
+                    dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
+                    dcProgressDto.setAsvErr(e.getErrorCode().name());
                 }
-            } catch (ServiceException e) {
-                dcProgressDto.setAsvStatus(DCProgressStatus.DECLINE);
-                dcProgressDto.setAsvErr(e.getErrorCode().name());
             }
         }
     }

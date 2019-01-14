@@ -2,6 +2,8 @@ package com.cts.fasttack.jms.dto;
 
 import java.util.Date;
 
+import com.cts.fasttack.common.core.dict.InternationalPaymentSystem;
+
 /**
  * JMS token response DTO.
  *
@@ -48,6 +50,12 @@ public class JmsTokenResponseDto {
     private String tokenRequestorName;
 
     private String tokenType;
+
+    private String panInternalId;
+
+    private String panInternalGuid;
+
+    private InternationalPaymentSystem ips;
 
     private JmsDeviceResponseDto device;
 
@@ -193,6 +201,30 @@ public class JmsTokenResponseDto {
 
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
+    }
+
+    public String getPanInternalId() {
+        return panInternalId;
+    }
+
+    public void setPanInternalId(String panInternalId) {
+        this.panInternalId = panInternalId;
+    }
+
+    public String getPanInternalGuid() {
+        return panInternalGuid;
+    }
+
+    public void setPanInternalGuid(String panInternalGuid) {
+        this.panInternalGuid = panInternalGuid;
+    }
+
+    public InternationalPaymentSystem getIps() {
+        return ips;
+    }
+
+    public void setIps(InternationalPaymentSystem ips) {
+        this.ips = ips;
     }
 
     public JmsDeviceResponseDto getDevice() {

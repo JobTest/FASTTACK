@@ -97,7 +97,7 @@ public class DeliverActivationCodeProcessor extends AbstractCamelProcessor<Activ
                         .build();
                 dcProgressDto = dcProgressService.get(request.getDeliverActivationDto().getCorrelationId());
                 dcProgressDto.ifPresent(dc -> {
-                    sendOtpDto.setConversationId(dc.getRequestId());
+                    sendOtpDto.setConversationId(dc.getCorrelationId());
                 });
 
                 cvmDto.setTokenRefId(request.getDeliverActivationDto().getTokenUniqueReference());

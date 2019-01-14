@@ -12,6 +12,7 @@ import com.cts.fasttack.admin.web.security.acl.AclMessageHistory;
 import com.cts.fasttack.admin.web.security.acl.AclMonitoring;
 import com.cts.fasttack.admin.web.security.acl.AclRole;
 import com.cts.fasttack.admin.web.security.acl.AclToken;
+import com.cts.fasttack.admin.web.security.acl.AclCard;
 import com.cts.fasttack.admin.web.security.acl.AclUser;
 import com.cts.fasttack.admin.web.security.acl.AclCardProduct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,54 +45,60 @@ public class MenuItemConfig {
 
     @Bean
     @Order(3)
+    public MenuItem CardMenuItem(AclCard aclCard){
+        return createItem("common.menu.card", "/card/replacement.htm?filter.clear=true", "fa fa-credit-card fa-fw", aclCard);
+    }
+
+    @Bean
+    @Order(4)
     public MenuItem RoleItem(AclRole aclRole){
         return createItem("common.menu.role", "/role/list.htm", "fa fa-users fa-fw", aclRole);
     }
 
     @Bean
-    @Order(4)
+    @Order(5)
     public MenuItem UserMenuItem(AclUser aclUser){
         return createItem("common.menu.users", "/user/list.htm?filter.clear=true", "fa fa-user fa-fw", aclUser);
     }
 
     @Bean
-    @Order(5)
+    @Order(6)
     public MenuItem MessageHistoryMenuItem(AclMessageHistory aclMessageHistory){
         return createItem("common.menu.systemLog", "/messageHistory/list.htm?filter.clear=true", "fa fa-list-alt", aclMessageHistory);
     }
 
     @Bean
-    @Order(6)
+    @Order(7)
     public MenuItem ChangeLogMenuItem(AclChangeLog aclChangeLog){
         return createItem("changeLog.title", "/changeLog/list.htm?filter.clear=true", "fa fa-pencil-square-o", aclChangeLog);
     }
 
     @Bean
-    @Order(7)
+    @Order(8)
     public MenuItem AccessLogMenuitem(AclAccessLog aclAccessLog){
         return createItem("accessLog.title", "/accessLog/list.htm?filter.clear=true", "fa fa-pencil-square-o", aclAccessLog);
     }
 
     @Bean
-    @Order(8)
+    @Order(9)
     public MenuItem EncKeyMenuItem(AclEncKey aclEncKey){
         return createItem("common.menu.enckey", "/enckey/list.htm?filter.clear=true", "fa fa-key", aclEncKey);
     }
 
     @Bean
-    @Order(9)
+    @Order(10)
     public MenuItem FePropMenuItem(AclFEProp aclFEProp){
         return createItem("common.menu.feProp", "/feProp/list.htm", "fa fa-pencil-square-o", aclFEProp);
     }
 
     @Bean
-    @Order(10)
+    @Order(11)
     public MenuItem BinSetupMenuItem(AclBinSetup aclBinSetup){
         return createItem("common.menu.bin", "/bin/list.htm?filter.clear=true", "fa fa-cog fa-fw", aclBinSetup);
     }
 
     @Bean
-    @Order(11)
+    @Order(12)
     public MenuItem CardProductMenuItem(AclCardProduct aclCardProduct){
         return createItem("common.menu.cardproduct", "/cardProduct/list.htm", "fa fa-cog fa-fw", aclCardProduct);
     }

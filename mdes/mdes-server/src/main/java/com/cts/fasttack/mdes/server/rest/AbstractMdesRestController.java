@@ -32,7 +32,7 @@ public class AbstractMdesRestController {
             callback.execute(response);
         } catch (ServiceException | CryptographyException e) {
             response.setResponseId(request.getRequestId());
-            setResponseErrorAttributes(response, e.getErrorCode());
+            setResponseErrorAttributes(response, e.getErrorCode(), e.getErrorDescription());
             return new ResponseEntity<>(response, e.getHttpStatus());
         } catch (Exception e) {
             logger.error("Error while processing request", e);
@@ -44,6 +44,11 @@ public class AbstractMdesRestController {
 
     protected void setResponseErrorAttributes(CommonMdesResponseDto response, ErrorCode errorCode) {
         response.setErrorDescription(messageSourceService.getMessage(errorCode.name()));
+        response.setErrorCode(errorCode.name());
+    }
+
+    protected void setResponseErrorAttributes(CommonMdesResponseDto response, ErrorCode errorCode, String errorDescription) {
+        response.setErrorDescription(messageSourceService.getMessage(errorDescription));
         response.setErrorCode(errorCode.name());
     }
 

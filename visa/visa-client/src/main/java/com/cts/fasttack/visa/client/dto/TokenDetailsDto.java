@@ -26,8 +26,8 @@ public class TokenDetailsDto {
     private Date otpCodeExpiration;
     private String otpVerificationAttempts;
     private String otpVerificationRetryCounts;
-    private String lastFourOfPan;
-    private String lastFourOfPreviousPan;
+    private String lastFourOfPAN;
+    private String lastFourOfPreviousPAN;
     private DeviceInformationDto deviceInformation;
 
     public String getToken() {
@@ -190,20 +190,20 @@ public class TokenDetailsDto {
         this.otpVerificationRetryCounts = otpVerificationRetryCounts;
     }
 
-    public String getLastFourOfPan() {
-        return lastFourOfPan;
+    public String getLastFourOfPAN() {
+        return lastFourOfPAN;
     }
 
-    public void setLastFourOfPan(String lastFourOfPan) {
-        this.lastFourOfPan = lastFourOfPan;
+    public void setLastFourOfPAN(String lastFourOfPAN) {
+        this.lastFourOfPAN = lastFourOfPAN;
     }
 
-    public String getLastFourOfPreviousPan() {
-        return lastFourOfPreviousPan;
+    public String getLastFourOfPreviousPAN() {
+        return lastFourOfPreviousPAN;
     }
 
-    public void setLastFourOfPreviousPan(String lastFourOfPreviousPan) {
-        this.lastFourOfPreviousPan = lastFourOfPreviousPan;
+    public void setLastFourOfPreviousPAN(String lastFourOfPreviousPAN) {
+        this.lastFourOfPreviousPAN = lastFourOfPreviousPAN;
     }
 
     public DeviceInformationDto getDeviceInformation() {

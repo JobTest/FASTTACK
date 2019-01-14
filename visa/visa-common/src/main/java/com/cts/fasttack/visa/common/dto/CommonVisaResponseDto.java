@@ -23,6 +23,9 @@ public class CommonVisaResponseDto {
 	@JacksonXmlProperty(namespace = "http://vnts.visa.com/tpcas/v1")
     private String errorCode;
 
+    @JacksonXmlProperty(namespace = "http://vnts.visa.com/tpcas/v1")
+    private String errorDescription;
+
     /* getters and setters */
 
     public String getActionCode() {
@@ -39,5 +42,13 @@ public class CommonVisaResponseDto {
 
     public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public String getErrorDescription() {
+        return errorDescription;
+    }
+
+    public void setErrorDescription(String errorDescription) {
+        this.errorDescription = errorDescription;
     }
 }

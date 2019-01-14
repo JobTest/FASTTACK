@@ -60,6 +60,7 @@ public class SimpleHsmHttpsClientRequestFactory extends SimpleClientHttpRequestF
         Assert.notNull(pkcsPassword, "Password for PKCS#11 must be set");
         Assert.notNull(jksPassword, "Password for KeyStore must be set");
         Assert.notNull(jksKeyStore, "KeyStore must be set");
+        Assert.isTrue(jksKeyStore.exists(), "Not found a KeyStore file " + jksKeyStore);
         Assert.notNull(pkcsConfig, "PKCS#11 configuration file must be set");
         KeyStore.Builder pkcsKeyStoreBuilder = createPkcsKeyStoreBuilder();
         KeyStore.Builder jksKeyStoreBuilder = createJksKeyStoreBuilder();

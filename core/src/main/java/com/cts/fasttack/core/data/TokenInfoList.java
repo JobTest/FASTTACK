@@ -23,8 +23,8 @@ import java.util.Date;
 @Subselect(
         "SELECT ti.token_ref_id AS TOKEN_REF_ID, ti.tokenrequestor_id AS TOKENREQUESTOR_ID, th.token_event_date, " +
         "th.token_event_source, th.token_event_type, ti.pan_internal_id, ti.pan_internal_guid, ti.token_status, " +
-        "ti.customer_id, ti.client_wallet_account_id, ti.masked_pan, ti.ips, di.device_name, ti.customer_phone, " +
-                "ti.token_expdate, ti.digitize_date, ti.pan_source, ti.bin, ti.reminder_period, ti.tokenization_path, " +
+        "ti.customer_id, ti.client_wallet_account_id, ti.masked_pan, ti.masked_token, ti.ips, di.device_name, ti.customer_phone, " +
+                "ti.token_expdate, ti.digitize_date, ti.token_status_update, ti.pan_source, ti.bin, ti.reminder_period, ti.tokenization_path, " +
                 "ti.wp_device_score, ti.wp_account_score, ti.wp_phonenumber_score, ti.wp_reason_codes, ti.clr_tokenization_standard_ver, " +
                 "ti.tokenrequestor_id AS token_requestor_title, " +
                 "ti.digitize_date AS date_from, ti.token_status_update AS date_till " +
@@ -63,6 +63,8 @@ public class TokenInfoList {
 
     private String maskedPan;
 
+    private String maskedToken;
+
     private String ips;
 
     private String deviceName;
@@ -71,13 +73,17 @@ public class TokenInfoList {
 
     private String clientWalletAccountId;
 
-    @JsonFormat(pattern = "dd.MM.yyyy")
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date digitizeDate;
 
     @JsonFormat(pattern = "MM.yyyy")
     @DateTimeFormat(pattern = "MM.yyyy")
     private Date tokenExpdate;
+
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date tokenStatusUpdate;
 
     private String panSource;
     
@@ -179,6 +185,14 @@ public class TokenInfoList {
         this.maskedPan = maskedPan;
     }
 
+    public String getMaskedToken() {
+        return maskedToken;
+    }
+
+    public void setMaskedToken(String maskedToken) {
+        this.maskedToken = maskedToken;
+    }
+
     public String getIps() {
         return ips;
     }
@@ -225,6 +239,14 @@ public class TokenInfoList {
 
     public void setTokenExpdate(Date tokenExpdate) {
         this.tokenExpdate = tokenExpdate;
+    }
+
+    public Date getTokenStatusUpdate() {
+        return tokenStatusUpdate;
+    }
+
+    public void setTokenStatusUpdate(Date tokenStatusUpdate) {
+        this.tokenStatusUpdate = tokenStatusUpdate;
     }
 
     public String getPanSource() {

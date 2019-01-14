@@ -22,7 +22,9 @@ public class TokenInquiryJmsToRequestDtoConverter extends AbstractConverter<JmsT
 
     @Override
     protected void lightConvert(JmsTokenInquiryDto source, TokenInquiryRequestDto target) {
-        target.setCardholderInfo(jmsCardholderInfoToDtoConverter.convert(source.getCardholderInfo()));
+        if (source.getCardholderInfo() != null) {
+            target.setCardholderInfo(jmsCardholderInfoToDtoConverter.convert(source.getCardholderInfo()));
+        }
         target.setOperatorID(source.getOperatorID());
         target.setPanReferenceID(source.getPanReferenceID());
         target.setRequestID(source.getRequestID());

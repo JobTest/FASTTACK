@@ -15,6 +15,7 @@ import com.cts.fasttack.visa.client.dto.TokenDetailsDto;
  * {@link TokenDetailsDto} to {@link JmsTokenResponseDto} converter.
  *
  * @author v.semerkov
+ * @author d.ishchenko
  */
 @Component
 public class TokenDetailsDtoToJmsTokenResponseDtoConverter extends AbstractConverter<TokenDetailsDto, JmsTokenResponseDto> {
@@ -33,7 +34,7 @@ public class TokenDetailsDtoToJmsTokenResponseDtoConverter extends AbstractConve
 
     @Override
     protected void lightConvert(TokenDetailsDto source, JmsTokenResponseDto target) {
-        target.setAccountPanSuffix(source.getLastFourOfPan());
+        target.setAccountPanSuffix(source.getLastFourOfPAN());
         target.setTokenUniqueReference(source.getTokenReferenceID());
 
         if (StringUtils.isNotBlank(source.getToken()) && source.getToken().length() >= 4) {
@@ -45,14 +46,13 @@ public class TokenDetailsDtoToJmsTokenResponseDtoConverter extends AbstractConve
         target.setCurrentStatusDescription(convertTokenStateToTokenStatusDescription(source.getTokenState()));
         target.setCurrentStatusDateTime(source.getLastTokenStatusUpdatedTime());
         target.setPaymentAppInstanceId(source.getWalletAccountID());
+        target.setStorageTechnology(guessMdesStyleStorageTechnology(source.getTokenType()));
 
         Optional.ofNullable(source.getRiskInformation())
                 .ifPresent(riskInformation -> {
-                    target.setProvisioningStatusCode(riskInformation.getFinalProvisioningDecision());
                     target.setTokenActivatedDateTime(riskInformation.getDateAndTimeTokenActivated());
                 });
 
-        target.setStorageTechnology(source.getTokenType());
         target.setTokenRequestorId(source.getTokenRequestorID());
         target.setTokenRequestorName(source.getTokenRequestorName());
         target.setTokenType(source.getTokenType());
@@ -93,6 +93,14 @@ public class TokenDetailsDtoToJmsTokenResponseDtoConverter extends AbstractConve
                 return "Inactive";
             default:
                 return null;
+        }
+    }
+
+    private String guessMdesStyleStorageTechnology(String tokenType) {
+        if ("S".equals(tokenType)) {
+            return "S";
+        } else {
+            return "H";
         }
     }
 }

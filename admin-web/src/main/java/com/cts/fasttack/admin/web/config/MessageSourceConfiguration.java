@@ -24,6 +24,7 @@ public class MessageSourceConfiguration {
             I18N_PATH + "validation",
             I18N_PATH + "enckey",
             I18N_PATH + "tokens",
+            I18N_PATH + "cards",
             I18N_PATH + "cardProduct",
             I18N_PATH + "messageHistory",
             I18N_PATH + "errors",

@@ -4,7 +4,9 @@ import com.cts.fasttack.bank.client.rest.factory.BankHttpsClientRequestFactoryUn
 import com.cts.fasttack.bank.client.rest.factory.BankHttpsClientRequestFactoryBilateral;
 import com.cts.fasttack.bank.client.ws.interceptor.LoggingWebServiceInterceptor;
 import com.cts.fasttack.bank.client.ws.saaj.BankSaajSoapMessageFactory;
+import com.cts.fasttack.common.core.config.PropertyClientConnectionManager;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.auth.AUTH;
 import org.apache.http.client.config.RequestConfig;
@@ -58,6 +60,10 @@ public class WebServicesConfiguration {
 
     @Value("${spring.client.ws.security.passwordType:}")
     private String wsSecurityPasswordType;
+
+    private int defaultMaxPerRoute = PropertyClientConnectionManager.DEFAULT_MAX_PER_ROUTE;
+
+    private int maxTotal = PropertyClientConnectionManager.MAX_TOTAL;
 
     @Autowired(required = false)
     @Qualifier("bankHttpsClientRequestFactoryUnilateral")
@@ -123,10 +129,16 @@ public class WebServicesConfiguration {
                 .register("http", PlainConnectionSocketFactory.getSocketFactory())
                 .register("https", sslConnectionSocketFactory)
                 .build();
+
+        PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+        poolingHttpClientConnectionManager.setDefaultMaxPerRoute(defaultMaxPerRoute);
+        poolingHttpClientConnectionManager.setMaxTotal(maxTotal);
+//        poolingHttpClientConnectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("locahost", 8088)), 50);
+
         CloseableHttpClient httpClient = HttpClientBuilder.create()
                 .addInterceptorFirst(new HttpComponentsMessageSender.RemoveSoapHeadersInterceptor())
                 .addInterceptorLast((HttpRequestInterceptor) (request, context) -> request.addHeader(AUTH.WWW_AUTH_RESP, "Basic " + Base64.encodeBase64String((username + ":" + password).getBytes(StandardCharsets.UTF_8))))
-                .setConnectionManager(new PoolingHttpClientConnectionManager(socketFactoryRegistry))
+                .setConnectionManager(poolingHttpClientConnectionManager)
                 .setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(readTimeout).build())
                 .build();
 

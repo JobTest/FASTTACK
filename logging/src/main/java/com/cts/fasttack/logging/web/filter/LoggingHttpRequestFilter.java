@@ -55,7 +55,14 @@ public class LoggingHttpRequestFilter extends OncePerRequestFilter {
         request = new ContentCachingRequestWrapper(request);
         response = new ContentCachingResponseWrapper(response);
 
-        String requestId = UUID.randomUUID().toString();
+        filterChain.doFilter(request, response);
+
+        String requestData = getRequestData(request);
+        String responseData = getResponseData(response);
+
+        String _requestId = StringUtil.getAsString(requestData, "requestId");
+        String _wpRequestId = StringUtil.getElementsByTagName(requestData, "wpRequestId");
+        String requestId = getRequestId(_requestId, _wpRequestId);
         Map<String, String> headers = Collections.list(request.getHeaderNames()).stream().collect(Collectors.toMap(h -> h, request::getHeader));
 
         Date requestDate = new Date();
@@ -77,11 +84,6 @@ public class LoggingHttpRequestFilter extends OncePerRequestFilter {
                 .contentType(request.getContentType());
         	logger.trace(requestMessage);
         }
-
-        filterChain.doFilter(request, response);
-
-        String requestData = getRequestData(request);
-        String responseData = getResponseData(response);
 
         // log REQUEST_MESSAGE with payload
         LoggingMessage requestMessage = new LoggingMessage(LoggingMessage.REQUEST_MESSAGE + System.lineSeparator() + "Message received at " + DateFormatUtils.format(requestDate, DateFormatEnum.DATETIME.getValue()), requestId)
@@ -150,7 +152,7 @@ public class LoggingHttpRequestFilter extends OncePerRequestFilter {
                 logger.debug(loggingMessage.resetPayload(debugPayload));
             }
             if (logger.isTraceEnabled()) {
-                logger.trace(loggingMessage.resetPayload(payload));
+                if (!payload.contains("password")) logger.trace(loggingMessage.resetPayload(payload));
             }
         }
     }
@@ -178,5 +180,13 @@ public class LoggingHttpRequestFilter extends OncePerRequestFilter {
             }
         }
         return payload;
+    }
+
+    private static String getRequestId(String requestId1, String requestId2) {
+        return requestId1!=null
+                ? requestId1
+                : requestId2!=null
+                    ? requestId2
+                    : UUID.randomUUID().toString();
     }
 }

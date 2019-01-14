@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 import com.cts.fasttack.core.dict.TokenStatus;
-import com.cts.fasttack.core.dto.TokenInfoDto;
 import com.cts.fasttack.core.service.FEPropService;
 import com.cts.fasttack.jms.dto.JmsCardHolderInfoRequestDto;
 import com.cts.fasttack.jms.dto.JmsTokenLifecycleIpsDto;
@@ -20,7 +19,6 @@ public class UpdateTokenJmsMessageToTokenLifecycleIpsConverter {
 
     public TokenLifecycleIpsJmsMessage convert(UpdateTokenJmsMessage request,
                                                Map<String, String> properties,
-                                               TokenInfoDto tokenInfoDto,
                                                JmsCardHolderInfoRequestDto cardHolderInfoRequestDto,
                                                TokenStatus tokenStatus) {
         TokenLifecycleIpsJmsMessage tokenLifecycleIpsJmsMessage = new TokenLifecycleIpsJmsMessage();
@@ -35,7 +33,6 @@ public class UpdateTokenJmsMessageToTokenLifecycleIpsConverter {
         target.setTokenReason(source.getTokenReason());
         target.setCardHolderInfo(cardHolderInfoRequestDto);
         target.setStatus(source.getTokenEventStatus());
-        target.setPanReferenceId(tokenInfoDto.getPanRefId());
         target.setStatus("UPDATE");
 
         return tokenLifecycleIpsJmsMessage.jmsTokenActivateIpsDto(target);

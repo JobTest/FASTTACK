@@ -17,7 +17,6 @@ import org.springframework.ws.soap.client.core.SoapActionCallback;
  */
 @Service("confirmProvisioningService")
 public class ConfirmProvisioningServiceImpl extends WebServiceClient implements ConfirmProvisioningService {
-
     @Autowired
     public ConfirmProvisioningServiceImpl(@Qualifier("webServiceTemplate") WebServiceTemplate webServiceTemplate) {
         super(webServiceTemplate);

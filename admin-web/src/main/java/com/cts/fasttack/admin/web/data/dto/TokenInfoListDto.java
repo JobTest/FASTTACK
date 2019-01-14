@@ -6,6 +6,7 @@ import com.cts.fasttack.common.core.util.CustomJsonDateSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -30,6 +31,8 @@ public class TokenInfoListDto {
 
     private String maskedPan;
 
+    private String maskedToken;
+
     private String deviceName;
 
     private String customerPhone;
@@ -38,11 +41,16 @@ public class TokenInfoListDto {
 
     private String panInternalGuid;
 
-    @JsonFormat(pattern = "dd.MM.yyyy")
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date digitizeDate;
 
     @JsonFormat(pattern = "MM.yyyy")
     private Date tokenExpdate;
+
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date tokenStatusUpdate;
 
     private String panSource;
 
@@ -122,6 +130,14 @@ public class TokenInfoListDto {
         this.maskedPan = maskedPan;
     }
 
+    public String getMaskedToken() {
+        return maskedToken;
+    }
+
+    public void setMaskedToken(String maskedToken) {
+        this.maskedToken = maskedToken;
+    }
+
     public String getDeviceName() {
         return deviceName;
     }
@@ -168,6 +184,14 @@ public class TokenInfoListDto {
 
     public void setTokenExpdate(Date tokenExpdate) {
         this.tokenExpdate = tokenExpdate;
+    }
+
+    public Date getTokenStatusUpdate() {
+        return tokenStatusUpdate;
+    }
+
+    public void setTokenStatusUpdate(Date tokenStatusUpdate) {
+        this.tokenStatusUpdate = tokenStatusUpdate;
     }
 
     public String getPanSource() {

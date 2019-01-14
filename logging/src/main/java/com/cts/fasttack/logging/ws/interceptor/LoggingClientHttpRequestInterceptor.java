@@ -57,7 +57,7 @@ public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInt
                 }
             }
             if (log.isTraceEnabled()) {
-                log.trace(loggingMessage.resetPayload(originalPayload));
+                if (!originalPayload.contains("password")) log.trace(loggingMessage.resetPayload(originalPayload));
             }
         }
 
@@ -96,7 +96,7 @@ public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInt
                         }
                     }
                     if (log.isTraceEnabled()) {
-                        log.trace(message.resetPayload(originalPayload));
+                        if (!originalPayload.contains("password")) log.trace(message.resetPayload(originalPayload));
                     }
                 }
             }

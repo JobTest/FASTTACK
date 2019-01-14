@@ -7,12 +7,16 @@ import com.cts.fasttack.jms.processor.AbstractCamelProcessor;
 import org.apache.camel.Exchange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author a.lipavets
  */
 @Component
 public class SendOtpProcessor extends AbstractCamelProcessor<SendOtpJmsMessage, BankJmsResponseDto> {
+
+    private Logger logger = LogManager.getLogger(SendOtpProcessor.class);
 
     @Autowired
     private SendOtpWebService sendOtpWebService;

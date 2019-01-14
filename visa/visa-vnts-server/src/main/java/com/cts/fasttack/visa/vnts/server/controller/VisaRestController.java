@@ -139,7 +139,7 @@ public class VisaRestController {
                 setResponseErrorAttributes(response, VisaErrorCode.Codes.CURRENT_CHANNEL_IS_NOT_AVAILABLE);
                 return response;
             }
-            setResponseErrorAttributes(response, VisaErrorCode.valueOf(e.getErrorCode().name()).getCode());
+            setResponseErrorAttributes(response, VisaErrorCode.valueOf(e.getErrorCode().name()).getCode(), e.getErrorDescription());
             return response;
         } catch (Exception e) {
             setResponseErrorAttributes(response, VisaErrorCode.Codes.INTERNAL_SERVICE_FAILURE);
@@ -151,6 +151,12 @@ public class VisaRestController {
     private void setResponseErrorAttributes(CommonVisaResponseDto response, String errorCode) {
         response.setActionCode(ActionCode.FAILURE.getCode());
         response.setErrorCode(errorCode);
+    }
+
+    private void setResponseErrorAttributes(CommonVisaResponseDto response, String errorCode, String errorDescription) {
+        response.setActionCode(ActionCode.FAILURE.getCode());
+        response.setErrorCode(errorCode);
+        response.setErrorDescription(errorDescription);
     }
 
     private interface ProcessingCallback<T extends CommonVisaResponseDto> {

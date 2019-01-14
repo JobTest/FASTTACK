@@ -84,7 +84,7 @@ public class AuthorizeController extends AbstractMdesRestController {
                     JmsAuthorizeServiceResponseDto coreResponse = integrationBus.inOut(callingContext.getProcessingArea(), "authorizeService", jmsMessage, JmsAuthorizeServiceResponseDto.class);
                     jmsAuthorizeServiceResponseToResponseDtoConverter.convert(coreResponse, response);
                 } catch (ServiceException ex) {
-                    createResponse(response, requestDto.getRequestId(), ex.getErrorCode().name(), messageSourceService.getMessage(ex.getErrorCode().name()));
+                    createResponse(response, requestDto.getRequestId(), ex.getErrorCode().name(), messageSourceService.getMessage(ex.getErrorDescription()));
                 }
             } else {
                 ConstraintViolation<AuthorizeServiceRequestDto> constraintViolation = violations.iterator().next();

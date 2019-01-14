@@ -43,7 +43,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.UUID;
+import java.util.Date;
+import java.util.Optional;
+import java.util.List;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
@@ -356,20 +359,10 @@ public class TokenHelper {
                 .stream()
                 .collect(Collectors.toList());
 
-        Collections.sort(cardProductDtos, new Comparator<CardProductDto>() {
-            @Override
-            public int compare(CardProductDto o1, CardProductDto o2) {
-                if ((o1.getBeginRange() <= o2.getBeginRange() && o2.getEndRange() < o1.getEndRange())
-                        || (o1.getBeginRange() < o2.getBeginRange() && o2.getEndRange() <= o1.getEndRange()))
-                    return 1;
-                if ((o2.getBeginRange() <= o1.getBeginRange() && o1.getEndRange() < o2.getEndRange())
-                        || (o2.getBeginRange() < o1.getBeginRange() && o1.getEndRange() <= o2.getEndRange()))
-                    return -1;
-                return 0;
-            }});
+        CardProductDto.sortByLengthRange(cardProductDtos);
 
         for (CardProductDto cardProductDto : cardProductDtos) {
-            if (cardProductDto.getBeginRange() < pan && pan < cardProductDto.getEndRange()) return cardProductDto;
+            if (cardProductDto.getBeginRange() <= pan && pan <= cardProductDto.getEndRange()) return cardProductDto;
         }
         return null;
     }

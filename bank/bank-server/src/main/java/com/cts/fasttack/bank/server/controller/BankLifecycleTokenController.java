@@ -3,6 +3,7 @@ package com.cts.fasttack.bank.server.controller;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import javax.validation.Path.Node;
 
 import com.cts.fasttack.bank.server.dto.LifecycleTokenResponseDto;
 import com.cts.fasttack.bank.server.dto.TokenUpdateResponseDto;
@@ -54,8 +55,17 @@ public class BankLifecycleTokenController extends AbstractBankRestController {
 
         return processRequest(request, new LifecycleTokenResponseDto(), response -> {
             Set<ConstraintViolation<TokenLifecycleRequestDto>> violations = validator.validate(request);
+
             if (!violations.isEmpty()) {
-                setResponseErrorAttributes(response, violations.iterator().next().getMessage(), BankErrorCodes.INVALID_INPUT.getCode());
+                ConstraintViolation<TokenLifecycleRequestDto> violation = violations.iterator().next();
+
+                String fieldName = null;
+
+                for (Node node : violation.getPropertyPath()) {
+                    fieldName = node.getName();
+                }
+
+                setResponseErrorAttributes(response, violation.getMessage(), BankErrorCodes.INVALID_INPUT.getCode(), fieldName);
             } else {
                 HeadersJmsMessage jmsMessage = new BankLifecycleTokenJmsMessage()
                         .activateTokenDto(tokenLifecycleRequestToJmsConverter.convert(request))

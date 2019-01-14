@@ -17,6 +17,8 @@ import com.cts.fasttack.jms.data.JmsResponseMessage;
 import com.cts.fasttack.logging.interceptor.MessageHistoryInterceptor;
 import com.cts.fasttack.logging.service.CallingContext;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * @author Anton Leliuk
  */
@@ -34,7 +36,8 @@ public abstract class AbstractCamelProcessor<IN extends JmsMessage, OUT> impleme
         JmsResponseMessage<OUT> response = new JmsResponseMessage<>();
         String encryptedJson = String.valueOf(exchange.getIn().getBody());
 
-        log.info("Received message from JMS " + exchange.getFromEndpoint() + ": " + encryptedJson);
+//        log.info("Received message from JMS " + exchange.getFromEndpoint() + ": " + encryptedJson); //todo: old JMS message log
+        log.info("Received message from JMS " + exchange.getFromEndpoint());
 
         String decryptedJson = jmsCryptoRestClient.decrypt(encryptedJson).getText();
 
@@ -69,6 +72,6 @@ public abstract class AbstractCamelProcessor<IN extends JmsMessage, OUT> impleme
 
     public interface ProcessorCallback<IN, OUT> {
 
-        OUT execute(IN request) throws ServiceException;
+        OUT execute(IN request) throws ServiceException, ExecutionException, InterruptedException;
     }
 }

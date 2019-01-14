@@ -43,7 +43,9 @@ public class IssuerHostSvHttpsClientRequestFactoryBilateral extends SimpleClient
         if (mutualTls!=null) {
             Assert.notNull(jksKeyStorePassword, "Password for KeyStore must be set");
             Assert.notNull(jksKeyStore, "KeyStore must be set");
+            Assert.isTrue(jksKeyStore.exists(), "Not found a KeyStore file " + jksKeyStore);
             Assert.notNull(jksTrustStore, "TrustStore file must be set");
+            Assert.isTrue(jksTrustStore.exists(), "Not found a TrustStore file " + jksTrustStore);
             Assert.notNull(keyPassword, "Password for private key must be set");
             Assert.notNull(tlsEnabled, "fasttack-bank-client-application.properties 'spring.client.tlsEnabled' must be set");
         } else {

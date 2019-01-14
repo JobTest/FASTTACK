@@ -30,6 +30,8 @@ import com.cts.fasttack.visa.vtis.server.dto.TokenNotificationRequestDto;
 import com.cts.fasttack.visa.vtis.server.dto.TokenNotificationResponseHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ import org.springframework.stereotype.Service;
  * @author d.ishchenko
  */
 @Service
+@Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class VisaTokenStatusUpdateServiceImpl implements VisaTokenStatusUpdateService {
 
     @Autowired
